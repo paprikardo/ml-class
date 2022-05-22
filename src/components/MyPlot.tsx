@@ -5,31 +5,9 @@
 import { IData } from "../Data";
 const boxmargin = 10; //border in percent
 
-const scaleX = (x: number, xmin: number, xmax: number): number => {
-  return x
-  // const len_intervall = xmax - xmin;
-  // const percent = (x - xmin) / len_intervall;
-  // //console.log("mapped ", x, " to ", percent);
-  // // 100*x+b = 100-b
-  // // 100*x = 100-2b
-  // // x = 1-2b/100
-  // return percent * 100 * (1 - (2 * boxmargin) / 100) + boxmargin + "%";
-};
-const scaleY = (y: number, ymin: number, ymax: number): number => {
-  return scaleX(y, ymin, ymax);
-};
-const scaleXInv = (x: number, xmin: number, xmax: number): number => {
-  const len_intervall = xmax - xmin;
-  const percent = (x - boxmargin/100) / ((1 - (2 * boxmargin) / 100))
-  return percent*len_intervall+xmin
-};
-const scaleYInv = (y: number, ymin: number, ymax: number): number => {
-  return scaleXInv(y, ymin, ymax);
-};
-
 var pt: DOMPoint | undefined = undefined;
 var screenctm: any = null;
-var svg_bbox: any = undefined;
+
 var xBlue = 1
 var yBlue = 1
 
@@ -55,15 +33,6 @@ const myPlot = ({
   const ymin = Math.min(...all_data_y);
   const ymax = Math.max(...all_data_y);
 
-  const addPointFromPercent = (x: number, y: number): void => {
-    xBlue = x
-    yBlue = y
-    addPoint(
-      x,
-      y,
-      "Kerbel"
-    );
-  };
   const onClickHandler = (evt: React.MouseEvent<SVGSVGElement>) => {
     console.log("clicked");
     if (pt == null) {
@@ -73,7 +42,7 @@ const myPlot = ({
       pt.y = evt.clientY;
       // The cursor point, translated into svg coordinates
       var cursorpt = pt.matrixTransform(screenctm.inverse());
-      addPointFromPercent(cursorpt.x,cursorpt.y)
+      addPoint(cursorpt.x,cursorpt.y,"Kerbel")
     }
   };
 
@@ -105,11 +74,10 @@ const myPlot = ({
       height="100%"
       width="100%"
       onClick={onClickHandler}
-      viewBox={xmin+" "+ymin+" "+xmax+" "+ymax}
+      viewBox={xmin+" "+ymin+" "+(xmax-xmin)+" "+(ymax-ymin)}
       ref={(ref) => {
         pt = ref?.createSVGPoint();
         screenctm = ref?.getScreenCTM();
-        svg_bbox = ref?.getBBox();
       }}
     >
       {points1}
@@ -123,10 +91,10 @@ const myPlot = ({
       fill="blue"
     />
       <line
-        x1={scaleX(xmin, xmin, xmax)}
-        y1={scaleY(plot_data["line"](xmin), ymin, ymax)}
-        x2={scaleX(xmax, xmin, xmax)}
-        y2={scaleY(plot_data["line"](xmax), ymin, ymax)}
+        x1={xmin}
+        y1={plot_data["line"](xmin)}
+        x2={xmax}
+        y2={plot_data["line"](xmax)}
         stroke="black"
         strokeWidth="5"
         strokeLinecap="butt"
