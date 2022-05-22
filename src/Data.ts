@@ -9,5 +9,5 @@ export interface IDataGroup {
 
 export interface IData {
   data: IDataGroup[];
-  line: [number,number][];
+  line: (x: number) => number;
 }

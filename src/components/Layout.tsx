@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { IData } from "../Data";
+import { IData,IDataGroup} from "../Data";
 import { SimpleGrid } from "@mantine/core";
 import TableWrapper from "./TableWrapper";
 import Plot_wrapper from "./Plot_wrapper";
+import { isGetAccessorDeclaration } from "typescript";
 const defaultDataClose: IData = {
   data: [
     {
@@ -60,7 +61,7 @@ const defaultDataClose: IData = {
       ],
     },
   ],
-  line: [],
+  line: ()=>0,
 };
 
 const defaultDataSpread: IData = {
@@ -86,7 +87,7 @@ const defaultDataSpread: IData = {
       ],
     },
   ],
-  line: [],
+  line: ()=>0,
 };
 
 // const compute_line = (data_data:IDataGroup[]):IData => {
@@ -106,11 +107,24 @@ function Layout(): JSX.Element {
   //     .then((res) => res.json())
   //     .then((data:IData) => setCurrentData(data));
   // });
+  const addPoint = (xVal:number,yVal:number,id:string) :void => {
+    setCurrentData((prev) => {
+      const group = prev.data.find(elem => elem.id == id)
+      if(group == undefined){
+        console.log("UNDEFINED ERROR")
+      }
+      else{
+        group.data.push({x:xVal,y:yVal})
+      }
+      return {data: prev.data,line: prev.line}//return same object with new reference so rerender triggers 
+    })
+    console.log(currentData)
+  }
   return (
     <SimpleGrid style={{ height: "100vh" }} cols={2} spacing="xs">
       <div>Hoi ich bin ne tabelle</div>
       <div>
-        <Plot_wrapper plot_data={currentData}></Plot_wrapper>
+        <Plot_wrapper plot_data={currentData} addPoint={addPoint}></Plot_wrapper>
       </div>
     </SimpleGrid>
   );
