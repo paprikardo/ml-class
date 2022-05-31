@@ -1,17 +1,17 @@
-import { IDataGroup } from "../Data";
-//import Table from "./Table";
+import {IData,IDataPoint} from "../Data";
+import Table from "./Table";
 
 interface TableWrapperProps {
-  data: IDataGroup[];
-  setData:React.Dispatch<React.SetStateAction<IDataGroup[]>>;
+  plot_data: IData;
+  change_data:(id: string, key: number, new_point:IDataPoint) => void;
 }
 
-const TableWrapper = ({ data, setData }: TableWrapperProps) => {
+const TableWrapper = ({ plot_data, change_data }: TableWrapperProps) => {
   return (
     <div>
-      {/* <Table data={dataKerbel} setData={setDataKerbel}></Table>
-      <Table data={dataKerbel} setData={setDataKerbel}></Table>
-      <Table data={dataBrennessel} setData={setDataBrennessel}></Table> */}
+      <div>TABLE</div>  
+      <Table id_data={plot_data["data"][0]} change_id_data={(key:number,new_point:IDataPoint) => change_data(plot_data["data"][0]["id"],key,new_point)}></Table>
+      <Table id_data={plot_data["data"][1]} change_id_data={(key:number,new_point:IDataPoint) => change_data(plot_data["data"][1]["id"],key,new_point)}></Table>
     </div>
   );
 };

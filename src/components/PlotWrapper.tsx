@@ -1,11 +1,9 @@
-import { ResponsiveScatterPlot } from "@nivo/scatterplot";
 import {
   ScatterPlotCustomSvgLayer,
   ScatterPlotLayerProps,
 } from "@nivo/scatterplot";
 import MyPlot from "./MyPlot"
 import { IDataPoint, IData, IDataGroup } from "../Data";
-import { computeLine } from "./Math";
 import { line } from "d3-shape";
 
 const svmjs = require("svm");
@@ -88,7 +86,7 @@ const computeLinePoints = ([c1,c2]:[IDataGroup,IDataGroup]) => {
   return line_generator
 }
 
-const Plot_wrapper = ({ plot_data, addPoint}: { plot_data: IData, addPoint:(xVal:number,yVal:number,id:string)=>void}) => {
+const PlotWrapper = ({ plot_data, addPoint}: { plot_data: IData, addPoint:(xVal:number,yVal:number,id:string)=>void}) => {
   //const LineLayer = createLineLayer(plot_data.line);
   plot_data["line"] = computeLinePoints(plot_data.data as [IDataGroup,IDataGroup])
   return (
@@ -113,4 +111,4 @@ const Plot_wrapper = ({ plot_data, addPoint}: { plot_data: IData, addPoint:(xVal
     </div>
   );
 };
-export default Plot_wrapper;
+export default PlotWrapper;
