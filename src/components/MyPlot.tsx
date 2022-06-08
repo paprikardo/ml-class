@@ -38,9 +38,9 @@ const MyPlot = ({
       // The cursor point, translated into svg coordinates
       var cursorpt = pt.matrixTransform(screenctm.inverse());
       if (shiftKey) {
-        addPoint(cursorpt.x, -cursorpt.y, class2.id); //-y on the points since y coordinate was flipped
+        addPoint(parseFloat(cursorpt.x.toFixed(4)), parseFloat((-cursorpt.y).toFixed(4)), class2.id); //-y on the points since y coordinate was flipped
       } else {
-        addPoint(cursorpt.x, -cursorpt.y, class1.id); //-y on the points since y coordinate was flipped
+        addPoint(parseFloat(cursorpt.x.toFixed(4)), parseFloat((-cursorpt.y).toFixed(4)), class1.id); //-y on the points since y coordinate was flipped
       }
     }
   };

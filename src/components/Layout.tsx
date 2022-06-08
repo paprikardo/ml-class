@@ -3,6 +3,7 @@ import { IData, IDataPoint } from "../Data";
 import { SimpleGrid } from "@mantine/core";
 import TableWrapper from "./TableWrapper";
 import PlotWrapper from "./PlotWrapper";
+import Table from "./Table";
 // const defaultDataClose: IData = {
 //   data: [
 //     {
@@ -148,6 +149,38 @@ function Layout(): JSX.Element {
         change_data={changePoint}
       ></TableWrapper>
       <PlotWrapper plot_data={currentData} addPoint={addPoint}></PlotWrapper>
+      <div>
+        <div>
+          <h3>New Point to classify</h3>
+          <table style={{ margin: "auto" }}>
+            <thead>
+              <tr>
+                <th>Grösse</th>
+                <th>Länge</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <input
+                    type="number"
+                    value={2}
+                    onChange={(event) => 0}
+                  ></input>
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    value={3}
+                    onChange={(event) => 0}
+                  ></input>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div style={{width: "50%", height:"50%", margin:"auto"}}> Roboter Gesicht sagt das Ergebnis der Klassifizierung</div>
     </SimpleGrid>
   );
 }

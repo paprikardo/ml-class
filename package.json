@@ -2,6 +2,7 @@
   "name": "lin_class",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://kusskuss.vsos.ethz.ch/lin_class/",
   "dependencies": {
     "@mantine/core": "^4.1.3",
     "@mantine/hooks": "^4.1.3",
