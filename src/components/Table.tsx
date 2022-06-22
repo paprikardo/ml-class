@@ -1,18 +1,18 @@
-import { IDataGroup, IDataPoint } from "../Data";
+import { IDataPoint } from "../Data";
 
 const Table = ({
-  id_data,
+  class_name,
+  data,
   change_id_data,
 }: {
-  id_data: IDataGroup;
+  class_name: string
+  data: IDataPoint[];
   change_id_data: (key: number, new_point: IDataPoint) => void;
 }) => {
-  const class_name = id_data["id"];
-  const data = id_data["data"];
   return (
     <div>
       <h3>{class_name}</h3>
-      <table style={{margin:"auto"}}>
+      <table className="Centred Table">
         <thead>
           <tr>
             <th>Grösse</th>
@@ -20,7 +20,7 @@ const Table = ({
           </tr>
         </thead>
         <tbody>
-          {id_data["data"].map(({ x, y }, key) => (
+          {data.map(({ x, y }, key) => (
             <tr key={class_name + "-" + key}>
               <td>
                 <input type="number" value={x} onChange={(event) => change_id_data(key,{x:parseFloat(event.target.value),y:y})}></input>
