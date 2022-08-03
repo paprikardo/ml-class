@@ -1,24 +1,18 @@
-import { CLASS_A, CLASS_B, CLASS_NEW_POINT, IData, IDataPoint } from "../Data";
-import { SimpleGrid } from "@mantine/core";
-import TableWrapper from "./TableWrapper";
+import { CLASS_A, CLASS_B, IData, IDataPoint } from "../Data";
+
 import RobotWrapper from "./RobotWrapper";
 import NewPointTable from "./NewPointTable";
 import MyPlot from "./MyPlot";
 import { useEffect, useRef, useState } from "react";
 import { rand_0_10 } from "../Random";
-import { type } from "os";
 function Layout2DUserLine({
   currentData,
-  changePoint,
-  addPoint,
-  new_random_data,
   setDataEmpty,
   addRandomPoint,
 }: {
   currentData: IData;
-  changePoint: (id: string, key: number, new_point: IDataPoint) => void;
-  addPoint: (xVal: number, yVal: number, id: string) => void;
-  new_random_data: () => void;
+  changePoint: (cl: number, key: number, new_point: IDataPoint) => void
+  addPoint: (cl: number, new_point: IDataPoint) => void;
   setDataEmpty: () => void;
   addRandomPoint: (
     mean_CLASS_A: IDataPoint,
@@ -79,8 +73,8 @@ function Layout2DUserLine({
   }, [gameState]);
 
   const computeScore = () => {
-    const pointsA = currentData.data[CLASS_A];
-    const pointsB = currentData.data[CLASS_B];
+    const pointsA = currentData.data[CLASS_A].points;
+    const pointsB = currentData.data[CLASS_B].points;
     const mUserLine =
       (userLineState.y2 - userLineState.y1) /
       (userLineState.x2 - userLineState.x1);
@@ -166,16 +160,11 @@ function Layout2DUserLine({
   };
 
   return (
-    <SimpleGrid cols={2} spacing="xs">
-      <TableWrapper
-        plot_data={currentData}
-        change_data={changePoint}
-        new_random_data={new_random_data}
-      ></TableWrapper>
+    <div>
       <MyPlot
         ref={plotRef}
         plot_data={currentData}
-        addPoint={addPoint}
+        addPoint={()=>{return 0}}
         hideSplitLine={hideSplitLine}
         userLineState={userLineState}
         onMouseUpPlotHandler={onMouseUpPlotHandler}
@@ -183,12 +172,8 @@ function Layout2DUserLine({
         onMouseMovePlotHandler={onMouseMovePlotHandler}
         enableUserDraw={enableUserDraw}
       ></MyPlot>
-      <NewPointTable
-        plot_data={currentData.data[CLASS_NEW_POINT]}
-        change_data={changePoint}
-      ></NewPointTable>
       <RobotWrapper class_result="result"></RobotWrapper>
-    </SimpleGrid>
+    </div>
   );
 }
 

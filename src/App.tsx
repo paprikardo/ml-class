@@ -1,95 +1,89 @@
 import {
   IData,
-  defaultDataSpread,
+  default2DDataSpread,
   IDataPoint,
   CLASS_A,
   CLASS_B,
-  emptyData,
+  empty2DData,
 } from "./Data";
 import { useState, useEffect } from "react";
 import "./App.css";
 import Layout2DRobotLine from "./components/Layout2DRobotLine";
 import Layout2DUserLine from "./components/Layout2DUserLine";
+import { SimpleGrid } from "@mantine/core";
+import TableWrapper from "./components/TableWrapper";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import {randn_bm,rand_0_10} from "./Random"
+import { randn_bm, rand_0_10, randomPoint, rand_0_10_point } from "./Random";
 function App() {
-  const [currentData, setCurrentData] = useState(defaultDataSpread);
-  //adds a random point to both classes CLASS A and CLASS B
-  const addRandomPoint = (mean_CLASS_A:IDataPoint,mean_CLASS_B:IDataPoint,variance: number = 2) => {
-    addPoint(
-      randn_bm(mean_CLASS_A.x, variance),
-      randn_bm(mean_CLASS_A.y, variance),
-      CLASS_A
-    );
-    addPoint(
-      randn_bm(mean_CLASS_B.x, variance),
-      randn_bm(mean_CLASS_B.y, variance),
-      CLASS_B
-    );
+  const [currentData, setCurrentData] = useState(default2DDataSpread);
+  const dimensions = currentData.attrib.length;
+  const numClasses = currentData.data.length;
+  /**
+   * samples a random point each from the given mean and variance and adds them to classes CLASS A and CLASS B respectively
+   * @param means - array of means, one for each DataClass
+   * @param variance
+   */
+  const addRandomPoint = (means: IDataPoint[], variance: number = 2) => {
+    means.forEach((cl_mean, i) => addPoint(i, randomPoint(cl_mean, variance)));
   };
-  
-  const addPoint = (xVal: number, yVal: number, id: string): void => {
+  //adds a point to the Data.data array (i.e. the cl'th class/group)
+  const addPoint = (cl: number, new_point: IDataPoint): void => {
     setCurrentData((prev) => {
+      prev.data[cl].points.push(new_point);
       const newPrev = { ...prev };
-      const newPrevData = { ...prev.data };
-      const group = newPrevData[id];
-      if (group === undefined) {
-        console.log("UNDEFINED ERROR");
-      } else {
-        const newGroup = [...group, { x: xVal, y: yVal }];
-        newPrev.data = newPrevData;
-        newPrev.data[id] = newGroup;
-      }
+      // const newPrevData = [...prev.data];
+      // const dataClass = newPrevData[cl];
+      // const newDataClassPoints = [...dataClass.points, { x: xVal, y: yVal }];
+      // dataClass.points = newDataClassPoints;
+      // newPrev.data[id] = newGroup;
       return newPrev; //return same object with new reference so rerender triggers
     });
   };
+  //changes a point with the key "key" in the Data.data dictionary with key "id" to "new_point"
   const changePoint = (
-    id: string,
+    cl: number,
     key: number,
     new_point: IDataPoint
   ): void => {
     setCurrentData((prev) => {
+      prev.data[cl].points[key] = new_point;
       const newPrev = { ...prev };
-      const newPrevData = { ...prev.data };
-      const group = newPrevData[id];
-      if (group === undefined) {
-        console.log("UNDEFINED ERROR");
-      } else {
-        group[key] = new_point;
-      }
-      const newGroup = [...group];
-      newPrevData[id] = newGroup;
-      newPrev.data = newPrevData;
+      // const newPrevData = { ...prev.data };
+      // const group = newPrevData[id];
+      // if (group === undefined) {
+      //   console.log("UNDEFINED ERROR");
+      // } else {
+      //   group[key] = new_point;
+      // }
+      // const newGroup = [...group];
+      // newPrevData[id] = newGroup;
+      // newPrev.data = newPrevData;
       return newPrev;
     });
   };
   const setDataEmpty = () => {
-    setCurrentData(emptyData);
-  }
+    setCurrentData(empty2DData);
+  };
+  //generates "numSamples" new points for both classes from a random variance and mean
   const newRandomData = () => {
     const numSamples = 5;
     const variance = 2;
-    const m1 = { x: rand_0_10(), y: rand_0_10() };
-    const m2 = { x: rand_0_10(), y: rand_0_10() };
-    const points1: IDataPoint[] = [];
-    const points2: IDataPoint[] = [];
-    for (var i = 0; i < numSamples; i++) {
-      points1.push({
-        x: randn_bm(m1.x, variance),
-        y: randn_bm(m1.y, variance),
-      });
-      points2.push({
-        x: randn_bm(m2.x, variance),
-        y: randn_bm(m2.y, variance),
-      });
+    const means: IDataPoint[] = [];
+    for (var i = 0; i < currentData.data.length; i++) {
+      means.push(rand_0_10_point(dimensions));
     }
+    const cls_points: IDataPoint[][] = [];
+    for (var i = 0; i < numClasses; i++) {
+      cls_points.push([]);
+    }
+    cls_points.map((cl_points, i) => {
+      for (var i = 0; i < numSamples; i++) {
+        cl_points.push(randomPoint(means[i], variance));
+      }
+    });
     setCurrentData((prev) => {
-      const newData: IData = {
-        data: { ...prev.data },
-        line: () => 0,
-      };
-      newData.data[CLASS_A] = points1;
-      newData.data[CLASS_B] = points2;
+      const newData: IData = { ...prev };
+      cls_points.forEach((cl_points,i)=>{newData.data[i].points=cl_points})
       console.log(newData);
       return newData;
     });
@@ -132,8 +126,8 @@ function App() {
       setCurrentData((prev) => {
         const prevCopy = { ...prev };
         prevCopy.line = computeLinePoints(
-          prev.data[CLASS_A],
-          prev.data[CLASS_B]
+          prev.data[CLASS_A].points,
+          prev.data[CLASS_B].points
         );
         return prevCopy;
       }),
@@ -147,37 +141,41 @@ function App() {
             <Link to="/">
               <div style={{ height: "20" }}>Robot Line</div>
             </Link>
-            <Link to="/userline">
-              User Line
-            </Link>
+            <Link to="/userline">User Line</Link>
           </div>
         </nav>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Layout2DRobotLine
-                currentData={currentData}
-                changePoint={changePoint}
-                addPoint={addPoint}
-                new_random_data={newRandomData}
-              ></Layout2DRobotLine>
-            }
-          ></Route>
-          <Route
-            path="/userline"
-            element={
-              <Layout2DUserLine
-                currentData={currentData}
-                changePoint={changePoint}
-                addPoint={addPoint}
-                new_random_data={newRandomData}
-                setDataEmpty={setDataEmpty}
-                addRandomPoint={addRandomPoint}
-              ></Layout2DUserLine>
-            }
-          ></Route>
-        </Routes>
+        <div>DKR DKR</div>
+        <SimpleGrid cols={2} spacing="xs">
+          <TableWrapper
+            plot_data={currentData}
+            change_data={changePoint}
+            new_random_data={newRandomData}
+          ></TableWrapper>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Layout2DRobotLine
+                  currentData={currentData}
+                  changePoint={changePoint}
+                  addPoint={addPoint}
+                ></Layout2DRobotLine>
+              }
+            ></Route>
+            <Route
+              path="/userline"
+              element={
+                <Layout2DUserLine
+                  currentData={currentData}
+                  changePoint={changePoint}
+                  addPoint={addPoint}
+                  setDataEmpty={setDataEmpty}
+                  addRandomPoint={addRandomPoint}
+                ></Layout2DUserLine>
+              }
+            ></Route>
+          </Routes>
+        </SimpleGrid>
       </Router>
     </div>
   );

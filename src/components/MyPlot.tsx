@@ -1,7 +1,6 @@
 //*TODO: used viewbox to scale points appropriately. How to find coordinates in viewbox? */
-import { type } from "@testing-library/user-event/dist/type";
-import { forwardRef, useEffect, useState, useImperativeHandle } from "react";
-import { CLASS_A, CLASS_B, CLASS_NEW_POINT, IData, IDataPoint } from "../Data";
+import { forwardRef, useEffect, useState } from "react";
+import { CLASS_A, CLASS_B, IData, IDataPoint } from "../Data";
 
 var pt: DOMPoint | undefined = undefined;
 var screenctm: any = null;
@@ -9,7 +8,7 @@ var screenctm: any = null;
 var shiftKey = false;
 interface IProp {
   plot_data: IData;
-  addPoint: (xVal: number, yVal: number, id: string) => void;
+  addPoint: (cl: number, new_point: IDataPoint) => void;
   userLineState?: {
     x1: number;
     x2: number;
@@ -39,21 +38,36 @@ const MyPlot = forwardRef(
     }: IProp,
     ref
   ): JSX.Element => {
+    const oneDimensional = plot_data.data[0].points.length==1
+    const yOneDimension = 2;
+
     const class1 = plot_data.data[CLASS_A];
     const class2 = plot_data.data[CLASS_B];
-    const newPoint = plot_data.data[CLASS_NEW_POINT][0];
-    const all_data_x = [
-      ...class1.map(({ x, y }, index) => x),
-      ...class2.map(({ x, y }, index) => x),
+    const newPoint = plot_data.newPoint;
+    const all_points_x = [
+      ...class1.points.map(({ x, y }, index) => x),
+      ...class2.points.map(({ x, y }, index) => x),
     ];
-    const all_data_y = [
-      ...class1.map(({ x, y }, index) => y),
-      ...class2.map(({ x, y }, index) => y),
+    const all_points_y = [
+      ...class1.points.map(({ x, y }, index) => y),
+      ...class2.points.map(({ x, y }, index) => y),
     ];
-    const xmin = Math.min(...all_data_x);
-    const xmax = Math.max(...all_data_x);
-    const ymin = Math.min(...all_data_y);
-    const ymax = Math.max(...all_data_y);
+    var xmin = Math.min(...all_points_x);
+    var xmax = Math.max(...all_points_x);
+    var ymin = Math.min(...all_points_y);
+    var ymax = Math.max(...all_points_y);
+    //set the minimum intervall that we want to show on the axis
+    const minIntervalLength = 5;
+    const xdistance = xmax - xmin;
+    if (xdistance < minIntervalLength) {
+      xmax = xmax + minIntervalLength / 2;
+      xmin = xmin - minIntervalLength / 2;
+    }
+    const ydistance = ymax - ymin;
+    if (ydistance < minIntervalLength) {
+      ymax = ymax + minIntervalLength / 2;
+      ymin = ymin - minIntervalLength / 2;
+    }
 
     const [mouseHold, setMouseHold] = useState(false);
 
@@ -73,17 +87,15 @@ const MyPlot = forwardRef(
       if (!enableUserDraw) {
         //only add new points on click if not draw User Line mode
         if (shiftKey) {
-          addPoint(
-            parseFloat(cursorpt!.x.toFixed(4)),
-            parseFloat((-cursorpt!.y).toFixed(4)),
-            CLASS_B
-          ); //-y on the points since y coordinate was flipped
+          addPoint(CLASS_B, {
+            x: parseFloat(cursorpt!.x.toFixed(4)),
+            y: parseFloat((-cursorpt!.y).toFixed(4)),
+          }); //-y on the points since y coordinate was flipped
         } else {
-          addPoint(
-            parseFloat(cursorpt!.x.toFixed(4)),
-            parseFloat((-cursorpt!.y).toFixed(4)),
-            CLASS_A
-          ); //-y on the points since y coordinate was flipped
+          addPoint(CLASS_A, {
+            x: parseFloat(cursorpt!.x.toFixed(4)),
+            y: parseFloat((-cursorpt!.y).toFixed(4)),
+          }); //-y on the points since y coordinate was flipped
         }
       }
     };
@@ -119,28 +131,34 @@ const MyPlot = forwardRef(
     // PLOT ELEMENTS
     const displaySplitLine = hideSplitLine ? "none" : "";
 
-    const points1 = class1.map(({ x, y }, index) => (
-      <circle
-        key={"c1" + index}
-        cx={x}
-        cy={y}
-        r="0.3"
-        stroke="black"
-        strokeWidth="0.09"
-        fill="red"
-      />
-    ));
-    const points2 = class2.map(({ x, y }, index) => (
-      <circle
-        key={"c2" + index}
-        cx={x}
-        cy={y}
-        r="0.3"
-        stroke="black"
-        strokeWidth="0.09"
-        fill="blue"
-      />
-    ));
+    const points1 = class1.points.map(({ x, y }, index) => {
+      const ys = oneDimensional ? yOneDimension : y;
+      return (
+        <circle
+          key={"c1" + index}
+          cx={x}
+          cy={ys}
+          r="0.3"
+          stroke="black"
+          strokeWidth="0.09"
+          fill="red"
+        />
+      );
+    });
+    const points2 = class2.points.map(({ x, y }, index) => {
+      const ys = oneDimensional ? yOneDimension : y;
+      return (
+        <circle
+          key={"c2" + index}
+          cx={x}
+          cy={ys}
+          r="0.3"
+          stroke="black"
+          strokeWidth="0.09"
+          fill="blue"
+        />
+      );
+    });
     const axisLine = (
       x1: number,
       y1: number,
@@ -265,7 +283,9 @@ const MyPlot = forwardRef(
         }}
       >
         {xLabels}
-        {yLabels}
+        {(() => {
+          return oneDimensional ? null : yLabels;
+        })()}
         <g transform="scale(1,-1)">
           {xTicks}
           {xAxis}

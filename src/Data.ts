@@ -1,53 +1,67 @@
-export interface IDataPoint {
+interface IData2DPoint {
   x: number;
   y: number;
 }
 
-export interface IData {
-  data: {[key:string]:IDataPoint[]};
-  line: (x: number) => number;
+export type IDataPoint = number[]
+
+interface IDataClass {
+  className: string;
+  points: (number[])[];
 }
 
-export const CLASS_A = "Pflanze A";
-export const CLASS_B = "Pflanze B";
-export const CLASS_NEW_POINT = "New point to classify";
+export interface IData {
+  data: IDataClass[];
+  attrib: string[];
+  newPoint: number[];
+}
 
-export const defaultDataSpread: IData = {
-  data: {
-    "Pflanze A":[
-        { x: 1.366, y: 1.692 },
-        { x: 2.948, y: 2.745 },
-        { x: 2.444, y: 2.061 },
-        { x: 1.189, y: 0.893 },
-        { x: 1.757, y: 4.041 },
+export const CLASS_A = 0;
+export const CLASS_B = 1;
+
+export const default2DDataSpread: IData = {
+  data: [
+    {
+      className: "Pflanze A",
+      points: [
+        [ 1.366, 1.692 ],
+        [2.948, 2.745 ],
+        [ 2.444, 2.061],
+        [1.189, 0.893 ],
+        [1.757, 4.041 ],
       ],
-      "Pflanze B":[
-        { x: 9.696, y: 8.865 },
-        { x: 11.248, y: 10.695 },
-        { x: 8.989, y: 11.032 },
-        { x: 10.626, y: 9.749 },
-        { x: 10.767, y: 9.857 },
+    },
+    {
+      className: "Pflanze B",
+      points: [
+        [ 9.696,8.865 ],
+        [11.248, 10.695],
+        [8.989, 11.032 ],
+        [10.626, 9.749 ],
+        [10.767, 9.857 ],
       ],
-      "New point to classify":[
-        { x: 10, y: 10 }
-      ]
-    }
-  ,
-  line: () => 0,
+    },
+  ],
+  attrib:["Groesse","Länge"],
+  newPoint: [10,10],
 };
 
-export const emptyData: IData = {
-  data: {
-    "Pflanze A":[
-    ],
-    "Pflanze B":[
-    ],
-    "New point to classify":[
-      { x: 0, y: 0 }
-    ]
-  },
-  line: () => 0
-}
+export const empty2DData: IData = {
+  data: [
+    {
+      className: "Pflanze A",
+      points: [
+      ],
+    },
+    {
+      className: "Pflanze B",
+      points: [
+      ],
+    },
+  ],
+  attrib:["Groesse","Länge"],
+  newPoint:[0,0]
+};
 
 // const defaultDataClose: IData = {
 //   data: [

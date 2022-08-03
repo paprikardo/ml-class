@@ -2,7 +2,7 @@ import { IDataPoint } from "../Data";
 
 interface NewPointTableProps {
   plot_data: IDataPoint[];
-  change_data:(id: string, key: number, new_point:IDataPoint) => void;
+  change_data:(cl: number, key: number, new_point:IDataPoint) => void;
 }
 
 const NewPointTable = ({plot_data, change_data}:NewPointTableProps) => {
