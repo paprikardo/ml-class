@@ -20,17 +20,14 @@ const Table = ({
           </tr>
         </thead>
         <tbody>
-          {points.map(({ x, y }, key) => (
+          {points.map(([x, y], key) => (
             <tr key={class_name + "-" + key}>
               <td>
                 <input
                   type="number"
                   value={x}
                   onChange={(event) =>
-                    change_cl_data(key, {
-                      x: parseFloat(event.target.value),
-                      y: y,
-                    })
+                    change_cl_data(key, [parseFloat(event.target.value), y])
                   }
                 ></input>
               </td>
@@ -39,10 +36,7 @@ const Table = ({
                   type="number"
                   value={y}
                   onChange={(event) =>
-                    change_cl_data(key, {
-                      x: x,
-                      y: parseFloat(event.target.value),
-                    })
+                    change_cl_data(key, [x, parseFloat(event.target.value)])
                   }
                 ></input>
               </td>

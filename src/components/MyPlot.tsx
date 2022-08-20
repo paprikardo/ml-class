@@ -38,8 +38,8 @@ const MyPlot = forwardRef(
     }: IProp,
     ref
   ): JSX.Element => {
-    const dimensions = plot_data.data[0].points.length;
-    const oneDimensional = dimensions == 1;
+    const dimensions = plot_data.data[0].points[0].length;
+    const oneDimensional = dimensions === 1;
     const yOneDimension = 2;
     const selectDimData = (): IDataClass[] => {
       const [a1, a2] = plot_data.selected_attrib; //indices of the selected attributes/dimensions/features
@@ -59,12 +59,11 @@ const MyPlot = forwardRef(
         plot_data.data[c1].points.map((p) => [p[a1], p[a2]]),
       ];
     };
-    var svmBorderLine:(x: number) => number= ()=>1;
     //compute line classifier
     const svmjs = require("svm");
     //c1 and c2 are the arrays of 2D data points, i.e. the selection to 2 features has to happen before calling this function, use getSelectedData() for the selection
     const computeSVMBorder = (c1: IDataPoint[], c2: IDataPoint[]) => {
-      if (c1[0].length != 2 || c2[0].length != 2) {
+      if (c1[0].length !== 2 || c2[0].length !== 2) {
         console.log(
           "ERROR: Calles SVM with wrong input dimensions. Maybe you have not selected the 2 distincitive features"
         );
@@ -94,10 +93,8 @@ const MyPlot = forwardRef(
         (x * w["w"][0] + w["b"]) / -w["w"][1];
       return line_generator;
     };
-    //compute line and put it in data
-    useEffect(() => {
-      svmBorderLine = computeSVMBorder(...selectDimSelectClassData());
-    }, [plot_data.data]);
+    //compute line
+    const svmBorderLine = computeSVMBorder(...selectDimSelectClassData());
 
     const classes = selectDimData(); //classes with selected dimensions to display
     const classPoints = classes.map((cl) => cl.points); //just their points without the class names
@@ -191,18 +188,18 @@ const MyPlot = forwardRef(
     // PLOT ELEMENTS
     const displaySplitLine = hideSplitLine ? "none" : "";
     const colors = ["red", "blue", "yellow","green"]; //LIMITATION: ALLOW MAXIMUM OF 4 DIFFERENT CLASSES
-    const svgCircles = classPoints.map((points, index) =>
-      points.map((p) => {
+    const svgCircles = classPoints.map((points, cl_index) =>
+      points.map((p,points_index) => {
         const ys = oneDimensional ? yOneDimension : p[1];
         return (
           <circle
-            key={"c1" + index}
+            key={"c"+cl_index +"p" +points_index}
             cx={p[0]}
             cy={ys}
             r="0.3"
             stroke="black"
             strokeWidth="0.09"
-            fill={colors[index]}
+            fill={colors[cl_index]}
           />
         );
       })
@@ -306,6 +303,7 @@ const MyPlot = forwardRef(
     const svgPadding = 1;
 
     useKeyPress();
+    console.log(dimensions,plot_data,svmBorderLine)
     return (
       <svg
         height="100%"
@@ -339,7 +337,7 @@ const MyPlot = forwardRef(
           {xAxis}
           {yTicks}
           {yAxis}
-          {...svgCircles}
+          {svgCircles}
           {/* Differentiation line */}
           <line
             display={displaySplitLine}

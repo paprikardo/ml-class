@@ -5,7 +5,7 @@ export function rand_0_10() {
   return Math.random() * 10;
 }
 // a dim-dimensional random point with values between zero and 10
-export function rand_0_10_point(dim: number) {
+export function rand_0_10_point(dim: number):IDataPoint {
   const p = [];
   for (var i = 0; i < dim; i++) {
     p.push(rand_0_10());

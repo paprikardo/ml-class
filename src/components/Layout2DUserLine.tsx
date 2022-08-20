@@ -1,4 +1,4 @@
-import { CLASS_A, CLASS_B, IData, IDataPoint } from "../Data";
+import { IData, IDataPoint } from "../Data";
 
 import RobotWrapper from "./RobotWrapper";
 import NewPointTable from "./NewPointTable";
@@ -11,14 +11,10 @@ function Layout2DUserLine({
   addRandomPoint,
 }: {
   currentData: IData;
-  changePoint: (cl: number, key: number, new_point: IDataPoint) => void
+  changePoint: (cl: number, key: number, new_point: IDataPoint) => void;
   addPoint: (cl: number, new_point: IDataPoint) => void;
   setDataEmpty: () => void;
-  addRandomPoint: (
-    mean_CLASS_A: IDataPoint,
-    mean_CLASS_B: IDataPoint,
-    variance?: number
-  ) => void;
+  addRandomPoint: (means: IDataPoint[], variance?: number) => void;
 }): JSX.Element {
   const [gameState, setGameState] = useState("init");
   const [userLineState, setUserLineState] = useState({
@@ -36,8 +32,9 @@ function Layout2DUserLine({
     });
   };
 
-  const [mean_CLASS_A] = useState({ x: rand_0_10(), y: rand_0_10() });
-  const [mean_CLASS_B] = useState({ x: rand_0_10(), y: rand_0_10() });
+  const [mean_CLASS_A] = useState([rand_0_10(), rand_0_10()]);
+  const [mean_CLASS_B] = useState([rand_0_10(), rand_0_10()]);
+  const [selClassA,selClassB] = currentData.selected_class
   const enableUserDraw = true;
   const [hideSplitLine, setHideSplitLine] = useState(true);
   const plotRef = useRef();
@@ -45,7 +42,7 @@ function Layout2DUserLine({
   useEffect(() => {
     setHideSplitLine(false);
     setDataEmpty();
-    addRandomPoint(mean_CLASS_A, mean_CLASS_B);
+    addRandomPoint([mean_CLASS_A, mean_CLASS_B]);
   }, []);
   //game state logic
   const waitTime = 1000;
@@ -66,31 +63,26 @@ function Layout2DUserLine({
       const interval = setInterval(() => {
         resetUserLine();
         setGameState("init");
-        addRandomPoint(mean_CLASS_A, mean_CLASS_B);
+        addRandomPoint([mean_CLASS_A, mean_CLASS_B]);
         clearInterval(interval);
       }, waitTime);
     }
   }, [gameState]);
 
   const computeScore = () => {
-    const pointsA = currentData.data[CLASS_A].points;
-    const pointsB = currentData.data[CLASS_B].points;
+    const pointsA = currentData.data[selClassA].points;
+    const pointsB = currentData.data[selClassB].points;
     const mUserLine =
       (userLineState.y2 - userLineState.y1) /
       (userLineState.x2 - userLineState.x1);
     const cUserLine = userLineState.y1 - mUserLine * userLineState.x1;
     const pAonSide = pointsA
-      .map(({ x, y }) => {
+      .map(([x, y]) => {
         return isOnOneSideOfLine(mUserLine, cUserLine, x, y);
       })
       .filter(Boolean).length;
-    console.log(
-      pointsA.map(({ x, y }) => {
-        return isOnOneSideOfLine(mUserLine, cUserLine, x, y);
-      })
-    );
     const pBonSide = pointsB
-      .map(({ x, y }) => {
+      .map(([x, y]) => {
         return isOnOneSideOfLine(mUserLine, cUserLine, x, y);
       })
       .filter(Boolean).length;
@@ -164,7 +156,9 @@ function Layout2DUserLine({
       <MyPlot
         ref={plotRef}
         plot_data={currentData}
-        addPoint={()=>{return 0}}
+        addPoint={() => {
+          return 0;
+        }}
         hideSplitLine={hideSplitLine}
         userLineState={userLineState}
         onMouseUpPlotHandler={onMouseUpPlotHandler}
