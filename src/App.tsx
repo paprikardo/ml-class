@@ -19,7 +19,7 @@ function App() {
   const dimensions = currentData.attrib.length;
   const numClasses = currentData.data.length;
   /**
-   * samples a random point each from the given mean and variance and adds them to classes CLASS A and CLASS B respectively
+   * samples a random point each from the given mean and variance and adds them to the respective classes
    * @param means - array of means, one for each DataClass
    * @param variance
    */
@@ -91,18 +91,18 @@ function App() {
 
   //compute line classifier
   const svmjs = require("svm");
-
-  const computeLinePoints = (c1: IDataPoint[], c2: IDataPoint[]) => {
-    const data = [
-      ...c1.map(({ x, y }) => [x, y]),
-      ...c2.map(({ x, y }) => [x, y]),
-    ];
+  //c1 and c2 are the arrays of 2D data points, i.e. the selection to 2 features has to happen before calling this function
+  const computeSVMBorder = (c1: IDataPoint[], c2: IDataPoint[]) => {
+    if(c1[0].length != 2 || c2[0].length != 2){
+      console.log("ERROR: Calles SVM with wrong input dimensions. Maybe you have not selected the 2 distincitive features")
+    }
+    const data = [...c1,...c2]
     const labels: [number][] = [
       ...new Array(c1.length).fill(-1),
       ...new Array(c2.length).fill(1),
     ];
     const svm = new svmjs.SVM();
-    //const trainstats =
+    //const trainstats 
     svm.train(data, labels, { kernel: "linear", C: 1 }); // C is a parameter to SVM
     //const testlabels = svm.predict(testdata);
     // console.log("data: ",svm.data);
@@ -125,7 +125,7 @@ function App() {
     () =>
       setCurrentData((prev) => {
         const prevCopy = { ...prev };
-        prevCopy.line = computeLinePoints(
+        prevCopy.line = computeSVMBorder(
           prev.data[CLASS_A].points,
           prev.data[CLASS_B].points
         );

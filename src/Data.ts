@@ -5,19 +5,18 @@ interface IData2DPoint {
 
 export type IDataPoint = number[]
 
-interface IDataClass {
+export interface IDataClass {
   className: string;
-  points: (number[])[];
+  points: (IDataPoint)[];
 }
 
 export interface IData {
   data: IDataClass[];
   attrib: string[];
-  newPoint: number[];
+  selected_attrib:[number,number]
+  selected_class:[number,number]
+  newPoint: IDataPoint;
 }
-
-export const CLASS_A = 0;
-export const CLASS_B = 1;
 
 export const default2DDataSpread: IData = {
   data: [
@@ -44,6 +43,8 @@ export const default2DDataSpread: IData = {
   ],
   attrib:["Groesse","Länge"],
   newPoint: [10,10],
+  selected_attrib:[0,1],
+  selected_class:[0,1]
 };
 
 export const empty2DData: IData = {
@@ -60,7 +61,9 @@ export const empty2DData: IData = {
     },
   ],
   attrib:["Groesse","Länge"],
-  newPoint:[0,0]
+  newPoint:[0,0],
+  selected_attrib: [0,1],
+  selected_class:[0,1]
 };
 
 // const defaultDataClose: IData = {
