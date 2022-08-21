@@ -1,20 +1,23 @@
+export const NEW_POINT="NEW_POINT"
+
+
 interface IData2DPoint {
   x: number;
   y: number;
 }
 
-export type IDataPoint = number[]
+export type IDataPoint = number[];
 
 export interface IDataClass {
   className: string;
-  points: (IDataPoint)[];
+  points: IDataPoint[];
 }
 
 export interface IData {
   data: IDataClass[];
   attrib: string[];
-  selected_attrib:[number,number]
-  selected_class:[number,number]
+  selected_attrib: [number, number];
+  selected_class: [number, number];
   newPoint: IDataPoint;
 }
 
@@ -23,47 +26,80 @@ export const default2DDataSpread: IData = {
     {
       className: "Pflanze A",
       points: [
-        [ 1.366, 1.692 ],
-        [2.948, 2.745 ],
-        [ 2.444, 2.061],
-        [1.189, 0.893 ],
-        [1.757, 4.041 ],
+        [1.366, 1.692],
+        [2.948, 2.745],
+        [2.444, 2.061],
+        [1.189, 0.893],
+        [1.757, 4.041],
       ],
     },
     {
       className: "Pflanze B",
       points: [
-        [ 9.696,8.865 ],
+        [9.696, 8.865],
         [11.248, 10.695],
-        [8.989, 11.032 ],
-        [10.626, 9.749 ],
-        [10.767, 9.857 ],
+        [8.989, 11.032],
+        [10.626, 9.749],
+        [10.767, 9.857],
       ],
     },
   ],
-  attrib:["Groesse","Länge"],
-  newPoint: [10,10],
-  selected_attrib:[0,1],
-  selected_class:[0,1]
+  attrib: ["Groesse", "Länge"],
+  newPoint: [10, 10],
+  selected_attrib: [0, 1],
+  selected_class: [0, 1],
 };
 
-export const empty2DData: IData = {
+export const irisDataset: IData = {
+  data: [
+    {
+      className: "L. barnumiae",
+      points: [
+        [6, 7, 50],
+        [6, 7.2, 35],
+        [6.1, 7.4, 40],
+        [6.3, 8, 42],
+        [6.5, 7.6, 55],
+        [6.2, 7.8, 60],
+        [6.3, 7, 37],
+      ],
+    },
+    {
+      className: "L. gatasii",
+      points: [
+        [8,8,9],
+        [9,8,8]
+      ],
+    },
+    {
+      className: "L. grant-duffii",
+      points: [
+        [2,2,2],
+        [3,3,3]
+      ],
+    },
+  ],
+  attrib: ["Spatha","Blütenblätter","Stängel"],
+  newPoint: [10, 10,10],
+  selected_attrib: [0, 1],
+  selected_class: [0, 1],
+};
+
+const empty2DData: IData = {
   data: [
     {
       className: "Pflanze A",
-      points: [
-      ],
+      points: [],
     },
     {
       className: "Pflanze B",
-      points: [
-      ],
+      points: [],
     },
   ],
-  attrib:["Groesse","Länge"],
-  newPoint:[0,0],
-  selected_attrib: [0,1],
-  selected_class:[0,1]
+  attrib: ["Groesse", "Länge"],
+  newPoint: [0, 0],
+  selected_attrib: [0, 1],
+  selected_class: [0, 1],
 };
 
 // const defaultDataClose: IData = {

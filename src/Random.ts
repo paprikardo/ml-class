@@ -24,6 +24,6 @@ export function randn_bm(mean: number, variance: number): number {
   return parseFloat(num.toFixed(4));
 }
 
-export function randomPoint(cl_mean: IDataPoint, variance: number): IDataPoint {
+export function randomPoint(cl_mean: IDataPoint, variance:number=2): IDataPoint {
   return cl_mean.map((x) => randn_bm(x, variance));
 }

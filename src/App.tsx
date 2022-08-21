@@ -1,14 +1,20 @@
-import { IData, default2DDataSpread, IDataPoint, empty2DData } from "./Data";
-import { useState, useEffect } from "react";
+import {
+  IData,
+  default2DDataSpread,
+  IDataPoint,
+  irisDataset,
+  NEW_POINT,
+} from "./Data";
+import { useState } from "react";
 import "./App.css";
 import Layout2DRobotLine from "./components/Layout2DRobotLine";
 import Layout2DUserLine from "./components/Layout2DUserLine";
 import { SimpleGrid } from "@mantine/core";
 import TableWrapper from "./components/TableWrapper";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { randn_bm, rand_0_10, randomPoint, rand_0_10_point } from "./Random";
+import { randomPoint, rand_0_10_point } from "./Random";
 import { parse } from "papaparse";
-import { trace } from "console";
+import RobotWrapper from "./components/RobotWrapper";
 function App() {
   const [currentData, setCurrentData] = useState(default2DDataSpread);
   const dimensions = currentData.attrib.length;
@@ -19,7 +25,11 @@ function App() {
    * @param variance
    */
   const addRandomPoint = (means: IDataPoint[], variance: number = 2) => {
-    means.forEach((cl_mean, i) => addPoint(i, randomPoint(cl_mean, variance)));
+    means.forEach((cl_mean, i) => {
+      console.log(cl_mean,i);
+      addPoint(i, randomPoint(cl_mean, variance));
+    });
+    console.log("----",currentData)
   };
   //adds a point to the Data.data array (i.e. the cl'th class/group)
   const addPoint = (cl: number, new_point: IDataPoint): void => {
@@ -43,21 +53,34 @@ function App() {
     setCurrentData((prev) => {
       prev.data[cl].points[key] = new_point;
       const newPrev = { ...prev };
-      // const newPrevData = { ...prev.data };
-      // const group = newPrevData[id];
-      // if (group === undefined) {
-      //   console.log("UNDEFINED ERROR");
-      // } else {
-      //   group[key] = new_point;
-      // }
-      // const newGroup = [...group];
-      // newPrevData[id] = newGroup;
-      // newPrev.data = newPrevData;
       return newPrev;
     });
   };
-  const setDataEmpty = () => {
-    setCurrentData(empty2DData);
+  const changeNewPoint = (new_point: IDataPoint): void => {
+    setCurrentData((prev) => {
+      prev.newPoint = new_point;
+      const newPrev = { ...prev };
+      return newPrev;
+    });
+  };
+  const setDataSinglePoint = (means: IDataPoint[]) => {
+    setCurrentData((prev): IData => {
+      return {
+        data: prev.data.map((cl, cl_index) => {
+          return {
+            className: cl.className,
+            points: [randomPoint(means[cl_index])],
+          };
+        }),
+        selected_attrib: prev.selected_attrib,
+        selected_class: prev.selected_class,
+        newPoint: prev.newPoint,
+        attrib: prev.attrib,
+      };
+    });
+  };
+  const setIrisData = () => {
+    setCurrentData(irisDataset);
   };
   //generates "numSamples" new points for both classes from a random variance and mean
   const newRandomData = () => {
@@ -81,7 +104,6 @@ function App() {
       cls_points.forEach((cl_points, i) => {
         newData.data[i].points = cl_points;
       });
-      console.log(newData);
       return newData;
     });
   };
@@ -93,18 +115,15 @@ function App() {
       parse(file, {
         skipEmptyLines: true,
         complete: (results) => {
-          const res = results.data
-          console.log((res));
-          if(res.length>=2){
-            if(Array.isArray(res[0]) && Array.isArray(res[1])){
-              const r0 = res[0].filter((v, i, a) => a.indexOf(v) === i);//filters duplicates out of array
+          const res = results.data;
+          if (res.length >= 2) {
+            if (Array.isArray(res[0]) && Array.isArray(res[1])) {
+              const r0 = res[0].filter((v, i, a) => a.indexOf(v) === i); //filters duplicates out of array
+            } else {
+              console.log("ERROR: Parsing failed");
             }
-            else{
-              console.log("ERROR: Parsing failed")
-            }
-          }
-          else{
-            console.log("ERROR: CSV has to contain more than two rows")
+          } else {
+            console.log("ERROR: CSV has to contain more than two rows");
           }
         },
       });
@@ -116,20 +135,28 @@ function App() {
     <div className="App">
       <Router>
         <nav>
-          <div style={{ height: 50 }}>
-            <Link to="/">
-              <div style={{ height: "20" }}>Robot Line</div>
-            </Link>
-            <Link to="/userline">User Line</Link>
-          </div>
+          <Link to="/">
+            <div>Robot Line</div>
+          </Link>
+          <Link to="/userline">User Line</Link>
         </nav>
-        <div>DKR DKR</div>
+        <div>
+          <button onClick={newRandomData}>Generiere neue Daten</button>
+          <button onClick={setIrisData}>Iris Dataset</button>
+          <input
+            type="file"
+            name="file"
+            accept=".csv"
+            onChange={importNewData}
+          ></input>
+        </div>
         <SimpleGrid cols={2} spacing="xs">
           <TableWrapper
             plot_data={currentData}
             change_data={changePoint}
             new_random_data={newRandomData}
             import_new_data={importNewData}
+            set_iris_data={setIrisData}
           ></TableWrapper>
           <Routes>
             <Route
@@ -137,7 +164,7 @@ function App() {
               element={
                 <Layout2DRobotLine
                   currentData={currentData}
-                  changePoint={changePoint}
+                  changeNewPoint={changeNewPoint}
                   addPoint={addPoint}
                 ></Layout2DRobotLine>
               }
@@ -149,12 +176,13 @@ function App() {
                   currentData={currentData}
                   changePoint={changePoint}
                   addPoint={addPoint}
-                  setDataEmpty={setDataEmpty}
+                  setDataSinglePoint={setDataSinglePoint}
                   addRandomPoint={addRandomPoint}
                 ></Layout2DUserLine>
               }
             ></Route>
           </Routes>
+          <RobotWrapper class_result="result"></RobotWrapper>
         </SimpleGrid>
       </Router>
     </div>

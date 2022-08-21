@@ -115,16 +115,17 @@ const MyPlot = forwardRef(
     var ymin = Math.min(...all_points_y);
     var ymax = Math.max(...all_points_y);
     //set the minimum intervall that we want to show on the axis, this avoides that the plotted graph will zoom in too much when the points are very close to each other
-    const minIntervalLength = 5;
+    const minIntervalLength = 8;
     const xdistance = xmax - xmin;
+    console.log(xmin,xmax,ymin,ymax)
     if (xdistance < minIntervalLength) {
-      xmax = xmax + minIntervalLength / 2;
-      xmin = xmin - minIntervalLength / 2;
+      xmax = xmax + (minIntervalLength-xdistance) / 2;
+      xmin = xmin - (minIntervalLength-xdistance) / 2;
     }
     const ydistance = ymax - ymin;
     if (ydistance < minIntervalLength) {
-      ymax = ymax + minIntervalLength / 2;
-      ymin = ymin - minIntervalLength / 2;
+      ymax = ymax + (minIntervalLength-ydistance) / 2;
+      ymin = ymin - (minIntervalLength-ydistance) / 2;
     }
 
     const [mouseHold, setMouseHold] = useState(false);

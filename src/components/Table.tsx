@@ -2,11 +2,13 @@ import { IDataPoint } from "../Data";
 
 const Table = ({
   class_name,
+  attribs,
   points,
   change_cl_data,
 }: {
   class_name: string;
   points: IDataPoint[];
+  attribs: string[];
   change_cl_data: (key: number, new_point: IDataPoint) => void;
 }) => {
   return (
@@ -15,31 +17,27 @@ const Table = ({
       <table className="Centred Table">
         <thead>
           <tr>
-            <th>Grösse</th>
-            <th>Länge</th>
+            {attribs.map((s) => (
+              <th key={s}>{s}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
-          {points.map(([x, y], key) => (
+          {points.map((point, key) => (
             <tr key={class_name + "-" + key}>
-              <td>
-                <input
-                  type="number"
-                  value={x}
-                  onChange={(event) =>
-                    change_cl_data(key, [parseFloat(event.target.value), y])
-                  }
-                ></input>
-              </td>
-              <td>
-                <input
-                  type="number"
-                  value={y}
-                  onChange={(event) =>
-                    change_cl_data(key, [x, parseFloat(event.target.value)])
-                  }
-                ></input>
-              </td>
+              {point.map((x, point_index) => (
+                <td key={"td"+point_index}>
+                  <input
+                    type="number"
+                    value={x}
+                    onChange={(event) => {
+                      var newPoint = point;
+                      newPoint[point_index] = parseFloat(event.target.value);
+                      change_cl_data(key, newPoint);
+                    }}
+                  ></input>
+                </td>
+              ))}
             </tr>
           ))}
         </tbody>

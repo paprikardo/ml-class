@@ -7,13 +7,13 @@ import { useEffect, useRef, useState } from "react";
 import { rand_0_10 } from "../Random";
 function Layout2DUserLine({
   currentData,
-  setDataEmpty,
+  setDataSinglePoint,
   addRandomPoint,
 }: {
   currentData: IData;
   changePoint: (cl: number, key: number, new_point: IDataPoint) => void;
   addPoint: (cl: number, new_point: IDataPoint) => void;
-  setDataEmpty: () => void;
+  setDataSinglePoint: (means:IDataPoint[]) => void;
   addRandomPoint: (means: IDataPoint[], variance?: number) => void;
 }): JSX.Element {
   const [gameState, setGameState] = useState("init");
@@ -41,8 +41,7 @@ function Layout2DUserLine({
   //initialize game state
   useEffect(() => {
     setHideSplitLine(false);
-    setDataEmpty();
-    addRandomPoint([mean_CLASS_A, mean_CLASS_B]);
+    setDataSinglePoint([mean_CLASS_A,mean_CLASS_B])
   }, []);
   //game state logic
   const waitTime = 1000;
@@ -166,7 +165,6 @@ function Layout2DUserLine({
         onMouseMovePlotHandler={onMouseMovePlotHandler}
         enableUserDraw={enableUserDraw}
       ></MyPlot>
-      <RobotWrapper class_result="result"></RobotWrapper>
     </div>
   );
 }
