@@ -26,23 +26,23 @@ function App() {
    */
   const addRandomPoint = (means: IDataPoint[], variance: number = 2) => {
     means.forEach((cl_mean, i) => {
-      console.log(cl_mean, i);
       addPoint(i, randomPoint(cl_mean, variance));
     });
     console.log("----", currentData);
   };
   //adds a point to the Data.data array (i.e. the cl'th class/group)
   const addPoint = (cl: number, new_point: IDataPoint): void => {
+    console.log("addPoint to ",cl)
+    console.log("before:",currentData.data)
     setCurrentData((prev) => {
-      prev.data[cl].points.push(new_point);
+      const a = [...prev.data[cl].points]
+      a.push(new_point);
       const newPrev = { ...prev };
-      // const newPrevData = [...prev.data];
-      // const dataClass = newPrevData[cl];
-      // const newDataClassPoints = [...dataClass.points, { x: xVal, y: yVal }];
-      // dataClass.points = newDataClassPoints;
-      // newPrev.data[id] = newGroup;
+
+      newPrev.data[cl].points = a
       return newPrev; //return same object with new reference so rerender triggers
     });
+    console.log("after:",currentData.data)
   };
   //changes a point with the key "key" in the Data.data dictionary with key "id" to "new_point"
   const changePoint = (
@@ -71,6 +71,7 @@ function App() {
   };
   const setDataSinglePoint = (means: IDataPoint[]) => {
     setCurrentData((prev): IData => {
+      console.log(means, prev)
       return {
         data: prev.data.map((cl, cl_index) => {
           return {

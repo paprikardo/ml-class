@@ -119,7 +119,6 @@ const MyPlot = forwardRef(
     //set the minimum intervall that we want to show on the axis, this avoides that the plotted graph will zoom in too much when the points are very close to each other
     const minIntervalLength = 8;
     const xdistance = xmax - xmin;
-    console.log(xmin, xmax, ymin, ymax);
     if (xdistance < minIntervalLength) {
       xmax = xmax + (minIntervalLength - xdistance) / 2;
       xmin = xmin - (minIntervalLength - xdistance) / 2;
@@ -305,7 +304,6 @@ const MyPlot = forwardRef(
     const svgPadding = 1;
 
     useKeyPress();
-    console.log(dimensions, plot_data, svmBorderLine);
     return (
       <div>
         <div>

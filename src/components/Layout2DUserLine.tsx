@@ -9,14 +9,14 @@ function Layout2DUserLine({
   currentData,
   setDataSinglePoint,
   addRandomPoint,
-  setSelectedAttrib
+  setSelectedAttrib,
 }: {
   currentData: IData;
   changePoint: (cl: number, key: number, new_point: IDataPoint) => void;
   addPoint: (cl: number, new_point: IDataPoint) => void;
-  setDataSinglePoint: (means:IDataPoint[]) => void;
+  setDataSinglePoint: (means: IDataPoint[]) => void;
   addRandomPoint: (means: IDataPoint[], variance?: number) => void;
-  setSelectedAttrib:(xAxisAttrib: number, yAxisAttrib: number) => void
+  setSelectedAttrib: (xAxisAttrib: number, yAxisAttrib: number) => void;
 }): JSX.Element {
   const [gameState, setGameState] = useState("init");
   const [userLineState, setUserLineState] = useState({
@@ -33,23 +33,35 @@ function Layout2DUserLine({
       y2: 0,
     });
   };
-
-  const [mean_CLASS_A] = useState([rand_0_10(), rand_0_10()]);
-  const [mean_CLASS_B] = useState([rand_0_10(), rand_0_10()]);
-  const [selClassA,selClassB] = currentData.selected_class
+  const [messageState, setMessageState] = useState("");
+  const dimensions = currentData.attrib.length;
+  const numClasses = currentData.data.length;
+  const meansInit: IDataPoint[] = [];
+  for (var c = 0; c < numClasses; c++) {
+    const classMean = [];
+    for (var i = 0; i < dimensions; i++) {
+      classMean.push(rand_0_10());
+    }
+    meansInit.push(classMean);
+  }
+  const [classMeans] = useState(meansInit);
+  const [selClassA, selClassB] = currentData.selected_class;
   const enableUserDraw = true;
   const [hideSplitLine, setHideSplitLine] = useState(true);
   const plotRef = useRef();
   //initialize game state
   useEffect(() => {
     setHideSplitLine(false);
-    setDataSinglePoint([mean_CLASS_A,mean_CLASS_B])
+    setDataSinglePoint(classMeans);
   }, []);
   //game state logic
   const waitTime = 1000;
   useEffect(() => {
     if (gameState == "init") {
       setHideSplitLine(true);
+      setMessageState(
+        "Zeichne jetzt einen Klassifikator, der die Daten möglichst gut voneinander trennt "
+      );
       console.log(
         "Zeichne jetzt einen Klassifikator, der die Daten möglichst gut voneinander trennt "
       );
@@ -57,6 +69,9 @@ function Layout2DUserLine({
     if (gameState == "line drawn") {
       setHideSplitLine(false);
       const res = computeScore();
+      setMessageState(
+        "Du hast " + res + " Prozent richtig klassifiziert. Sehr gut!"
+      );
       console.log(
         "Du hast " + res + " Prozent richtig klassifiziert. Sehr gut!"
       );
@@ -64,7 +79,7 @@ function Layout2DUserLine({
       const interval = setInterval(() => {
         resetUserLine();
         setGameState("init");
-        addRandomPoint([mean_CLASS_A, mean_CLASS_B]);
+        addRandomPoint(classMeans);
         clearInterval(interval);
       }, waitTime);
     }
@@ -151,7 +166,6 @@ function Layout2DUserLine({
       );
     }
   };
-
   return (
     <div>
       <MyPlot

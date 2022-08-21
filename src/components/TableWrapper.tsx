@@ -16,6 +16,7 @@ const TableWrapper = ({
   import_new_data,
   set_iris_data,
 }: TableWrapperProps) => {
+  console.log("Table:", plot_data.data);
   return (
     <div className="TableWrapper">
       {plot_data.data.map((cl, index) => (
