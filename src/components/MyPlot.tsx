@@ -23,6 +23,7 @@ interface IProp {
     mouseHold: boolean,
     cursorpt: DOMPoint | undefined
   ) => void;
+  setSelectedAttrib: (xAxisAttrib: number, yAxisAttrib: number) => void;
 }
 const MyPlot = forwardRef(
   (
@@ -35,6 +36,7 @@ const MyPlot = forwardRef(
       onMouseUpPlotHandler,
       onMouseDownPlotHandler,
       onMouseMovePlotHandler,
+      setSelectedAttrib,
     }: IProp,
     ref
   ): JSX.Element => {
@@ -117,15 +119,15 @@ const MyPlot = forwardRef(
     //set the minimum intervall that we want to show on the axis, this avoides that the plotted graph will zoom in too much when the points are very close to each other
     const minIntervalLength = 8;
     const xdistance = xmax - xmin;
-    console.log(xmin,xmax,ymin,ymax)
+    console.log(xmin, xmax, ymin, ymax);
     if (xdistance < minIntervalLength) {
-      xmax = xmax + (minIntervalLength-xdistance) / 2;
-      xmin = xmin - (minIntervalLength-xdistance) / 2;
+      xmax = xmax + (minIntervalLength - xdistance) / 2;
+      xmin = xmin - (minIntervalLength - xdistance) / 2;
     }
     const ydistance = ymax - ymin;
     if (ydistance < minIntervalLength) {
-      ymax = ymax + (minIntervalLength-ydistance) / 2;
-      ymin = ymin - (minIntervalLength-ydistance) / 2;
+      ymax = ymax + (minIntervalLength - ydistance) / 2;
+      ymin = ymin - (minIntervalLength - ydistance) / 2;
     }
 
     const [mouseHold, setMouseHold] = useState(false);
@@ -188,13 +190,13 @@ const MyPlot = forwardRef(
     };
     // PLOT ELEMENTS
     const displaySplitLine = hideSplitLine ? "none" : "";
-    const colors = ["red", "blue", "yellow","green"]; //LIMITATION: ALLOW MAXIMUM OF 4 DIFFERENT CLASSES
+    const colors = ["red", "blue", "yellow", "green"]; //LIMITATION: ALLOW MAXIMUM OF 4 DIFFERENT CLASSES
     const svgCircles = classPoints.map((points, cl_index) =>
-      points.map((p,points_index) => {
+      points.map((p, points_index) => {
         const ys = oneDimensional ? yOneDimension : p[1];
         return (
           <circle
-            key={"c"+cl_index +"p" +points_index}
+            key={"c" + cl_index + "p" + points_index}
             cx={p[0]}
             cy={ys}
             r="0.3"
@@ -304,63 +306,106 @@ const MyPlot = forwardRef(
     const svgPadding = 1;
 
     useKeyPress();
-    console.log(dimensions,plot_data,svmBorderLine)
+    console.log(dimensions, plot_data, svmBorderLine);
     return (
-      <svg
-        height="100%"
-        width="100%"
-        onClick={onClickHandler}
-        onMouseDown={onMouseDownHandler}
-        onMouseUp={onMouseUpHandler}
-        onMouseMove={onMouseMoveHandler}
-        onKeyDown={onKeyDownHandler}
-        viewBox={
-          xmin -
-          svgPadding +
-          " " +
-          (-ymax - svgPadding) +
-          " " +
-          (xmax - xmin + 2 * svgPadding) +
-          " " +
-          (ymax - ymin + 2 * svgPadding)
-        }
-        ref={(ref) => {
-          pt = ref?.createSVGPoint();
-          screenctm = ref?.getScreenCTM();
-        }}
-      >
-        {xLabels}
-        {(() => {
-          return oneDimensional ? null : yLabels;
-        })()}
-        <g transform="scale(1,-1)">
-          {xTicks}
-          {xAxis}
-          {yTicks}
-          {yAxis}
-          {svgCircles}
-          {/* Differentiation line */}
-          <line
-            display={displaySplitLine}
-            x1={xmin}
-            y1={svmBorderLine(xmin)}
-            x2={xmax}
-            y2={svmBorderLine(xmax)}
-            stroke="black"
-            strokeWidth="5"
-            strokeLinecap="butt"
-            vectorEffect="non-scaling-stroke"
-          />
-          {/* User Line */}
-          <line
-            {...userLineState}
-            stroke="rgb(0, 153, 51)"
-            strokeWidth="5"
-            strokeLinecap="butt"
-            vectorEffect="non-scaling-stroke"
-          />
-        </g>
-      </svg>
+      <div>
+        <div>
+          X-Axis
+          <div>
+            {plot_data.attrib.map((str, index) => (
+              <div key={str + index}>
+                {str}
+                <input
+                  type="radio"
+                  name="RadioButtonGroupxAxis"
+                  value={index}
+                  onChange={(event) => {
+                    setSelectedAttrib(
+                      parseFloat(event.target.value),
+                      plot_data.selected_attrib[1]
+                    );
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+        <div>
+          Y-Axis
+          <div>
+            {plot_data.attrib.map((str, index) => (
+              <button
+                key={str + index}
+                onClick={() =>
+                  setSelectedAttrib(plot_data.selected_attrib[0], index)
+                }
+                style={
+                  plot_data.selected_attrib[1] == index
+                    ? { backgroundColor: "#8db8cc" }
+                    : {}
+                }
+              >
+                {str}
+              </button>
+            ))}
+          </div>
+        </div>
+        <svg
+          height="100%"
+          width="100%"
+          onClick={onClickHandler}
+          onMouseDown={onMouseDownHandler}
+          onMouseUp={onMouseUpHandler}
+          onMouseMove={onMouseMoveHandler}
+          onKeyDown={onKeyDownHandler}
+          viewBox={
+            xmin -
+            svgPadding +
+            " " +
+            (-ymax - svgPadding) +
+            " " +
+            (xmax - xmin + 2 * svgPadding) +
+            " " +
+            (ymax - ymin + 2 * svgPadding)
+          }
+          ref={(ref) => {
+            pt = ref?.createSVGPoint();
+            screenctm = ref?.getScreenCTM();
+          }}
+        >
+          {xLabels}
+          {(() => {
+            return oneDimensional ? null : yLabels;
+          })()}
+          <g transform="scale(1,-1)">
+            {xTicks}
+            {xAxis}
+            {yTicks}
+            {yAxis}
+            {svgCircles}
+            {/* Differentiation line */}
+            <line
+              display={displaySplitLine}
+              x1={xmin}
+              y1={svmBorderLine(xmin)}
+              x2={xmax}
+              y2={svmBorderLine(xmax)}
+              stroke="black"
+              strokeWidth="5"
+              strokeLinecap="butt"
+              vectorEffect="non-scaling-stroke"
+            />
+            {/* User Line */}
+            <line
+              {...userLineState}
+              stroke="rgb(0, 153, 51)"
+              strokeWidth="5"
+              strokeLinecap="butt"
+              vectorEffect="non-scaling-stroke"
+            />
+          </g>
+        </svg>
+      </div>
     );
   }
 );

@@ -6,14 +6,20 @@ function Layout2DRobotLine({
   currentData,
   changeNewPoint,
   addPoint,
+  setSelectedAttrib,
 }: {
   currentData: IData;
   changeNewPoint: (new_point: IDataPoint) => void;
   addPoint: (cl: number, new_point: IDataPoint) => void;
+  setSelectedAttrib: (xAxisAttrib: number, yAxisAttrib: number) => void;
 }): JSX.Element {
   return (
     <div>
-      <MyPlot plot_data={currentData} addPoint={addPoint}></MyPlot>
+      <MyPlot
+        plot_data={currentData}
+        addPoint={addPoint}
+        setSelectedAttrib={setSelectedAttrib}
+      ></MyPlot>
       <Table
         class_name="Neuer zu klassifizierender Punkt"
         attribs={currentData.attrib}

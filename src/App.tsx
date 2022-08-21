@@ -26,10 +26,10 @@ function App() {
    */
   const addRandomPoint = (means: IDataPoint[], variance: number = 2) => {
     means.forEach((cl_mean, i) => {
-      console.log(cl_mean,i);
+      console.log(cl_mean, i);
       addPoint(i, randomPoint(cl_mean, variance));
     });
-    console.log("----",currentData)
+    console.log("----", currentData);
   };
   //adds a point to the Data.data array (i.e. the cl'th class/group)
   const addPoint = (cl: number, new_point: IDataPoint): void => {
@@ -54,6 +54,12 @@ function App() {
       prev.data[cl].points[key] = new_point;
       const newPrev = { ...prev };
       return newPrev;
+    });
+  };
+  const setSelectedAttrib = (xAxisAttrib: number, yAxisAttrib: number) => {
+    setCurrentData((prev) => {
+      prev.selected_attrib = [xAxisAttrib, yAxisAttrib];
+      return { ...prev };
     });
   };
   const changeNewPoint = (new_point: IDataPoint): void => {
@@ -166,6 +172,7 @@ function App() {
                   currentData={currentData}
                   changeNewPoint={changeNewPoint}
                   addPoint={addPoint}
+                  setSelectedAttrib={setSelectedAttrib}
                 ></Layout2DRobotLine>
               }
             ></Route>
@@ -178,6 +185,7 @@ function App() {
                   addPoint={addPoint}
                   setDataSinglePoint={setDataSinglePoint}
                   addRandomPoint={addRandomPoint}
+                  setSelectedAttrib={setSelectedAttrib}
                 ></Layout2DUserLine>
               }
             ></Route>

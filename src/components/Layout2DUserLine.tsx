@@ -9,12 +9,14 @@ function Layout2DUserLine({
   currentData,
   setDataSinglePoint,
   addRandomPoint,
+  setSelectedAttrib
 }: {
   currentData: IData;
   changePoint: (cl: number, key: number, new_point: IDataPoint) => void;
   addPoint: (cl: number, new_point: IDataPoint) => void;
   setDataSinglePoint: (means:IDataPoint[]) => void;
   addRandomPoint: (means: IDataPoint[], variance?: number) => void;
+  setSelectedAttrib:(xAxisAttrib: number, yAxisAttrib: number) => void
 }): JSX.Element {
   const [gameState, setGameState] = useState("init");
   const [userLineState, setUserLineState] = useState({
@@ -164,6 +166,7 @@ function Layout2DUserLine({
         onMouseDownPlotHandler={onMouseDownPlotHandler}
         onMouseMovePlotHandler={onMouseMovePlotHandler}
         enableUserDraw={enableUserDraw}
+        setSelectedAttrib={setSelectedAttrib}
       ></MyPlot>
     </div>
   );
