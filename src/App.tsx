@@ -190,7 +190,7 @@ function App() {
               }
             ></Route>
           </Routes>
-          <RobotWrapper class_result="result"></RobotWrapper>
+          <RobotWrapper class_result="mm"></RobotWrapper>
         </SimpleGrid>
       </Router>
     </div>

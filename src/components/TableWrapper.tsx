@@ -1,4 +1,4 @@
-import { IData, IDataPoint } from "../Data";
+import { colors, IData, IDataPoint } from "../Data";
 import Table from "./Table";
 
 interface TableWrapperProps {
@@ -27,6 +27,7 @@ const TableWrapper = ({
           change_cl_data={(key: number, new_point: IDataPoint) =>
             change_data(index, key, new_point)
           }
+          color={colors[index]}
         ></Table>
       ))}
     </div>

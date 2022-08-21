@@ -6,6 +6,8 @@ interface IData2DPoint {
   y: number;
 }
 
+export const colors = ["#E64848", "#89CFFD", "#FFE9AE", "#CFE8A9","gray"]; //LIMITATION: ALLOW MAXIMUM OF 4 DIFFERENT CLASSES
+
 export type IDataPoint = number[];
 
 export interface IDataClass {

@@ -5,14 +5,16 @@ const Table = ({
   attribs,
   points,
   change_cl_data,
+  color
 }: {
   class_name: string;
   points: IDataPoint[];
   attribs: string[];
   change_cl_data: (key: number, new_point: IDataPoint) => void;
+  color?:string
 }) => {
   return (
-    <div>
+    <div style={{backgroundColor:color}}>
       <h3>{class_name}</h3>
       <table className="Centred Table">
         <thead>

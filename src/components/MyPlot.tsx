@@ -1,6 +1,6 @@
 //*TODO: used viewbox to scale points appropriately. How to find coordinates in viewbox? */
 import { forwardRef, useEffect, useState } from "react";
-import { IData, IDataPoint, IDataClass } from "../Data";
+import { IData, IDataPoint, IDataClass,colors } from "../Data";
 
 var pt: DOMPoint | undefined = undefined;
 var screenctm: any = null;
@@ -190,7 +190,6 @@ const MyPlot = forwardRef(
     };
     // PLOT ELEMENTS
     const displaySplitLine = hideSplitLine ? "none" : "";
-    const colors = ["red", "blue", "yellow", "green"]; //LIMITATION: ALLOW MAXIMUM OF 4 DIFFERENT CLASSES
     const svgCircles = classPoints.map((points, cl_index) =>
       points.map((p, points_index) => {
         const ys = oneDimensional ? yOneDimension : p[1];
@@ -313,20 +312,19 @@ const MyPlot = forwardRef(
           X-Axis
           <div>
             {plot_data.attrib.map((str, index) => (
-              <div key={str + index}>
+              <button
+                key={str + index}
+                onClick={() =>
+                  setSelectedAttrib(index,plot_data.selected_attrib[1])
+                }
+                style={
+                  plot_data.selected_attrib[0] == index
+                    ? { backgroundColor: "#8db8cc" }
+                    : {}
+                }
+              >
                 {str}
-                <input
-                  type="radio"
-                  name="RadioButtonGroupxAxis"
-                  value={index}
-                  onChange={(event) => {
-                    setSelectedAttrib(
-                      parseFloat(event.target.value),
-                      plot_data.selected_attrib[1]
-                    );
-                  }}
-                />
-              </div>
+              </button>
             ))}
           </div>
         </div>
