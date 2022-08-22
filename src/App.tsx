@@ -3,7 +3,6 @@ import {
   default2DDataSpread,
   IDataPoint,
   irisDataset,
-  NEW_POINT,
 } from "./Data";
 import { useState } from "react";
 import "./App.css";
@@ -14,7 +13,6 @@ import TableWrapper from "./components/TableWrapper";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { randomPoint, rand_0_10_point } from "./Random";
 import { parse } from "papaparse";
-import RobotWrapper from "./components/RobotWrapper";
 function App() {
   const [currentData, setCurrentData] = useState(default2DDataSpread);
   const dimensions = currentData.attrib.length;
@@ -35,11 +33,10 @@ function App() {
     console.log("addPoint to ",cl)
     console.log("before:",currentData.data)
     setCurrentData((prev) => {
-      const a = [...prev.data[cl].points]
-      a.push(new_point);
       const newPrev = { ...prev };
-
-      newPrev.data[cl].points = a
+      newPrev.data = [...prev.data]
+      newPrev.data[cl] = {...prev.data[cl]}
+      newPrev.data[cl].points = [...prev.data[cl].points,new_point];//adding new point
       return newPrev; //return same object with new reference so rerender triggers
     });
     console.log("after:",currentData.data)
@@ -98,10 +95,10 @@ function App() {
       means.push(rand_0_10_point(dimensions));
     }
     const cls_points: IDataPoint[][] = [];
-    for (var i = 0; i < numClasses; i++) {
+    for (i = 0; i < numClasses; i++) {
       cls_points.push([]);
     }
-    cls_points.map((cl_points, index) => {
+    cls_points.forEach((cl_points, index) => {
       for (var i = 0; i < numSamples; i++) {
         cl_points.push(randomPoint(means[index], variance));
       }
@@ -138,6 +135,7 @@ function App() {
       console.log("ERROR, No CSV file found");
     }
   };
+
   return (
     <div className="App">
       <Router>
@@ -191,7 +189,6 @@ function App() {
               }
             ></Route>
           </Routes>
-          <RobotWrapper class_result="mm"></RobotWrapper>
         </SimpleGrid>
       </Router>
     </div>

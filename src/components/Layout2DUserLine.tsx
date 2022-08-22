@@ -55,7 +55,7 @@ function Layout2DUserLine({
     setDataSinglePoint(classMeans);
   }, []);
   //game state logic
-  const waitTime = 1000;
+  const waitTime = 2000;
   useEffect(() => {
     if (gameState == "init") {
       setHideSplitLine(true);
@@ -68,7 +68,7 @@ function Layout2DUserLine({
     }
     if (gameState == "line drawn") {
       setHideSplitLine(false);
-      const res = computeScore();
+      const res = Math.round(computeScore());
       setMessageState(
         "Du hast " + res + " Prozent richtig klassifiziert. Sehr gut!"
       );
@@ -182,6 +182,7 @@ function Layout2DUserLine({
         enableUserDraw={enableUserDraw}
         setSelectedAttrib={setSelectedAttrib}
       ></MyPlot>
+      <RobotWrapper class_result={messageState}></RobotWrapper>
     </div>
   );
 }

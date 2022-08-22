@@ -90,7 +90,7 @@ const SpeechBubble = ({classification_result,preserveAspectRatio}:{classificatio
         strokeLinejoin="bevel"
         strokeMiterlimit="0"
         strokeWidth="0"
-        fontSize="7.056"
+        fontSize="1.056"
         textAnchor="middle"
       >
         <tspan

@@ -1,6 +1,7 @@
 //*TODO: used viewbox to scale points appropriately. How to find coordinates in viewbox? */
 import { forwardRef, useEffect, useState } from "react";
 import { IData, IDataPoint, IDataClass,colors } from "../Data";
+import '../App.css'
 
 var pt: DOMPoint | undefined = undefined;
 var screenctm: any = null;
