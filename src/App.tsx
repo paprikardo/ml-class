@@ -1,9 +1,4 @@
-import {
-  IData,
-  default2DDataSpread,
-  IDataPoint,
-  irisDataset,
-} from "./Data";
+import { IData, default2DDataSpread, IDataPoint, irisDataset } from "./Data";
 import { useState } from "react";
 import "./App.css";
 import Layout2DRobotLine from "./components/Layout2DRobotLine";
@@ -30,16 +25,16 @@ function App() {
   };
   //adds a point to the Data.data array (i.e. the cl'th class/group)
   const addPoint = (cl: number, new_point: IDataPoint): void => {
-    console.log("addPoint to ",cl)
-    console.log("before:",currentData.data)
+    console.log("addPoint to ", cl);
+    console.log("before:", currentData.data);
     setCurrentData((prev) => {
       const newPrev = { ...prev };
-      newPrev.data = [...prev.data]
-      newPrev.data[cl] = {...prev.data[cl]}
-      newPrev.data[cl].points = [...prev.data[cl].points,new_point];//adding new point
+      newPrev.data = [...prev.data];
+      newPrev.data[cl] = { ...prev.data[cl] };
+      newPrev.data[cl].points = [...prev.data[cl].points, new_point]; //adding new point
       return newPrev; //return same object with new reference so rerender triggers
     });
-    console.log("after:",currentData.data)
+    console.log("after:", currentData.data);
   };
   //changes a point with the key "key" in the Data.data dictionary with key "id" to "new_point"
   const changePoint = (
@@ -53,10 +48,20 @@ function App() {
       return newPrev;
     });
   };
+  //sets the selected attributes (selected to being displayed in the plot) to xAxisAttrib and yAxisAttrib
   const setSelectedAttrib = (xAxisAttrib: number, yAxisAttrib: number) => {
     setCurrentData((prev) => {
-      prev.selected_attrib = [xAxisAttrib, yAxisAttrib];
-      return { ...prev };
+      const newPrev = { ...prev };
+      newPrev.selected_attrib = [xAxisAttrib, yAxisAttrib];
+      return newPrev;
+    });
+  };
+  //sets the selected classes (selected to the classification) to class1 and class2
+  const setSelectedClasses = (class1: number, class2: number) => {
+    setCurrentData((prev) => {
+      const newPrev = { ...prev };
+      newPrev.selected_class = [class1, class2];
+      return newPrev;
     });
   };
   const changeNewPoint = (new_point: IDataPoint): void => {
@@ -68,7 +73,7 @@ function App() {
   };
   const setDataSinglePoint = (means: IDataPoint[]) => {
     setCurrentData((prev): IData => {
-      console.log(means, prev)
+      console.log(means, prev);
       return {
         data: prev.data.map((cl, cl_index) => {
           return {
@@ -130,6 +135,8 @@ function App() {
             change_data={changePoint}
             new_random_data={newRandomData}
             set_iris_data={setIrisData}
+            setSelectedClasses={setSelectedClasses}
+            selectedClasses = {currentData.selected_class}
           ></TableWrapper>
           <Routes>
             <Route

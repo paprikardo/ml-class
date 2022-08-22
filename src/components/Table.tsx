@@ -1,22 +1,28 @@
 import { IDataPoint } from "../Data";
-
+import '../App.css'
 const Table = ({
   class_name,
   attribs,
   points,
   change_cl_data,
-  color
+  color,
+  highlighted,
+  onClickHandler
 }: {
   class_name: string;
   points: IDataPoint[];
   attribs: string[];
   change_cl_data: (key: number, new_point: IDataPoint) => void;
-  color?:string
+  color?:string,
+  highlighted?:boolean,
+  onClickHandler?:()=>void
 }) => {
+  const highlightedClassName = highlighted?" highlighted":""
+  console.log(color,"Centred Table"+highlightedClassName)
   return (
-    <div style={{backgroundColor:color}}>
-      <h3>{class_name}</h3>
-      <table className="Centred Table">
+    <div className="Centred Table" style={{backgroundColor:color}} onClick={onClickHandler}>
+      <h3><p>{class_name}</p></h3>
+      <table className={"Centred Table "+highlightedClassName}>
         <thead>
           <tr>
             {attribs.map((s) => (
