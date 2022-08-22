@@ -111,31 +111,6 @@ function App() {
       return newData;
     });
   };
-  //import data from a csv file
-  const importNewData: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    //parse csv file given by event.target.files[o]
-    if (event.target.files != null) {
-      const file = event.target.files[0];
-      parse(file, {
-        skipEmptyLines: true,
-        complete: (results) => {
-          const res = results.data;
-          if (res.length >= 2) {
-            if (Array.isArray(res[0]) && Array.isArray(res[1])) {
-              const r0 = res[0].filter((v, i, a) => a.indexOf(v) === i); //filters duplicates out of array
-            } else {
-              console.log("ERROR: Parsing failed");
-            }
-          } else {
-            console.log("ERROR: CSV has to contain more than two rows");
-          }
-        },
-      });
-    } else {
-      console.log("ERROR, No CSV file found");
-    }
-  };
-
   return (
     <div className="App">
       <Router>
@@ -148,19 +123,12 @@ function App() {
         <div>
           <button onClick={newRandomData}>Generiere neue Daten</button>
           <button onClick={setIrisData}>Iris Dataset</button>
-          <input
-            type="file"
-            name="file"
-            accept=".csv"
-            onChange={importNewData}
-          ></input>
         </div>
         <SimpleGrid cols={2} spacing="xs">
           <TableWrapper
             plot_data={currentData}
             change_data={changePoint}
             new_random_data={newRandomData}
-            import_new_data={importNewData}
             set_iris_data={setIrisData}
           ></TableWrapper>
           <Routes>
