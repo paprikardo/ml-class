@@ -1,12 +1,11 @@
-export const NEW_POINT="NEW_POINT"
-
+export const NEW_POINT = "NEW_POINT";
 
 interface IData2DPoint {
   x: number;
   y: number;
 }
 
-export const colors = ["#E64848", "#89CFFD", "#FFE9AE", "#CFE8A9","gray"]; //LIMITATION: ALLOW MAXIMUM OF 4 DIFFERENT CLASSES
+export const colors = ["#E64848", "#89CFFD", "#FFE9AE", "#CFE8A9", "gray"]; //LIMITATION: ALLOW MAXIMUM OF 4 DIFFERENT CLASSES
 
 export type IDataPoint = number[];
 
@@ -18,11 +17,20 @@ export interface IDataClass {
 export interface IData {
   data: IDataClass[];
   attrib: string[];
-  selected_attrib: [number, number];
-  selected_class: [number, number];
+  selected_attrib: [number, number] | number; //if both axis are shown (the "2D" case we have two selected attributes), otherwise we have one
+  selected_class: [number, number]; //same for the selected classes
   newPoint: IDataPoint;
 }
-
+export const oneDDataset: IData = {
+  data: [
+    { className: "Klasse 1", points: [[2], [4], [3], [2.5]] },
+    { className: "Klasse 2", points: [[3.5], [4], [5], [5.5]] },
+  ],
+  attrib: ["Attrib 1"],
+  newPoint: [10, 10],
+  selected_attrib: [0, 0],
+  selected_class: [0, 0],
+};
 export const default2DDataSpread: IData = {
   data: [
     {
@@ -69,20 +77,20 @@ export const irisDataset: IData = {
     {
       className: "L. gatasii",
       points: [
-        [8,8,9],
-        [9,8,8]
+        [8, 8, 9],
+        [9, 8, 8],
       ],
     },
     {
       className: "L. grant-duffii",
       points: [
-        [2,2,2],
-        [3,3,3]
+        [2, 2, 2],
+        [3, 3, 3],
       ],
     },
   ],
-  attrib: ["Spatha","Blütenblätter","Stängel"],
-  newPoint: [10, 10,10],
+  attrib: ["Spatha", "Blütenblätter", "Stängel"],
+  newPoint: [10, 10, 10],
   selected_attrib: [0, 1],
   selected_class: [0, 1],
 };

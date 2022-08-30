@@ -1,4 +1,4 @@
-import { IData, default2DDataSpread, IDataPoint, irisDataset } from "./Data";
+import { IData, default2DDataSpread, IDataPoint, irisDataset, oneDDataset } from "./Data";
 import { useState } from "react";
 import "./App.css";
 import Layout2DRobotLine from "./components/Layout2DRobotLine";
@@ -91,6 +91,9 @@ function App() {
   const setIrisData = () => {
     setCurrentData(irisDataset);
   };
+  const set1DData = () => {
+    setCurrentData(oneDDataset)
+  }
   //generates "numSamples" new points for both classes from a random variance and mean
   const newRandomData = () => {
     const numSamples = 5;
@@ -128,6 +131,7 @@ function App() {
         <div>
           <button onClick={newRandomData}>Generiere neue Daten</button>
           <button onClick={setIrisData}>Iris Dataset</button>
+          <button onClick={set1DData}>1D Dataset</button>
         </div>
         <SimpleGrid cols={2} spacing="xs">
           <TableWrapper

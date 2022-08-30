@@ -1,7 +1,7 @@
 //*TODO: used viewbox to scale points appropriately. How to find coordinates in viewbox? */
 import { forwardRef, useEffect, useState } from "react";
-import { IData, IDataPoint, IDataClass,colors } from "../Data";
-import '../App.css'
+import { IData, IDataPoint, IDataClass, colors } from "../Data";
+import "../App.css";
 
 var pt: DOMPoint | undefined = undefined;
 var screenctm: any = null;
@@ -15,16 +15,17 @@ interface IProp {
     x2: number;
     y1: number;
     y2: number;
-  };
-  hideSplitLine?: boolean;
-  enableUserDraw?: boolean;
+  }; //The current state of the drawn user line, MyPlot does not track this
+  hideSplitLine?: boolean; //toogles if "Split Line" computed by AI is displayed
+  enableUserDraw?: boolean; //toggles if the User is allowed to draw its own classifier into the plot
+  isOneDimensional?: boolean; //toggles if this plot should only display one Dimension
   onMouseUpPlotHandler?: () => void;
   onMouseDownPlotHandler?: (cursorpt: DOMPoint | undefined) => void;
   onMouseMovePlotHandler?: (
     mouseHold: boolean,
     cursorpt: DOMPoint | undefined
   ) => void;
-  setSelectedAttrib: (xAxisAttrib: number, yAxisAttrib: number) => void;
+  setSelectedAttrib: (xAxisAttrib: number, yAxisAttrib: number) => void; 
 }
 const MyPlot = forwardRef(
   (
@@ -38,29 +39,50 @@ const MyPlot = forwardRef(
       onMouseDownPlotHandler,
       onMouseMovePlotHandler,
       setSelectedAttrib,
+      isOneDimensional,
     }: IProp,
     ref
   ): JSX.Element => {
     const dimensions = plot_data.data[0].points[0].length;
-    const oneDimensional = dimensions === 1;
-    const yOneDimension = 2;
+    const oneDimensional = isOneDimensional ? true : dimensions === 1;
+    const yOneDimension = 0;
+    //return selected data of all of the classes (selected attributes of the points from all classes)
     const selectDimData = (): IDataClass[] => {
-      const [a1, a2] = plot_data.selected_attrib; //indices of the selected attributes/dimensions/features
-      return plot_data.data.map(({ className, points }) => {
-        return {
-          className: className,
-          points: points.map((p) => [p[a1], p[a2]]),
-        };
-      });
+      if (Array.isArray(plot_data.selected_attrib)) {
+        //2D axis case
+        const [a1, a2] = plot_data.selected_attrib; //indices of the selected attributes/dimensions/features
+        return plot_data.data.map(({ className, points }) => {
+          return {
+            className: className,
+            points: points.map((p) => [p[a1], p[a2]]),
+          };
+        });
+      } else {
+        const attrib = plot_data.selected_attrib;
+        return plot_data.data.map(({ className, points }) => {
+          return {
+            className: className,
+            points: points.map((p) => [p[attrib]]),
+          };
+        });
+      }
     };
-    //return data points of the selected classess where the points only contain the selected dimensions
+    //return data points of the selected classes where the points only contain the selected dimensions/attributes
     const selectDimSelectClassData = (): [IDataPoint[], IDataPoint[]] => {
       const [c0, c1] = plot_data.selected_class; //indices of the selected classes
-      const [a1, a2] = plot_data.selected_attrib; //indices of the selected attributes/dimensions/features
-      return [
-        plot_data.data[c0].points.map((p) => [p[a1], p[a2]]),
-        plot_data.data[c1].points.map((p) => [p[a1], p[a2]]),
-      ];
+      if (Array.isArray(plot_data.selected_attrib)) {
+        const [a1, a2] = plot_data.selected_attrib; //indices of the selected attributes/dimensions/features
+        return [
+          plot_data.data[c0].points.map((p) => [p[a1], p[a2]]),
+          plot_data.data[c1].points.map((p) => [p[a1], p[a2]]),
+        ];
+      } else {
+        const attrib = plot_data.selected_attrib;
+        return [
+          plot_data.data[c0].points.map((p) => [p[attrib]]),
+          plot_data.data[c1].points.map((p) => [p[attrib]]),
+        ];
+      }
     };
     //compute line classifier
     const svmjs = require("svm");
@@ -148,9 +170,17 @@ const MyPlot = forwardRef(
       if (!enableUserDraw) {
         //only add new points on click if not draw User Line mode
         const pointToAdd = new Array(dimensions).fill(0);
-        const [selectedAttrib1, selectedAttrib2] = plot_data.selected_attrib;
-        pointToAdd[selectedAttrib1] = parseFloat(cursorpt!.x.toFixed(4));
-        pointToAdd[selectedAttrib2] = parseFloat((-cursorpt!.y).toFixed(4)); //-y on the points since y coordinate was flipped
+        if (Array.isArray(plot_data.selected_attrib)) {
+          //2D case i.e. two axis shown
+          const [selectedAttrib1, selectedAttrib2] = plot_data.selected_attrib;
+          pointToAdd[selectedAttrib1] = parseFloat(cursorpt!.x.toFixed(4));
+          pointToAdd[selectedAttrib2] = parseFloat((-cursorpt!.y).toFixed(4)); //-y on the points since y coordinate was flipped
+        } else {
+          //plot_data.selected_attrib : number
+          pointToAdd[plot_data.selected_attrib] = parseFloat(
+            cursorpt!.x.toFixed(4)
+          );
+        }
         if (shiftKey) {
           // add point to the second class if shiftKey
           addPoint(plot_data.selected_class[1], pointToAdd);
@@ -189,7 +219,7 @@ const MyPlot = forwardRef(
       }
     };
     // PLOT ELEMENTS
-    const displaySplitLine = hideSplitLine ? "none" : "";
+    const displaySplitLineParam = hideSplitLine ? "none" : "";
     const svgCircles = classPoints.map((points, cl_index) =>
       points.map((p, points_index) => {
         const ys = oneDimensional ? yOneDimension : p[1];
@@ -253,7 +283,7 @@ const MyPlot = forwardRef(
       Math.round(xmin + (xmax - xmin) / 2),
       Math.round(xmax),
     ];
-    const yValueXAxis = ymin - 1;
+    const yValueXAxis = oneDimensional ? yOneDimension : ymin - 0.5; //y value where the x axis is displayed
     const xTicks = xAxisPoints.map((x, i) =>
       tickLine(x, yValueXAxis, x, yValueXAxis - 0.2, "xTicks-" + i + "-" + x)
     );
@@ -267,7 +297,7 @@ const MyPlot = forwardRef(
     const xLabels = xAxisPoints.map((x, i) => (
       <text
         key={"xLabel-" + i + "-" + x}
-        x={x}
+        x={x - 0.1}
         y={-yValueXAxis + 0.5}
         fill="black"
         fontSize="0.3"
@@ -275,34 +305,48 @@ const MyPlot = forwardRef(
         {x}
       </text>
     ));
-    const yAxisPoints = [
-      Math.round(ymin),
-      Math.round(ymin + (ymax - ymin) / 2),
-      Math.round(ymax),
-    ];
+    const yAxisPoints = oneDimensional //only render y axis if two dimensional
+      ? []
+      : [
+          Math.round(ymin),
+          Math.round(ymin + (ymax - ymin) / 2),
+          Math.round(ymax),
+        ];
     const xValueYAxis = xmin - 0.5;
-    const yTicks = yAxisPoints.map((y, i) =>
-      tickLine(xValueYAxis, y, xValueYAxis - 0.2, y, "yTicks-" + i + " " + y)
+    const yTicks = oneDimensional ? ( //only render y ticks if two dimensional
+      <div></div>
+    ) : (
+      yAxisPoints.map((y, i) =>
+        tickLine(xValueYAxis, y, xValueYAxis - 0.2, y, "yTicks-" + i + " " + y)
+      )
     );
-    const yAxis = axisLine(
-      xValueYAxis,
-      yValueXAxis,
-      xValueYAxis,
-      yAxisPoints[yAxisPoints.length - 1] + 1,
-      "yAxis-Key"
+    const yAxis = oneDimensional ? ( //only render y axis if two dimensional
+      <div></div>
+    ) : (
+      axisLine(
+        xValueYAxis,
+        yValueXAxis,
+        xValueYAxis,
+        yAxisPoints[yAxisPoints.length - 1] + 1,
+        "yAxis-Key"
+      )
     );
-    const yLabels = yAxisPoints.map((y, i) => (
-      <text
-        key={"yLabel-" + i + "-" + y}
-        x={xValueYAxis - 0.5}
-        y={-y}
-        fill="black"
-        fontSize="0.3"
-      >
-        {y}
-      </text>
-    ));
-    const svgPadding = 1;
+    const yLabels = oneDimensional ? ( //only render y labels if two dimensional
+      <div></div>
+    ) : (
+      yAxisPoints.map((y, i) => (
+        <text
+          key={"yLabel-" + i + "-" + y}
+          x={xValueYAxis - 0.5}
+          y={-y + 0.1}
+          fill="black"
+          fontSize="0.3"
+        >
+          {y}
+        </text>
+      ))
+    );
+    const svgPadding = 2; //padding arround the svg elements
 
     useKeyPress();
     return (
@@ -314,11 +358,18 @@ const MyPlot = forwardRef(
               <button
                 key={str + index}
                 onClick={() =>
-                  setSelectedAttrib(index,plot_data.selected_attrib[1])
+                  setSelectedAttrib(
+                    index,
+                    Array.isArray(plot_data.selected_attrib)
+                      ? plot_data.selected_attrib[1]
+                      : index
+                  )
                 }
                 style={
-                  plot_data.selected_attrib[0] == index
-                    ? { backgroundColor: "#8db8cc" }
+                  Array.isArray(plot_data.selected_attrib)
+                    ? plot_data.selected_attrib[0] == index
+                      ? { backgroundColor: "#8db8cc" }
+                      : {}
                     : {}
                 }
               >
@@ -327,26 +378,38 @@ const MyPlot = forwardRef(
             ))}
           </div>
         </div>
-        <div>
-          Y-Axis
+
+        {oneDimensional ? (
+          <div></div>
+        ) : (
           <div>
-            {plot_data.attrib.map((str, index) => (
-              <button
-                key={str + index}
-                onClick={() =>
-                  setSelectedAttrib(plot_data.selected_attrib[0], index)
-                }
-                style={
-                  plot_data.selected_attrib[1] == index
-                    ? { backgroundColor: "#8db8cc" }
-                    : {}
-                }
-              >
-                {str}
-              </button>
-            ))}
+            Y-Axis
+            <div>
+              {plot_data.attrib.map((str, index) => (
+                <button
+                  key={str + index}
+                  onClick={() =>
+                    setSelectedAttrib(
+                      Array.isArray(plot_data.selected_attrib)
+                        ? plot_data.selected_attrib[0]
+                        : index,
+                      index
+                    )
+                  }
+                  style={
+                    Array.isArray(plot_data.selected_attrib)
+                      ? plot_data.selected_attrib[1] == index
+                        ? { backgroundColor: "#8db8cc" }
+                        : {}
+                      : {}
+                  }
+                >
+                  {str}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
         <svg
           height="100%"
           width="100%"
@@ -382,7 +445,7 @@ const MyPlot = forwardRef(
             {svgCircles}
             {/* Differentiation line */}
             <line
-              display={displaySplitLine}
+              display={displaySplitLineParam}
               x1={xmin}
               y1={svmBorderLine(xmin)}
               x2={xmax}
