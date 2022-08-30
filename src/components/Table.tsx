@@ -18,7 +18,6 @@ const Table = ({
   onClickHandler?:()=>void
 }) => {
   const highlightedClassName = highlighted?" highlighted":""
-  console.log(color,"Centred Table"+highlightedClassName)
   return (
     <div className="Centred Table" style={{backgroundColor:color}} onClick={onClickHandler}>
       <h3><p>{class_name}</p></h3>

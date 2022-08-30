@@ -10,14 +10,16 @@ var shiftKey = false;
 interface IProp {
   plot_data: IData;
   addPoint: (cl: number, new_point: IDataPoint) => void;
+  enableUserDraw?: boolean; //toggles if the User is allowed to draw its own classifier into the plot
   userLineState?: {
     x1: number;
     x2: number;
     y1: number;
     y2: number;
-  }; //The current state of the drawn user line, MyPlot does not track this
+  }; //The current state of the drawn user line, MyPlot does not track this, it is always displayed (with zero length if hidden)
+  userPointXState?: number; //the current user point
+  previewUserPoint?: boolean; //if true, the user Point is only in "preview" mode, transparent and not definite, if false the point is diplayed properly, if undefined it is not shown
   hideSplitLine?: boolean; //toogles if "Split Line" computed by AI is displayed
-  enableUserDraw?: boolean; //toggles if the User is allowed to draw its own classifier into the plot
   isOneDimensional?: boolean; //toggles if this plot should only display one Dimension
   onMouseUpPlotHandler?: () => void;
   onMouseDownPlotHandler?: (cursorpt: DOMPoint | undefined) => void;
@@ -25,7 +27,8 @@ interface IProp {
     mouseHold: boolean,
     cursorpt: DOMPoint | undefined
   ) => void;
-  setSelectedAttrib: (xAxisAttrib: number, yAxisAttrib: number) => void; 
+  setSelectedAttrib: (xAxisAttrib: number, yAxisAttrib: number) => void;
+  overwriteClickHandler?: (cursorpt: DOMPoint | undefined) => void;
 }
 const MyPlot = forwardRef(
   (
@@ -40,6 +43,9 @@ const MyPlot = forwardRef(
       onMouseMovePlotHandler,
       setSelectedAttrib,
       isOneDimensional,
+      overwriteClickHandler,
+      previewUserPoint,
+      userPointXState,
     }: IProp,
     ref
   ): JSX.Element => {
@@ -86,11 +92,11 @@ const MyPlot = forwardRef(
     };
     //compute line classifier
     const svmjs = require("svm");
-    //c1 and c2 are the arrays of 2D data points, i.e. the selection to 2 features has to happen before calling this function, use getSelectedData() for the selection
-    const computeSVMBorder = (c1: IDataPoint[], c2: IDataPoint[]) => {
-      if (c1[0].length !== 2 || c2[0].length !== 2) {
+    //c1 and c2 are the arrays of 2D or 1D data points, i.e. the selection to 2 features/1 feature has to happen before calling this function, use getSelectedData() for the selection
+    const computeSVMBorderWeights = (c1: IDataPoint[], c2: IDataPoint[]) => {
+      if (![1, 2].includes(c1[0].length) || ![1, 2].includes(c2[0].length)) {
         console.log(
-          "ERROR: Calles SVM with wrong input dimensions. Maybe you have not selected the 2 distincitive features"
+          "ERROR: Calles SVM with wrong input dimensions. Maybe you have not selected the 2 or 1 distincitive features"
         );
       }
       const data = [...c1, ...c2];
@@ -114,12 +120,31 @@ const MyPlot = forwardRef(
       //x[0]*w[0][0]+w[1] = -x[1]*w[0][1]
       //(x[0]*w[0][0]+w[1])/-w[0][1] = x[1]
       const w = svm.getWeights();
-      const line_generator = (x: number) =>
-        (x * w["w"][0] + w["b"]) / -w["w"][1];
-      return line_generator;
+      return w;
+    };
+    const getDiffLineGenerator = (w: { w: number[]; b: number }) => {
+      if (w.w.length != 2) {
+        console.log(
+          "ERROR: tried to compute Line Generator with dimensions: " +
+            w.w.length
+        );
+      }
+      return (
+        x: number // X*w +b = x0*w0+x1*w1 + b = pred = 0,  so therefore
+      ) => (x * w["w"][0] + w["b"]) / -w["w"][1]; // "y" = x1 = -(x0*w0+b)/w1
+    };
+    const getDiffPoint = (w: { w: number[]; b: number }) => {
+      if (w.w.length != 1) {
+        console.log(
+          "ERROR: tried to compute Diff Point with dimensions: " + w.w.length
+        );
+      }
+      return -w.b / w.w[0]; // X*w +b = x0*w0 + b = pred = 0,  so therefore x0 = -b/w0
     };
     //compute line
-    const svmBorderLine = computeSVMBorder(...selectDimSelectClassData());
+    const svmBorderWeights = computeSVMBorderWeights(
+      ...selectDimSelectClassData()
+    );
 
     const classes = selectDimData(); //classes with selected dimensions to display
     const classPoints = classes.map((cl) => cl.points); //just their points without the class names
@@ -167,7 +192,10 @@ const MyPlot = forwardRef(
     //on click add point
     const onClickHandler = (evt: React.MouseEvent<SVGSVGElement>) => {
       const cursorpt = getSVGCoords(evt);
-      if (!enableUserDraw) {
+      if (typeof overwriteClickHandler == "function") {
+        // overwrite the normal click handler with overwriteclickhandler if it exists
+        overwriteClickHandler(cursorpt);
+      } else if (!enableUserDraw) {
         //only add new points on click if not draw User Line mode
         const pointToAdd = new Array(dimensions).fill(0);
         if (Array.isArray(plot_data.selected_attrib)) {
@@ -220,6 +248,27 @@ const MyPlot = forwardRef(
     };
     // PLOT ELEMENTS
     const displaySplitLineParam = hideSplitLine ? "none" : "";
+    const diffByRobotElement = oneDimensional ? (
+      <circle
+        cx={getDiffPoint(svmBorderWeights)}
+        cy={yOneDimension}
+        r="0.3"
+        stroke="black"
+        strokeWidth="0.09"
+      />
+    ) : (
+      <line
+        display={displaySplitLineParam}
+        x1={xmin}
+        y1={getDiffLineGenerator(svmBorderWeights)(xmin)}
+        x2={xmax}
+        y2={getDiffLineGenerator(svmBorderWeights)(xmax)}
+        stroke="black"
+        strokeWidth="5"
+        strokeLinecap="butt"
+        vectorEffect="non-scaling-stroke"
+      />
+    );
     const svgCircles = classPoints.map((points, cl_index) =>
       points.map((p, points_index) => {
         const ys = oneDimensional ? yOneDimension : p[1];
@@ -347,8 +396,8 @@ const MyPlot = forwardRef(
       ))
     );
     const svgPadding = 2; //padding arround the svg elements
-
     useKeyPress();
+    console.log(userPointXState, previewUserPoint);
     return (
       <div>
         <div>
@@ -443,18 +492,8 @@ const MyPlot = forwardRef(
             {yTicks}
             {yAxis}
             {svgCircles}
-            {/* Differentiation line */}
-            <line
-              display={displaySplitLineParam}
-              x1={xmin}
-              y1={svmBorderLine(xmin)}
-              x2={xmax}
-              y2={svmBorderLine(xmax)}
-              stroke="black"
-              strokeWidth="5"
-              strokeLinecap="butt"
-              vectorEffect="non-scaling-stroke"
-            />
+            {/* Differentiation by robot */}
+            {diffByRobotElement}
             {/* User Line */}
             <line
               {...userLineState}
@@ -463,6 +502,18 @@ const MyPlot = forwardRef(
               strokeLinecap="butt"
               vectorEffect="non-scaling-stroke"
             />
+            {/* User Point */}
+            {typeof previewUserPoint !== "undefined" ? (
+              <circle
+                cx={userPointXState}
+                cy={yOneDimension}
+                r="0.3"
+                stroke="green"
+                strokeWidth="0.09"
+              />
+            ) : (
+              <></>
+            )}
           </g>
         </svg>
       </div>

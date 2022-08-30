@@ -19,7 +19,6 @@ const TableWrapper = ({
   setSelectedClasses,
   selectedClasses,
 }: TableWrapperProps) => {
-  console.log("Table:", plot_data.data);
   const onClickTable = (clIndex: number) => {
     if (typeof setSelectedClasses !== "undefined") {
       if (!selectedClasses.includes(clIndex)) {

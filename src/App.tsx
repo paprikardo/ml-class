@@ -1,8 +1,15 @@
-import { IData, default2DDataSpread, IDataPoint, irisDataset, oneDDataset } from "./Data";
+import {
+  IData,
+  default2DDataSpread,
+  IDataPoint,
+  irisDataset,
+  ki67positiveZellen,
+} from "./Data";
 import { useState } from "react";
 import "./App.css";
 import Layout2DRobotLine from "./components/Layout2DRobotLine";
 import Layout2DUserLine from "./components/Layout2DUserLine";
+import Layout1DUserLine from "./components/Layout1DUserLine";
 import { SimpleGrid } from "@mantine/core";
 import TableWrapper from "./components/TableWrapper";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
@@ -21,12 +28,9 @@ function App() {
     means.forEach((cl_mean, i) => {
       addPoint(i, randomPoint(cl_mean, variance));
     });
-    console.log("----", currentData);
   };
   //adds a point to the Data.data array (i.e. the cl'th class/group)
   const addPoint = (cl: number, new_point: IDataPoint): void => {
-    console.log("addPoint to ", cl);
-    console.log("before:", currentData.data);
     setCurrentData((prev) => {
       const newPrev = { ...prev };
       newPrev.data = [...prev.data];
@@ -34,7 +38,6 @@ function App() {
       newPrev.data[cl].points = [...prev.data[cl].points, new_point]; //adding new point
       return newPrev; //return same object with new reference so rerender triggers
     });
-    console.log("after:", currentData.data);
   };
   //changes a point with the key "key" in the Data.data dictionary with key "id" to "new_point"
   const changePoint = (
@@ -73,7 +76,6 @@ function App() {
   };
   const setDataSinglePoint = (means: IDataPoint[]) => {
     setCurrentData((prev): IData => {
-      console.log(means, prev);
       return {
         data: prev.data.map((cl, cl_index) => {
           return {
@@ -91,9 +93,9 @@ function App() {
   const setIrisData = () => {
     setCurrentData(irisDataset);
   };
-  const set1DData = () => {
-    setCurrentData(oneDDataset)
-  }
+  const setKi67Data = () => {
+    setCurrentData(ki67positiveZellen);
+  };
   //generates "numSamples" new points for both classes from a random variance and mean
   const newRandomData = () => {
     const numSamples = 5;
@@ -126,12 +128,13 @@ function App() {
           <Link to="/">
             <div>Robot Line</div>
           </Link>
-          <Link to="/userline">User Line</Link>
+          <Link to="/userline"><div>User Line</div></Link>
+          <Link to="/oneD"> oneD</Link>
         </nav>
         <div>
           <button onClick={newRandomData}>Generiere neue Daten</button>
           <button onClick={setIrisData}>Iris Dataset</button>
-          <button onClick={set1DData}>1D Dataset</button>
+          <button onClick={setKi67Data}>Ki67 Dataset</button>
         </div>
         <SimpleGrid cols={2} spacing="xs">
           <TableWrapper
@@ -140,7 +143,7 @@ function App() {
             new_random_data={newRandomData}
             set_iris_data={setIrisData}
             setSelectedClasses={setSelectedClasses}
-            selectedClasses = {currentData.selected_class}
+            selectedClasses={currentData.selected_class}
           ></TableWrapper>
           <Routes>
             <Route
@@ -165,6 +168,19 @@ function App() {
                   addRandomPoint={addRandomPoint}
                   setSelectedAttrib={setSelectedAttrib}
                 ></Layout2DUserLine>
+              }
+            ></Route>
+            <Route
+              path="/oneD"
+              element={
+                <Layout1DUserLine
+                  currentData={currentData}
+                  changePoint={changePoint}
+                  addPoint={addPoint}
+                  setDataSinglePoint={setDataSinglePoint}
+                  addRandomPoint={addRandomPoint}
+                  setSelectedAttrib={setSelectedAttrib}
+                ></Layout1DUserLine>
               }
             ></Route>
           </Routes>
