@@ -11,7 +11,7 @@ function Layout2DRobotLine({
   currentData: IData;
   changeNewPoint: (new_point: IDataPoint) => void;
   addPoint: (cl: number, new_point: IDataPoint) => void;
-  setSelectedAttrib: (xAxisAttrib: number, yAxisAttrib: number) => void;
+  setSelectedAttrib: (xAxisAttrib: number, yAxisAttrib?: number) => void;
 }): JSX.Element {
   return (
     <div>

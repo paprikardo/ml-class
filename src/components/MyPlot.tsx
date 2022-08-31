@@ -26,7 +26,7 @@ interface IProp {
     mouseHold: boolean,
     cursorpt: DOMPoint | undefined
   ) => void;
-  setSelectedAttrib: (xAxisAttrib: number, yAxisAttrib: number) => void;
+  setSelectedAttrib: (xAxisAttrib: number, yAxisAttrib?: number) => void;
   overwriteClickHandler?: (cursorpt: DOMPoint | undefined) => void;
 }
 const MyPlot = forwardRef(
@@ -76,6 +76,7 @@ const MyPlot = forwardRef(
     const selectDimSelectClassData = (): [IDataPoint[], IDataPoint[]] => {
       const [c0, c1] = plot_data.selected_class; //indices of the selected classes
       if (Array.isArray(plot_data.selected_attrib)) {
+        //if 2D axis case
         const [a1, a2] = plot_data.selected_attrib; //indices of the selected attributes/dimensions/features
         return [
           plot_data.data[c0].points.map((p) => [p[a1], p[a2]]),
@@ -138,10 +139,16 @@ const MyPlot = forwardRef(
     };
     //if v=vmin it is mapped to itself. All other values are mapped proportionally to its distance such that vmax is mapped to vmin + afterScalingMaxIntervall
     const scale = (v: number, vmin: number, vmax: number) => {
+      if (vmin == vmax) {
+        return v;
+      }
       return vmin + (afterScalingIntervall * (v - vmin)) / (vmax - vmin);
     };
     //inverse
     const scaleInv = (v: number, vmin: number, vmax: number) => {
+      if (vmin == vmax) {
+        return v;
+      }
       return vmin + ((v - vmin) * (vmax - vmin)) / afterScalingIntervall;
     };
 
@@ -158,15 +165,22 @@ const MyPlot = forwardRef(
           x: scaleXInv(cursorpt!.x),
           y: scaleYInv(-cursorpt!.y), //-y on the points since y coordinate was flipped
         }; //overwrite x, y to rescale
-        console.log(scaleXInv(cursorpt!.x), scaleYInv(-cursorpt!.y));
         return result;
       }
     };
 
     const selectDimSelectClassDataScaled = (): [IDataPoint[], IDataPoint[]] => {
-      const f = (x: IDataPoint[]) => x.map((p) => [scaleX(p[0]), scaleY(p[1])]);
       const [s1, s2] = selectDimSelectClassData();
-      return [f(s1), f(s2)];
+      if (Array.isArray(plot_data.selected_attrib)) {
+        //if 2D
+        const f = (x: IDataPoint[]) =>
+          x.map((p) => [scaleX(p[0]), scaleY(p[1])]);
+        return [f(s1), f(s2)];
+      } else {
+        //if 1D
+        const f = (x: IDataPoint[]) => x.map((p) => [scaleX(p[0])]);
+        return [f(s1), f(s2)];
+      }
     };
     //compute line classifier
     const svmjs = require("svm");
@@ -465,13 +479,13 @@ const MyPlot = forwardRef(
                 onClick={() =>
                   setSelectedAttrib(
                     index,
-                    Array.isArray(plot_data.selected_attrib)
+                    Array.isArray(plot_data.selected_attrib) //if 2D
                       ? plot_data.selected_attrib[1]
-                      : index
+                      : undefined
                   )
                 }
                 style={
-                  Array.isArray(plot_data.selected_attrib)
+                  Array.isArray(plot_data.selected_attrib) //if 2D
                     ? plot_data.selected_attrib[0] == index
                       ? { backgroundColor: "#8db8cc" }
                       : {}
@@ -485,7 +499,7 @@ const MyPlot = forwardRef(
         </div>
 
         {oneDimensional ? (
-          <div></div>
+          <></>
         ) : (
           <div>
             Y-Axis
@@ -495,14 +509,14 @@ const MyPlot = forwardRef(
                   key={str + index}
                   onClick={() =>
                     setSelectedAttrib(
-                      Array.isArray(plot_data.selected_attrib)
+                      Array.isArray(plot_data.selected_attrib) //if 2D
                         ? plot_data.selected_attrib[0]
                         : index,
                       index
                     )
                   }
                   style={
-                    Array.isArray(plot_data.selected_attrib)
+                    Array.isArray(plot_data.selected_attrib) //if 2D
                       ? plot_data.selected_attrib[1] == index
                         ? { backgroundColor: "#8db8cc" }
                         : {}
@@ -566,9 +580,10 @@ const MyPlot = forwardRef(
               vectorEffect="non-scaling-stroke"
             />
             {/* User Point */}
-            {typeof previewUserPoint !== "undefined" ? (
+            {typeof previewUserPoint !== "undefined" &&
+            typeof userPointXState !== "undefined" ? (
               <circle
-                cx={userPointXState}
+                cx={scaleX(userPointXState)}
                 cy={yOneDimension}
                 r="0.3"
                 stroke="green"

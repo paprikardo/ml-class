@@ -58,10 +58,24 @@ function App() {
     });
   };
   //sets the selected attributes (selected to being displayed in the plot) to xAxisAttrib and yAxisAttrib
-  const setSelectedAttrib = (xAxisAttrib: number, yAxisAttrib: number) => {
+  const setSelectedAttrib = (xAxisAttrib: number, yAxisAttrib?: number) => {
     setCurrentData((prev) => {
       const newPrev = { ...prev };
-      newPrev.selected_attrib = [xAxisAttrib, yAxisAttrib];
+      if (
+        Array.isArray(newPrev.selected_attrib) &&
+        typeof yAxisAttrib !== "undefined"
+      ) {
+        newPrev.selected_attrib = [xAxisAttrib, yAxisAttrib];
+      } else if (
+        typeof newPrev.selected_attrib == "number" &&
+        typeof yAxisAttrib == "undefined"
+      ) {
+        newPrev.selected_attrib = xAxisAttrib;
+      } else {
+        console.log(
+          "Error: Inconsistency in selected Attrib. Called setSelected Attrib with wrong args"
+        );
+      }
       return newPrev;
     });
   };

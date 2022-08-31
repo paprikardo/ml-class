@@ -15,7 +15,7 @@ const Layout1DUser = ({
   addPoint: (cl: number, new_point: IDataPoint) => void;
   setDataSinglePoint: (means: IDataPoint[]) => void;
   addRandomPoint: (means: IDataPoint[], variance?: number) => void;
-  setSelectedAttrib: (xAxisAttrib: number, yAxisAttrib: number) => void;
+  setSelectedAttrib: (xAxisAttrib: number, yAxisAttrib?: number) => void;
 }): JSX.Element => {
   const [gameState, setGameState] = useState("init");
   const [userPointXState, setUserPointXState] = useState(0);
@@ -71,7 +71,7 @@ const Layout1DUser = ({
       }, waitTime);
     }
   }, [gameState]);
-
+  console.log(currentData);
   const computeScore = () => {
     const pointsA = currentData.data[selClassA].points;
     const pointsB = currentData.data[selClassB].points;
@@ -115,7 +115,8 @@ const Layout1DUser = ({
     mouseHold: boolean,
     cursorpt: DOMPoint | undefined
   ) => {
-    if(hideSplitPoint){ // only move the point when the point is "hidden", so in preview state 
+    if (hideSplitPoint) {
+      // only move the point when the point is "hidden", so in preview state
       setUserPointXState(cursorpt!.x);
     }
   };

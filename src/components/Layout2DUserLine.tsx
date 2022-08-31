@@ -16,7 +16,7 @@ function Layout2DUserLine({
   addPoint: (cl: number, new_point: IDataPoint) => void;
   setDataSinglePoint: (means: IDataPoint[]) => void;
   addRandomPoint: (means: IDataPoint[], variance?: number) => void;
-  setSelectedAttrib: (xAxisAttrib: number, yAxisAttrib: number) => void;
+  setSelectedAttrib: (xAxisAttrib: number, yAxisAttrib?: number) => void;
 }): JSX.Element {
   const [gameState, setGameState] = useState("init");
   const [userLineState, setUserLineState] = useState({
@@ -33,7 +33,6 @@ function Layout2DUserLine({
       y2: 0,
     });
   };
-  console.log(userLineState.x2,userLineState.y2);
   const [messageState, setMessageState] = useState("");
   const dimensions = currentData.attrib.length;
   const numClasses = currentData.data.length;
