@@ -237,7 +237,6 @@ const MyPlot = forwardRef(
     const svmBorderWeights = computeSVMBorderWeights(
       ...selectDimSelectClassDataScaled()
     );
-
     //on click add point
     const onClickHandler = (evt: React.MouseEvent<SVGSVGElement>) => {
       const cursorpt = getSVGCoords(evt);
@@ -297,8 +296,10 @@ const MyPlot = forwardRef(
     };
     // PLOT ELEMENTS
     const displaySplitLineParam = hideSplitLine ? "none" : "";
+    const displaySplitPointParam = previewUserPoint? "none":"";
     const diffByRobotElement = oneDimensional ? (
       <circle
+        display={displaySplitPointParam}
         cx={getDiffPoint(svmBorderWeights)}
         cy={yOneDimension}
         r="0.3"
@@ -468,6 +469,7 @@ const MyPlot = forwardRef(
     );
     const svgPadding = 2; //padding arround the svg elements
     useKeyPress();
+    console.log(plot_data.selected_attrib);
     return (
       <div>
         <div>
@@ -489,6 +491,8 @@ const MyPlot = forwardRef(
                     ? plot_data.selected_attrib[0] == index
                       ? { backgroundColor: "#8db8cc" }
                       : {}
+                    : plot_data.selected_attrib == index
+                    ? { backgroundColor: "#8db8cc" }
                     : {}
                 }
               >

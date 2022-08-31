@@ -1,16 +1,10 @@
-import {
-  IData,
-  default2DDataSpread,
-  IDataPoint,
-  irisDataset,
-  ki67positiveZellen,
-} from "./Data";
+import { IData, IDataPoint, irisDataset, ki67positiveZellen } from "./Data";
 import { useState } from "react";
 import "./App.css";
 import Layout2DRobotLine from "./components/Layout2DRobotLine";
 import Layout2DUserLine from "./components/Layout2DUserLine";
 import Layout1DUserLine from "./components/Layout1DUserLine";
-import { SimpleGrid } from "@mantine/core";
+import { Button, Center, Grid, SimpleGrid } from "@mantine/core";
 import TableWrapper from "./components/TableWrapper";
 import {
   BrowserRouter as Router,
@@ -21,8 +15,9 @@ import {
 } from "react-router-dom";
 import { randomPoint, rand_0_10_point } from "./Random";
 import { parse } from "papaparse";
+import LevelWeizen2 from "./components/LevelWeizen2";
 function App() {
-  const [currentData, setCurrentData] = useState(default2DDataSpread);
+  const [currentData, setCurrentData] = useState(irisDataset);
   const dimensions = currentData.attrib.length;
   const numClasses = currentData.data.length;
   /**
@@ -144,11 +139,11 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <div>
+        {/* <div>
           <button onClick={newRandomData}>Generiere neue Daten</button>
           <button onClick={setIrisData}>Iris Dataset</button>
           <button onClick={setKi67Data}>Ki67 Dataset</button>
-        </div>
+        </div> */}
         <Routes>
           <Route
             path=""
@@ -157,22 +152,42 @@ function App() {
           <Route
             path="level-selection"
             element={
-              <nav>
-                <Link to="/level/robot">
-                  <div>Robot Line</div>
-                </Link>
-                <Link to="/level/userline">
-                  <div>User Line</div>
-                </Link>
-                <Link to="/level/oneD"> oneD</Link>
-              </nav>
+              <Center style={{width:"100vw", height:"100vh"}}>
+                <Grid>
+                  <Grid.Col span={4}>
+                    <Link to="/level/levelWeizen">
+                      <Button>Weizen 2</Button>
+                    </Link>
+                  </Grid.Col>
+                  <Grid.Col span={4}>
+                    <Link to="/level/levelWeizen">
+                      <Button>Weizen 2</Button>
+                    </Link>
+                  </Grid.Col>
+                  <Grid.Col span={4}>
+                    <Link to="/level/levelWeizen">
+                      <Button>Weizen 2</Button>
+                    </Link>
+                  </Grid.Col>
+                  <Grid.Col span={4}>
+                    <Link to="/level/levelWeizen">
+                      <Button>Weizen 2</Button>
+                    </Link>
+                  </Grid.Col>
+                  <Grid.Col span={4}>
+                    <Link to="/level/levelWeizen">
+                      <Button>Weizen 2</Button>
+                    </Link>
+                  </Grid.Col>
+                </Grid>
+              </Center>
             }
           ></Route>
           <Route
-            path="/level"
+            path="level"
             element={
               <div>
-                <Link to="/level-selection">Exit</Link>
+                <Link to="/level-selection"><Button>Exit</Button></Link>
                 <SimpleGrid cols={2} spacing="xs">
                   <TableWrapper
                     plot_data={currentData}
@@ -187,6 +202,17 @@ function App() {
               </div>
             }
           >
+            <Route
+              path="levelWeizen"
+              element={
+                <LevelWeizen2
+                  currentData={currentData}
+                  setDataSinglePoint={setDataSinglePoint}
+                  setSelectedAttrib={setSelectedAttrib}
+                  setCurrentData={setCurrentData}
+                ></LevelWeizen2>
+              }
+            ></Route>
             <Route
               path="robot"
               element={
@@ -216,10 +242,7 @@ function App() {
               element={
                 <Layout1DUserLine
                   currentData={currentData}
-                  changePoint={changePoint}
-                  addPoint={addPoint}
                   setDataSinglePoint={setDataSinglePoint}
-                  addRandomPoint={addRandomPoint}
                   setSelectedAttrib={setSelectedAttrib}
                 ></Layout1DUserLine>
               }

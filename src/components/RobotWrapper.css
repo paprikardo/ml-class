@@ -1,12 +1,9 @@
-.RobotWrapper {
-  width: 400px;
-}
-.RobotWrapper .RobotMessage {
-  width: 100%;
-  margin-bottom: 20px;
-}
-.RobotWrapper .RobotMessage p {
-  margin: 0 0 10px 0;
+.RobotMessage {
+  margin-left: 20px;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  max-width: 70%;
 }
 .bubble {
   position: relative;
@@ -17,20 +14,28 @@
   margin-left: 20px;
 }
 .bubble:after {
-  content:"";
-  display:block;
+  content: "";
+  display: block;
   position: absolute;
-  
-  left:-15px;
-  top:15px;
 
-  width:0;
-  height:0;
-  border-top:8px solid transparent;
-  border-bottom:8px solid transparent;
-  border-right:15px solid #f0f0f0;
+  left: -15px;
+  top: 15px;
+
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 15px solid #f0f0f0;
 }
 
 .RobotIcon {
-  width:20%;
+  max-width: 30%;
+}
+
+.RobotMessage,
+.RobotIcon {
+  float: left;
+}
+.RobotWrapper,.RobotIcon{
+  height: 10vh;
 }

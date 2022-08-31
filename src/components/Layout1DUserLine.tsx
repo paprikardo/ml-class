@@ -7,14 +7,10 @@ import { rand_0_10 } from "../Random";
 const Layout1DUser = ({
   currentData,
   setDataSinglePoint,
-  addRandomPoint,
   setSelectedAttrib,
 }: {
   currentData: IData;
-  changePoint: (cl: number, key: number, new_point: IDataPoint) => void;
-  addPoint: (cl: number, new_point: IDataPoint) => void;
   setDataSinglePoint: (means: IDataPoint[]) => void;
-  addRandomPoint: (means: IDataPoint[], variance?: number) => void;
   setSelectedAttrib: (xAxisAttrib: number, yAxisAttrib?: number) => void;
 }): JSX.Element => {
   const [gameState, setGameState] = useState("init");
@@ -71,7 +67,6 @@ const Layout1DUser = ({
       }, waitTime);
     }
   }, [gameState]);
-  console.log(currentData);
   const computeScore = () => {
     const pointsA = currentData.data[selClassA].points;
     const pointsB = currentData.data[selClassB].points;
@@ -133,6 +128,7 @@ const Layout1DUser = ({
         onMouseMovePlotHandler={onMouseMovePlotHandler}
         enableUserDraw={enableUserDraw}
         setSelectedAttrib={setSelectedAttrib}
+        isOneDimensional={true}
       ></MyPlot>
       <RobotWrapper class_result={messageState}></RobotWrapper>
     </div>
