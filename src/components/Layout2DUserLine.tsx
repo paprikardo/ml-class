@@ -33,6 +33,7 @@ function Layout2DUserLine({
       y2: 0,
     });
   };
+  console.log(userLineState.x2,userLineState.y2);
   const [messageState, setMessageState] = useState("");
   const dimensions = currentData.attrib.length;
   const numClasses = currentData.data.length;
@@ -144,7 +145,7 @@ function Layout2DUserLine({
       setUserLineState(
         (prev: { x1: number; x2: number; y1: number; y2: number }) => {
           const nx2 = cursorpt!.x;
-          const ny2 = -cursorpt!.y; //-y since y coordinate was flipped
+          const ny2 = cursorpt!.y;
           return { ...prev, x2: nx2, y2: ny2 };
         }
       );
@@ -158,9 +159,9 @@ function Layout2DUserLine({
         (prev: { x1: number; x2: number; y1: number; y2: number }) => {
           return {
             x1: cursorpt!.x,
-            y1: -cursorpt!.y,
+            y1: cursorpt!.y,
             x2: cursorpt!.x,
-            y2: -cursorpt!.y,
+            y2: cursorpt!.y,
           }; //-y since y coordinate was flipped
         }
       );

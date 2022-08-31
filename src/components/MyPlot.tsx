@@ -1,4 +1,3 @@
-//*TODO: used viewbox to scale points appropriately. How to find coordinates in viewbox? */
 import { forwardRef, useEffect, useState } from "react";
 import { IData, IDataPoint, IDataClass, colors } from "../Data";
 import "../App.css";
@@ -90,6 +89,85 @@ const MyPlot = forwardRef(
         ];
       }
     };
+
+    const classes = selectDimData(); //classes with selected dimensions to display
+    const classPoints = classes.map((cl) => cl.points); //just their points without the class names
+    const newPoint = plot_data.newPoint;
+    //in the following we refer to x as all points in the first selected dimension and y as the second
+    const all_points_x = classPoints //extract all x values
+      .map((clp) => clp.map((p) => p[0]))
+      .toString()
+      .split(",")
+      .map(Number); //extract x coords and flatten array
+    const all_points_y = classPoints
+      .map((clp) => clp.map((p) => p[1]))
+      .toString()
+      .split(",")
+      .map(Number); //extract x coords and flatten array
+    var xmin = Math.min(...all_points_x);
+    var xmax = Math.max(...all_points_x);
+    var ymin = Math.min(...all_points_y);
+    var ymax = Math.max(...all_points_y);
+    // //set the minimum intervall that we want to show on the axis, this avoides that the plotted graph will zoom in too much when the points are very close to each other
+    // const minIntervalLength = 8;
+    // const xdistance = xmax - xmin;
+    // if (xdistance < minIntervalLength) {
+    //   xmax = xmax + (minIntervalLength - xdistance) / 2;
+    //   xmin = xmin - (minIntervalLength - xdistance) / 2;
+    // }
+    // const ydistance = ymax - ymin;
+    // if (ydistance < minIntervalLength) {
+    //   ymax = ymax + (minIntervalLength - ydistance) / 2;
+    //   ymin = ymin - (minIntervalLength - ydistance) / 2;
+    // }
+
+    const [mouseHold, setMouseHold] = useState(false);
+    const afterScalingIntervall = 15;
+    //scales any point to the desired max Intervall
+    const scaleY = (y: number) => {
+      return scale(y, ymin, ymax);
+    };
+    const scaleX = (x: number) => {
+      return scale(x, xmin, xmax);
+    };
+    const scaleXInv = (x: number) => {
+      return scaleInv(x, xmin, xmax);
+    };
+    const scaleYInv = (y: number) => {
+      return scaleInv(y, ymin, ymax);
+    };
+    //if v=vmin it is mapped to itself. All other values are mapped proportionally to its distance such that vmax is mapped to vmin + afterScalingMaxIntervall
+    const scale = (v: number, vmin: number, vmax: number) => {
+      return vmin + (afterScalingIntervall * (v - vmin)) / (vmax - vmin);
+    };
+    //inverse
+    const scaleInv = (v: number, vmin: number, vmax: number) => {
+      return vmin + ((v - vmin) * (vmax - vmin)) / afterScalingIntervall;
+    };
+
+    const getSVGCoords = (evt: React.MouseEvent<SVGSVGElement>) => {
+      if (pt == null) {
+        console.log("NULL ERROR");
+      } else {
+        pt.x = evt.clientX;
+        pt.y = evt.clientY;
+        // The cursor point, translated into svg coordinates
+        const cursorpt = pt.matrixTransform(screenctm.inverse());
+        const result = {
+          ...cursorpt,
+          x: scaleXInv(cursorpt!.x),
+          y: scaleYInv(-cursorpt!.y), //-y on the points since y coordinate was flipped
+        }; //overwrite x, y to rescale
+        console.log(scaleXInv(cursorpt!.x), scaleYInv(-cursorpt!.y));
+        return result;
+      }
+    };
+
+    const selectDimSelectClassDataScaled = (): [IDataPoint[], IDataPoint[]] => {
+      const f = (x: IDataPoint[]) => x.map((p) => [scaleX(p[0]), scaleY(p[1])]);
+      const [s1, s2] = selectDimSelectClassData();
+      return [f(s1), f(s2)];
+    };
     //compute line classifier
     const svmjs = require("svm");
     //c1 and c2 are the arrays of 2D or 1D data points, i.e. the selection to 2 features/1 feature has to happen before calling this function, use getSelectedData() for the selection
@@ -143,52 +221,9 @@ const MyPlot = forwardRef(
     };
     //compute line
     const svmBorderWeights = computeSVMBorderWeights(
-      ...selectDimSelectClassData()
+      ...selectDimSelectClassDataScaled()
     );
 
-    const classes = selectDimData(); //classes with selected dimensions to display
-    const classPoints = classes.map((cl) => cl.points); //just their points without the class names
-    const newPoint = plot_data.newPoint;
-    //in the following we refer to x as all points in the first selected dimension and y as the second
-    const all_points_x = classPoints
-      .map((clp) => clp.map((p) => p[0]))
-      .toString()
-      .split(",")
-      .map(Number); //extract x coords and flatten array
-    const all_points_y = classPoints
-      .map((clp) => clp.map((p) => p[1]))
-      .toString()
-      .split(",")
-      .map(Number); //extract x coords and flatten array
-    var xmin = Math.min(...all_points_x);
-    var xmax = Math.max(...all_points_x);
-    var ymin = Math.min(...all_points_y);
-    var ymax = Math.max(...all_points_y);
-    //set the minimum intervall that we want to show on the axis, this avoides that the plotted graph will zoom in too much when the points are very close to each other
-    const minIntervalLength = 8;
-    const xdistance = xmax - xmin;
-    if (xdistance < minIntervalLength) {
-      xmax = xmax + (minIntervalLength - xdistance) / 2;
-      xmin = xmin - (minIntervalLength - xdistance) / 2;
-    }
-    const ydistance = ymax - ymin;
-    if (ydistance < minIntervalLength) {
-      ymax = ymax + (minIntervalLength - ydistance) / 2;
-      ymin = ymin - (minIntervalLength - ydistance) / 2;
-    }
-
-    const [mouseHold, setMouseHold] = useState(false);
-
-    const getSVGCoords = (evt: React.MouseEvent<SVGSVGElement>) => {
-      if (pt == null) {
-        console.log("NULL ERROR");
-      } else {
-        pt.x = evt.clientX;
-        pt.y = evt.clientY;
-        // The cursor point, translated into svg coordinates
-        return pt.matrixTransform(screenctm.inverse());
-      }
-    };
     //on click add point
     const onClickHandler = (evt: React.MouseEvent<SVGSVGElement>) => {
       const cursorpt = getSVGCoords(evt);
@@ -202,7 +237,7 @@ const MyPlot = forwardRef(
           //2D case i.e. two axis shown
           const [selectedAttrib1, selectedAttrib2] = plot_data.selected_attrib;
           pointToAdd[selectedAttrib1] = parseFloat(cursorpt!.x.toFixed(4));
-          pointToAdd[selectedAttrib2] = parseFloat((-cursorpt!.y).toFixed(4)); //-y on the points since y coordinate was flipped
+          pointToAdd[selectedAttrib2] = parseFloat(cursorpt!.y.toFixed(4));
         } else {
           //plot_data.selected_attrib : number
           pointToAdd[plot_data.selected_attrib] = parseFloat(
@@ -259,10 +294,10 @@ const MyPlot = forwardRef(
     ) : (
       <line
         display={displaySplitLineParam}
-        x1={xmin}
-        y1={getDiffLineGenerator(svmBorderWeights)(xmin)}
-        x2={xmax}
-        y2={getDiffLineGenerator(svmBorderWeights)(xmax)}
+        x1={scaleX(xmin)}
+        y1={getDiffLineGenerator(svmBorderWeights)(scaleX(xmin))}
+        x2={scaleX(xmax)}
+        y2={getDiffLineGenerator(svmBorderWeights)(scaleX(xmax))}
         stroke="black"
         strokeWidth="5"
         strokeLinecap="butt"
@@ -271,11 +306,12 @@ const MyPlot = forwardRef(
     );
     const svgCircles = classPoints.map((points, cl_index) =>
       points.map((p, points_index) => {
-        const ys = oneDimensional ? yOneDimension : p[1];
+        const xs = scaleX(p[0]);
+        const ys = oneDimensional ? yOneDimension : scaleY(p[1]);
         return (
           <circle
             key={"c" + cl_index + "p" + points_index}
-            cx={p[0]}
+            cx={xs}
             cy={ys}
             r="0.3"
             stroke="black"
@@ -332,22 +368,30 @@ const MyPlot = forwardRef(
       Math.round(xmin + (xmax - xmin) / 2),
       Math.round(xmax),
     ];
+    const xAxisPointsScaled = xAxisPoints.map((x) => scaleX(x)); //scale points before putting them in svg
     const yValueXAxis = oneDimensional ? yOneDimension : ymin - 0.5; //y value where the x axis is displayed
-    const xTicks = xAxisPoints.map((x, i) =>
-      tickLine(x, yValueXAxis, x, yValueXAxis - 0.2, "xTicks-" + i + "-" + x)
+    const yValueXAxisScaled = yValueXAxis; //no need to scale ymin
+    const xTicks = xAxisPointsScaled.map((x, i) =>
+      tickLine(
+        x,
+        yValueXAxisScaled,
+        x,
+        yValueXAxisScaled - 0.2,
+        "xTicks-" + i + "-" + x
+      )
     );
     const xAxis = axisLine(
-      xAxisPoints[0] - 1,
-      yValueXAxis,
-      xAxisPoints[xAxisPoints.length - 1] + 1,
-      yValueXAxis,
+      xAxisPointsScaled[0] - 1,
+      yValueXAxisScaled,
+      xAxisPointsScaled[xAxisPoints.length - 1] + 1,
+      yValueXAxisScaled,
       "xAxis-Key"
     );
     const xLabels = xAxisPoints.map((x, i) => (
       <text
         key={"xLabel-" + i + "-" + x}
-        x={x - 0.1}
-        y={-yValueXAxis + 0.5}
+        x={xAxisPointsScaled[i] - 0.1} //take label from xAxisPoints but take point from scaled version
+        y={-yValueXAxisScaled + 0.5}
         fill="black"
         fontSize="0.3"
       >
@@ -361,43 +405,55 @@ const MyPlot = forwardRef(
           Math.round(ymin + (ymax - ymin) / 2),
           Math.round(ymax),
         ];
+    const yAxisPointsScaled = yAxisPoints.map((y) => scaleY(y)); //scale points before putting them in svg
     const xValueYAxis = xmin - 0.5;
+    const xValueYAxisScaled = xValueYAxis; //no need to scale xmin
     const yTicks = oneDimensional ? ( //only render y ticks if two dimensional
       <div></div>
     ) : (
-      yAxisPoints.map((y, i) =>
-        tickLine(xValueYAxis, y, xValueYAxis - 0.2, y, "yTicks-" + i + " " + y)
+      yAxisPointsScaled.map((y, i) =>
+        tickLine(
+          xValueYAxisScaled,
+          y,
+          xValueYAxisScaled - 0.2,
+          y,
+          "yTicks-" + i + " " + y
+        )
       )
     );
     const yAxis = oneDimensional ? ( //only render y axis if two dimensional
-      <div></div>
+      <></>
     ) : (
       axisLine(
-        xValueYAxis,
-        yValueXAxis,
-        xValueYAxis,
-        yAxisPoints[yAxisPoints.length - 1] + 1,
+        xValueYAxisScaled,
+        yValueXAxisScaled,
+        xValueYAxisScaled,
+        yAxisPointsScaled[yAxisPointsScaled.length - 1] + 1,
         "yAxis-Key"
       )
     );
     const yLabels = oneDimensional ? ( //only render y labels if two dimensional
       <div></div>
     ) : (
-      yAxisPoints.map((y, i) => (
-        <text
-          key={"yLabel-" + i + "-" + y}
-          x={xValueYAxis - 0.5}
-          y={-y + 0.1}
-          fill="black"
-          fontSize="0.3"
-        >
-          {y}
-        </text>
-      ))
+      yAxisPoints.map(
+        (
+          y,
+          i //take label from yAxisPoints but take point from scaled version
+        ) => (
+          <text
+            key={"yLabel-" + i + "-" + y}
+            x={xValueYAxisScaled - 0.5}
+            y={-yAxisPointsScaled[i] + 0.1}
+            fill="black"
+            fontSize="0.3"
+          >
+            {y}
+          </text>
+        )
+      )
     );
     const svgPadding = 2; //padding arround the svg elements
     useKeyPress();
-    console.log(userPointXState, previewUserPoint);
     return (
       <div>
         <div>
@@ -468,14 +524,14 @@ const MyPlot = forwardRef(
           onMouseMove={onMouseMoveHandler}
           onKeyDown={onKeyDownHandler}
           viewBox={
-            xmin -
+            scaleX(xmin) -
             svgPadding +
             " " +
-            (-ymax - svgPadding) +
+            (-scaleY(ymax) - svgPadding) +
             " " +
-            (xmax - xmin + 2 * svgPadding) +
+            (scaleX(xmax) - scaleX(xmin) + 2 * svgPadding) +
             " " +
-            (ymax - ymin + 2 * svgPadding)
+            (scaleY(ymax) - scaleY(ymin) + 2 * svgPadding)
           }
           ref={(ref) => {
             pt = ref?.createSVGPoint();
@@ -496,7 +552,14 @@ const MyPlot = forwardRef(
             {diffByRobotElement}
             {/* User Line */}
             <line
-              {...userLineState}
+              {...(typeof userLineState !== "undefined"
+                ? {
+                    x1: scaleX(userLineState.x1),
+                    x2: scaleX(userLineState.x2),
+                    y1: scaleY(userLineState.y1),
+                    y2: scaleY(userLineState.y2),
+                  }
+                : {})}
               stroke="rgb(0, 153, 51)"
               strokeWidth="5"
               strokeLinecap="butt"

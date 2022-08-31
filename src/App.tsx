@@ -12,7 +12,13 @@ import Layout2DUserLine from "./components/Layout2DUserLine";
 import Layout1DUserLine from "./components/Layout1DUserLine";
 import { SimpleGrid } from "@mantine/core";
 import TableWrapper from "./components/TableWrapper";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  Outlet,
+} from "react-router-dom";
 import { randomPoint, rand_0_10_point } from "./Random";
 import { parse } from "papaparse";
 function App() {
@@ -124,30 +130,51 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <nav>
-          <Link to="/">
-            <div>Robot Line</div>
-          </Link>
-          <Link to="/userline"><div>User Line</div></Link>
-          <Link to="/oneD"> oneD</Link>
-        </nav>
         <div>
           <button onClick={newRandomData}>Generiere neue Daten</button>
           <button onClick={setIrisData}>Iris Dataset</button>
           <button onClick={setKi67Data}>Ki67 Dataset</button>
         </div>
-        <SimpleGrid cols={2} spacing="xs">
-          <TableWrapper
-            plot_data={currentData}
-            change_data={changePoint}
-            new_random_data={newRandomData}
-            set_iris_data={setIrisData}
-            setSelectedClasses={setSelectedClasses}
-            selectedClasses={currentData.selected_class}
-          ></TableWrapper>
-          <Routes>
+        <Routes>
+          <Route
+            path=""
+            element={<Link to="/level-selection"> start</Link>}
+          ></Route>
+          <Route
+            path="level-selection"
+            element={
+              <nav>
+                <Link to="/level/robot">
+                  <div>Robot Line</div>
+                </Link>
+                <Link to="/level/userline">
+                  <div>User Line</div>
+                </Link>
+                <Link to="/level/oneD"> oneD</Link>
+              </nav>
+            }
+          ></Route>
+          <Route
+            path="/level"
+            element={
+              <div>
+                <Link to="/level-selection">Exit</Link>
+                <SimpleGrid cols={2} spacing="xs">
+                  <TableWrapper
+                    plot_data={currentData}
+                    change_data={changePoint}
+                    new_random_data={newRandomData}
+                    set_iris_data={setIrisData}
+                    setSelectedClasses={setSelectedClasses}
+                    selectedClasses={currentData.selected_class}
+                  ></TableWrapper>
+                  <Outlet></Outlet>
+                </SimpleGrid>
+              </div>
+            }
+          >
             <Route
-              path="/"
+              path="robot"
               element={
                 <Layout2DRobotLine
                   currentData={currentData}
@@ -158,7 +185,7 @@ function App() {
               }
             ></Route>
             <Route
-              path="/userline"
+              path="/level/userline"
               element={
                 <Layout2DUserLine
                   currentData={currentData}
@@ -171,7 +198,7 @@ function App() {
               }
             ></Route>
             <Route
-              path="/oneD"
+              path="/level/oneD"
               element={
                 <Layout1DUserLine
                   currentData={currentData}
@@ -183,8 +210,8 @@ function App() {
                 ></Layout1DUserLine>
               }
             ></Route>
-          </Routes>
-        </SimpleGrid>
+          </Route>
+        </Routes>
       </Router>
     </div>
   );

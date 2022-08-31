@@ -65,7 +65,45 @@ export const default2DDataSpread: IData = {
   selected_attrib: [0, 1],
   selected_class: [0, 1],
 };
-
+export const swimmingDataset = {
+  data: [
+    {
+      className: "Schwimmt im Wasser",
+      points: [
+        [588.3, 10],
+        [294.1, 5],
+        [133.3, 20],
+        [217.4, 100],
+        [54.3, 25],
+        [55.6, 40],
+        [34.7, 25],
+        [333.3, 300],
+        [111.1, 100],
+      ],
+    },
+    {
+      className: "Sinkt im Wasser",
+      points: [
+        [200, 300],
+        [41.4, 87],
+        [160, 400],
+        [100, 250],
+        [10.9, 85],
+        [51.3, 400],
+        [6.4, 50],
+        [25.4, 200],
+        [10.8, 90],
+        [5.8, 60],
+        [8.8, 100],
+        [44.2, 500],
+      ],
+    },
+  ],
+  attrib: ["Volumen (cm^3)", "Masse (g)"],
+  newPoint: [10, 10],
+  selected_attrib: [0, 1],
+  selected_class: [0, 1],
+};
 export const irisDataset: IData = {
   data: [
     {
