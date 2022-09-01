@@ -22,6 +22,7 @@ export interface IData {
   selected_class: [number, number]; //same for the selected classes
   newPoint: IDataPoint;
 }
+
 export const ki67positiveZellen: IData = {
   data: [
     {
@@ -38,7 +39,7 @@ export const ki67positiveZellen: IData = {
   selected_attrib: 0,
   selected_class: [0, 1],
 };
-export const schierlingDataset = {
+export const schierlingDataset: IData = {
   data: [
     {
       className: "Gefleckter Schierling",
@@ -114,14 +115,14 @@ export const schierlingDataset = {
         [101.12, 7.68],
         [148.01, 8.52],
       ],
-      attrib: ["Höhe", "Früchte"],
-      newPoint: [10, 10],
-      selected_attrib: [0, 1],
-      selected_class: [0, 1],
     },
   ],
+  attrib: ["Höhe", "Früchte"],
+  newPoint: [10, 10],
+  selected_attrib: [0, 1],
+  selected_class: [0, 1],
 };
-export const swimmingDataset = {
+export const swimmingDataset:IData = {
   data: [
     {
       className: "Schwimmt im Wasser",
@@ -238,7 +239,7 @@ export const dummy2C3D: IData = {
     {
       className: "Klasse 2",
       points: [],
-    }
+    },
   ],
   attrib: ["Attribut 1", "Attribut 2", "Attribut 3"],
   newPoint: [10, 10, 10],
@@ -255,7 +256,7 @@ export const dummy2C3D1A: IData = {
     {
       className: "Klasse 2",
       points: [],
-    }
+    },
   ],
   attrib: ["Attribut 1", "Attribut 2", "Attribut 3"],
   newPoint: [10, 10, 10],
@@ -272,7 +273,7 @@ export const dummy2C2D: IData = {
     {
       className: "Klasse 2",
       points: [],
-    }
+    },
   ],
   attrib: ["Attribut 1", "Attribut 2"],
   newPoint: [10, 10, 10],
@@ -289,7 +290,7 @@ export const dummy2C2D1A: IData = {
     {
       className: "Klasse 2",
       points: [],
-    }
+    },
   ],
   attrib: ["Attribut 1", "Attribut 2"],
   newPoint: [10, 10, 10],

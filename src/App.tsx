@@ -12,6 +12,7 @@ import {
   SimpleGrid,
   Stack,
   Title,
+  Text,
 } from "@mantine/core";
 import TableWrapper from "./components/TableWrapper";
 import {
@@ -28,6 +29,8 @@ import LevelUserLineGame from "./levels/LevelUserLineGame2D";
 import LevelUserPointGame1D from "./levels/LevelUserPointGame1D";
 import LevelRobotLineGame2D from "./levels/LevelRobotLineGame2D";
 import RobotWrapper from "./components/RobotWrapper";
+import LevelSchierling2D from "./levels/LevelSchierling2D";
+import LevelSchierling1D from "./levels/LevelSchierling1D";
 function App() {
   const [currentData, setCurrentData] = useState(irisDataset);
   const dimensions = currentData.attrib.length;
@@ -160,7 +163,7 @@ function App() {
     dim +
     " dimensionalen Punkte zu klassifizieren. Klicke mit der Maus und versuche die beiden Punktwolken (von Klasse 1 und von Klasse 2) voneinander zu separieren. Sind die zwei Klassen separierbar?";
   const robotKlassModalContent = (dim: number) =>
-    "Ich werde versuchen die " +
+    "Der Roboter wird versuchen die " +
     dim +
     " dimensionalen Punkte zu klassifizieren. Klicke mit deiner Maus um einen neuen Punkt zu Klasse 1 hinzuzufügen. Drücke zusätzlich Shift um einen neuen Punkt zu Klasse 2 hinzuzufügen";
   const levels: ILevel[] = [
@@ -201,20 +204,21 @@ function App() {
       link: "robot-klassifizieren-3D",
     },
     {
-      initModalTitle: "Sind die Weizen-Daten linear separierbar?",
-      initModalContent:
-        "Von zwei Weizenarten wurden von je 70 Körnern die Breite, Länge und Fläche vermessen. Finde die Messung mit der sich die beiden Klassen perfekt linear separieren lassen.",
+      initModalTitle: "Punkt-Klassifizieren in 2D",
+      initModalContent: pointKlassModalContent(2),
       level: (title, content) => (
-        <LevelWeizen2
+        <LevelUserPointGame1D
           currentData={currentData}
           setDataSinglePoint={setDataSinglePoint}
           setSelectedAttrib={setSelectedAttrib}
-          setCurrentData={setCurrentData}
+          addRandomPoint={addRandomPoint}
           initModalTitle={title}
           initModalContent={content}
-        />
+          setCurrentData={setCurrentData}
+          dimensions={2}
+        ></LevelUserPointGame1D>
       ),
-      link: "weizen2",
+      link: "punkt-klassifizieren-2D",
     },
     {
       initModalTitle: "Punkt-Klassifizieren in 3D",
@@ -232,23 +236,6 @@ function App() {
         ></LevelUserPointGame1D>
       ),
       link: "punkt-klassifizieren-3D",
-    },
-    {
-      initModalTitle: "Punkt-Klassifizieren in 2D",
-      initModalContent: pointKlassModalContent(2),
-      level: (title, content) => (
-        <LevelUserPointGame1D
-          currentData={currentData}
-          setDataSinglePoint={setDataSinglePoint}
-          setSelectedAttrib={setSelectedAttrib}
-          addRandomPoint={addRandomPoint}
-          initModalTitle={title}
-          initModalContent={content}
-          setCurrentData={setCurrentData}
-          dimensions={2}
-        ></LevelUserPointGame1D>
-      ),
-      link: "punkt-klassifizieren-2D",
     },
     {
       initModalTitle: "Linien-Klassifizieren in 2D",
@@ -287,24 +274,92 @@ function App() {
       link: "linien-klassifizieren-3D",
     },
   ];
+  const datasetLevels: ILevel[] = [
+    {
+      initModalTitle: "Sind die Weizen-Daten in 1D separierbar?",
+      initModalContent:
+        "Von zwei Weizenarten wurden von je 70 Körnern die Breite, Länge und Fläche vermessen. Finde die Messung mit der sich die beiden Klassen perfekt linear separieren lassen.",
+      level: (title, content) => (
+        <LevelWeizen2
+          currentData={currentData}
+          setDataSinglePoint={setDataSinglePoint}
+          setSelectedAttrib={setSelectedAttrib}
+          setCurrentData={setCurrentData}
+          initModalTitle={title}
+          initModalContent={content}
+        />
+      ),
+      link: "weizen2",
+    },
+    {
+      initModalTitle: "Sind die Schierling-Daten in 1D separierbar?",
+      initModalContent:
+        "Der griechische Philosoph Sokrates wurde im Athen des Jahres 399 v. Chr. zum Tode verurteilt und mit dem Schierlingsbecher hingerichtet. Mit diesem Becher wurde dem Verurteilten ein Getränk verabreicht, das aus einer Pflanze, dem giftigen Gefleckten Schierling, hergestellt wurde. Der Schierling ist für Laien leicht zu verwechseln mit anderen häufig vorkommenden Pflanzen, etwa der Hundspetersilie, die ebenfalls giftig ist, oder dem Wiesen­Kerbel, der ungiftig ist und zum Würzen von Salaten und Wildkräutersuppen verwendet wird. Alle drei Pflanzen haben ähnliche Blätter, blühen in weissen Dolden und bilden längliche Früchte.",
+      level: (title, content) => (
+        <LevelSchierling1D
+          currentData={currentData}
+          setDataSinglePoint={setDataSinglePoint}
+          setSelectedAttrib={setSelectedAttrib}
+          setCurrentData={setCurrentData}
+          initModalTitle={title}
+          initModalContent={content}
+        />
+      ),
+      link: "schierling",
+    },
+    {
+      initModalTitle: "Sind die Schierling-Daten in 2D separierbar?",
+      initModalContent:
+        "Der griechische Philosoph Sokrates wurde im Athen des Jahres 399 v. Chr. zum Tode verurteilt und mit dem Schierlingsbecher hingerichtet. Mit diesem Becher wurde dem Verurteilten ein Getränk verabreicht, das aus einer Pflanze, dem giftigen Gefleckten Schierling, hergestellt wurde. Der Schierling ist für Laien leicht zu verwechseln mit anderen häufig vorkommenden Pflanzen, etwa der Hundspetersilie, die ebenfalls giftig ist, oder dem Wiesen­Kerbel, der ungiftig ist und zum Würzen von Salaten und Wildkräutersuppen verwendet wird. Alle drei Pflanzen haben ähnliche Blätter, blühen in weissen Dolden und bilden längliche Früchte.",
+      level: (title, content) => (
+        <LevelSchierling2D
+          currentData={currentData}
+          setDataSinglePoint={setDataSinglePoint}
+          setSelectedAttrib={setSelectedAttrib}
+          setCurrentData={setCurrentData}
+          initModalTitle={title}
+          initModalContent={content}
+        />
+      ),
+      link: "schierling2D",
+    },
+  ];
+  const generateButtonFromLevel = (initModalTitle: string, link: string) => (
+    <Link to={"/level/" + link} key={link + "-link"}>
+      <Grid.Col span={4}>
+        <Button>{initModalTitle}</Button>
+      </Grid.Col>
+    </Link>
+  );
+  const generateRouteFromLevel = (
+    initModalTitle: string,
+    initModalContent: string,
+    level: (title: string, content: string) => JSX.Element,
+    link: string
+  ) => (
+    <Route
+      path={link}
+      element={level(initModalTitle, initModalContent)}
+      key={link + "-route"}
+    ></Route>
+  );
   const levelButtons = levels.map(
-    ({ initModalTitle, initModalContent, level, link }) => (
-      <Link to={"/level/" + link} key={link + "-link"}>
-        <Grid.Col span={4}>
-          <Button>{initModalTitle}</Button>
-        </Grid.Col>
-      </Link>
-    )
+    ({ initModalTitle, initModalContent, level, link }) =>
+      generateButtonFromLevel(initModalTitle, link)
   );
-  const levelRoutes = levels.map(
-    ({ initModalTitle, initModalContent, level, link }) => (
-      <Route
-        path={link}
-        element={level(initModalTitle, initModalContent)}
-        key={link + "-route"}
-      ></Route>
-    )
+  const datasetLevelButtons = datasetLevels.map(
+    ({ initModalTitle, initModalContent, level, link }) =>
+      generateButtonFromLevel(initModalTitle, link)
   );
+  const allLevelRoutes = levels
+    .map(({ initModalTitle, initModalContent, level, link }) =>
+      generateRouteFromLevel(initModalTitle, initModalContent, level, link)
+    )
+    .concat(
+      datasetLevels.map(({ initModalTitle, initModalContent, level, link }) =>
+        generateRouteFromLevel(initModalTitle, initModalContent, level, link)
+      )
+    );
   const gameTitle = (
     <Card className="GameTitle">
       <Title order={1}>
@@ -346,7 +401,19 @@ function App() {
                     <RobotWrapper
                       message={<>"Welches Level möchtest du spielen?"</>}
                     ></RobotWrapper>
+                    <Title order={4}>Basic Level:</Title>
                     <Grid justify="center">{levelButtons}</Grid>
+                    <Title order={4}>Level mit echten Datensätzen:</Title>
+                    <Grid justify="center">{datasetLevelButtons}</Grid>
+                    <Title order={4}>Wie geht das?:</Title>
+                    <Text>
+                      Vor jedem Level bekommst du eine kleine Anweisung was zu
+                      tun ist
+                    </Text>
+                    <Text>Wenn du mit einem Level fertig bist, dann klicke
+                      oben auf "Zurück zur Level-Auswahl"</Text>
+                    <Text>Benutze die Knöpfe oben rechts um die Attribute auszuwählen, die auf den Axen angezeigt werden</Text>
+                    <Text>Klicke auf die Tabellen links um die zwei Klassen auszuwählen die du klassifizieren möchtest</Text>
                   </Stack>
                 </Center>
               </div>
@@ -373,7 +440,7 @@ function App() {
               </Stack>
             }
           >
-            {levelRoutes}
+            {allLevelRoutes}
           </Route>
         </Routes>
       </Router>

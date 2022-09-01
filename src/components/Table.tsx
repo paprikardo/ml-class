@@ -1,5 +1,5 @@
 import { IDataPoint } from "../Data";
-import '../App.css'
+import "../App.css";
 import { Card, Text } from "@mantine/core";
 const Table = ({
   class_name,
@@ -8,25 +8,33 @@ const Table = ({
   change_cl_data,
   color,
   highlighted,
-  onClickHandler
+  onClickHandler,
 }: {
   class_name: string;
   points: IDataPoint[];
   attribs: string[];
   change_cl_data: (key: number, new_point: IDataPoint) => void;
-  color?:string,
-  highlighted?:boolean,
-  onClickHandler?:()=>void
+  color?: string;
+  highlighted?: boolean;
+  onClickHandler?: () => void;
 }) => {
-  const highlightedClassName = highlighted?" highlighted":""
+  const highlightedClassName = highlighted ? " highlighted" : "";
   return (
-    <Card className="Centred Table" style={{backgroundColor:color}} onClick={onClickHandler}>
-      <Text align="center" size="lg" weight={500} underline>Datenpunkte für {class_name}</Text>
-      <table className={"Centred Table "+highlightedClassName}>
+    <Card
+      className={highlightedClassName}
+      style={{ backgroundColor: color }}
+      onClick={onClickHandler}
+    >
+      <Text align="center" size="lg" weight={500} underline>
+        Datenpunkte für {class_name}
+      </Text>
+      <table className={"Centred Table"}>
         <thead>
           <tr>
             {attribs.map((s) => (
-              <th key={s}><Text align="center">{s}</Text></th>
+              <th key={s}>
+                <Text align="center">{s}</Text>
+              </th>
             ))}
           </tr>
         </thead>
@@ -34,7 +42,7 @@ const Table = ({
           {points.map((point, key) => (
             <tr key={class_name + "-" + key}>
               {point.map((x, point_index) => (
-                <td key={"td"+point_index}>
+                <td key={"td" + point_index}>
                   <input
                     type="number"
                     value={x}

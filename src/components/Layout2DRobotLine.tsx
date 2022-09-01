@@ -15,12 +15,13 @@ function Layout2DRobotLine({
   addPoint: (cl: number, new_point: IDataPoint) => void;
   setSelectedAttrib: (xAxisAttrib: number, yAxisAttrib?: number) => void;
 }): JSX.Element {
-  const robotMessage =<>
-  "Benutze"
-  <Kbd>shift</Kbd> + <Kbd>M</Kbd>
-  Klick oder Shift+Klick um neue Punkte hinzuzufügen. Ich werde versuchen die Punkte zu separieren. Schaffst du es, dass ich sie nicht mehr separieren kann?";
-  
-  </>
+  const robotMessage = (
+    <>
+      Benutze <Kbd>Maus-L</Kbd> oder <Kbd>shift</Kbd> + <Kbd>Maus-L</Kbd> um
+      neue Punkte hinzuzufügen. Ich werde versuchen die Punkte zu separieren.
+      Schaffst du es, dass ich sie nicht mehr separieren kann?";
+    </>
+  );
   return (
     <div>
       <MyPlot

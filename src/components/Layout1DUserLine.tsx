@@ -46,7 +46,7 @@ const Layout1DUser = ({
     if (gameState == "init") {
       setHideSplitPoint(true);
       setMessageState(
-        "Zeichne jetzt einen Klassifikator, der die Daten möglichst gut voneinander trennt "
+        "Klicke und bestimme einen Punkt-Klassifikator, der die Daten möglichst gut voneinander trennt "
       );
     }
     if (gameState == "line drawn") {

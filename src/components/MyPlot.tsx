@@ -1,6 +1,7 @@
 import { forwardRef, useEffect, useState } from "react";
 import { IData, IDataPoint, IDataClass, colors } from "../Data";
 import "../App.css";
+import { Title } from "@mantine/core";
 
 var pt: DOMPoint | undefined = undefined;
 var screenctm: any = null;
@@ -472,7 +473,7 @@ const MyPlot = forwardRef(
     return (
       <div>
         <div>
-          X-Axis
+          <Title order={5}>Attribut auf der X-Axis</Title>
           <div>
             {plot_data.attrib.map((str, index) => (
               <button
@@ -505,7 +506,7 @@ const MyPlot = forwardRef(
           <></>
         ) : (
           <div>
-            Y-Axis
+            <Title order={5}>Attribut auf der Y-Axis</Title>
             <div>
               {plot_data.attrib.map((str, index) => (
                 <button
