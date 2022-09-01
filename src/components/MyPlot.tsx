@@ -469,7 +469,6 @@ const MyPlot = forwardRef(
     );
     const svgPadding = 2; //padding arround the svg elements
     useKeyPress();
-    console.log(plot_data.selected_attrib);
     return (
       <div>
         <div>

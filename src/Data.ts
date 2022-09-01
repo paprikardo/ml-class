@@ -227,6 +227,38 @@ export const irisDataset: IData = {
   selected_attrib: [0, 1],
   selected_class: [0, 1],
 };
+export const dummy2C3D: IData = {
+  data: [
+    {
+      className: "Klasse 1",
+      points: [],
+    },
+    {
+      className: "Klasse 2",
+      points: [],
+    }
+  ],
+  attrib: ["Attribut 1", "Attribut 2", "Attribut 3"],
+  newPoint: [10, 10, 10],
+  selected_attrib: [0, 1],
+  selected_class: [0, 1],
+};
+export const dummy2C2D: IData = {
+  data: [
+    {
+      className: "Klasse 1",
+      points: [],
+    },
+    {
+      className: "Klasse 2",
+      points: [],
+    }
+  ],
+  attrib: ["Attribut 1", "Attribut 2"],
+  newPoint: [10, 10, 10],
+  selected_attrib: [0, 1],
+  selected_class: [0, 1],
+};
 export const weizen2Dataset1D: IData = {
   data: [
     {

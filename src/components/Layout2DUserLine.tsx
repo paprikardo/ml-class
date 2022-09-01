@@ -8,14 +8,12 @@ import { rand_0_10 } from "../Random";
 function Layout2DUserLine({
   currentData,
   setDataSinglePoint,
-  addRandomPoint,
+  onNextGameRound,
   setSelectedAttrib,
 }: {
   currentData: IData;
-  changePoint: (cl: number, key: number, new_point: IDataPoint) => void;
-  addPoint: (cl: number, new_point: IDataPoint) => void;
   setDataSinglePoint: (means: IDataPoint[]) => void;
-  addRandomPoint: (means: IDataPoint[], variance?: number) => void;
+  onNextGameRound: () => void;
   setSelectedAttrib: (xAxisAttrib: number, yAxisAttrib?: number) => void;
 }): JSX.Element {
   const [gameState, setGameState] = useState("init");
@@ -28,23 +26,13 @@ function Layout2DUserLine({
   const resetUserLine = () => {
     setUserLineState({
       x1: 0,
-      x2: 0, 
+      x2: 0,
       y1: 0,
       y2: 0,
     });
   };
   const [messageState, setMessageState] = useState("");
-  const dimensions = currentData.attrib.length;
-  const numClasses = currentData.data.length;
-  const meansInit: IDataPoint[] = [];
-  for (var c = 0; c < numClasses; c++) {
-    const classMean = [];
-    for (var i = 0; i < dimensions; i++) {
-      classMean.push(rand_0_10());
-    }
-    meansInit.push(classMean);
-  }
-  const [classMeans] = useState(meansInit);
+
   const [selClassA, selClassB] = currentData.selected_class;
   const enableUserDraw = true;
   const [hideSplitLine, setHideSplitLine] = useState(true);
@@ -52,7 +40,6 @@ function Layout2DUserLine({
   //initialize game state
   useEffect(() => {
     setHideSplitLine(false);
-    setDataSinglePoint(classMeans);
   }, []);
   //game state logic
   const waitTime = 2000;
@@ -62,24 +49,24 @@ function Layout2DUserLine({
       setMessageState(
         "Zeichne jetzt einen Klassifikator, der die Daten möglichst gut voneinander trennt "
       );
-      console.log(
-        "Zeichne jetzt einen Klassifikator, der die Daten möglichst gut voneinander trennt "
-      );
     }
     if (gameState == "line drawn") {
       setHideSplitLine(false);
       const res = Math.round(computeScore());
-      setMessageState(
-        "Du hast " + res + " Prozent richtig klassifiziert. Sehr gut!"
-      );
-      console.log(
-        "Du hast " + res + " Prozent richtig klassifiziert. Sehr gut!"
-      );
+      if (res == 100) {
+        setMessageState(
+          "Du hast die Daten perfekt aufgeteilt. Sehr gut! Die Daten sind wohl linear separierbar"
+        );
+      } else {
+        setMessageState(
+          "Du hast " + res + " Prozent richtig klassifiziert. Sind die Daten noch linear separierbar?"
+        );
+      }
       //reset user line and change state after waiting
       const interval = setInterval(() => {
         resetUserLine();
         setGameState("init");
-        addRandomPoint(classMeans);
+        onNextGameRound();
         clearInterval(interval);
       }, waitTime);
     }
@@ -124,6 +111,7 @@ function Layout2DUserLine({
   };
 
   const onMouseUpPlotHandler = () => {
+    const minLengthForUserline = 3;
     if (enableUserDraw) {
       //if line is long enough to not be a mistake change state
       if (
@@ -132,6 +120,10 @@ function Layout2DUserLine({
         3
       ) {
         setGameState("line drawn");
+      } else {
+        setMessageState(
+          "Dein gezeichneter Linien-Klassifikator ist zu kurz. Versuche es erneut."
+        );
       }
     }
   };

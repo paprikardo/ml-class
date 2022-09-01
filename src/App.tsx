@@ -15,7 +15,8 @@ import {
 } from "react-router-dom";
 import { randomPoint, rand_0_10_point } from "./Random";
 import { parse } from "papaparse";
-import LevelWeizen2 from "./components/LevelWeizen2";
+import LevelWeizen2 from "./levels/LevelWeizen2";
+import LevelUserLineGame from "./levels/LevelUserLineGame2D";
 function App() {
   const [currentData, setCurrentData] = useState(irisDataset);
   const dimensions = currentData.attrib.length;
@@ -136,6 +137,85 @@ function App() {
       return newData;
     });
   };
+  //levels
+  interface ILevel {
+    initModalTitle: string;
+    initModalContent: string;
+    level: (title: string, content: string) => JSX.Element;
+    link: string;
+  }
+
+  const levels: ILevel[] = [
+    {
+      initModalTitle: "Sind die Weizen-Daten linear separierbar?",
+      initModalContent: "Von zwei Weizenarten wurden von je 70 Körnern die Breite, Länge und Fläche vermessen. Finde die Messung mit der sich die beiden Klassen perfekt linear separieren lassen.",
+      level: (title, content) => (
+        <LevelWeizen2
+          currentData={currentData}
+          setDataSinglePoint={setDataSinglePoint}
+          setSelectedAttrib={setSelectedAttrib}
+          setCurrentData={setCurrentData}
+          initModalTitle={title}
+          initModalContent={content}
+        />
+      ),
+      link: "weizen2",
+    },
+    {
+      initModalTitle: "Klassifizieren in 2D",
+      initModalContent:
+        "Versuche die zwei dimensionalen Punkte zu klassifizieren. Klicke und ziehe mit der Maus und versuche die beiden Punktwolken (von Klasse 1 und von Klasse 2) voneinander zu separieren. Sind die zwei Klassen linear separierbar?",
+      level: (title, content) => (
+        <LevelUserLineGame
+          currentData={currentData}
+          setDataSinglePoint={setDataSinglePoint}
+          setSelectedAttrib={setSelectedAttrib}
+          addRandomPoint={addRandomPoint}
+          initModalTitle={title}
+          initModalContent={content}
+          setCurrentData={setCurrentData}
+          dimensions={2}
+        ></LevelUserLineGame>
+      ),
+      link: "klass2D",
+    },
+    {
+      initModalTitle: "Klassifizieren in 3D",
+      initModalContent:
+        "Versuche die drei dimensionalen Punkte zu klassifizieren. Klicke und ziehe mit der Maus und versuche die beiden Punktwolken (von Klasse 1 und von Klasse 2) voneinander zu separieren. Sind die zwei Klassen linear separierbar?",
+      level: (title, content) => (
+        <LevelUserLineGame
+          currentData={currentData}
+          setDataSinglePoint={setDataSinglePoint}
+          setSelectedAttrib={setSelectedAttrib}
+          addRandomPoint={addRandomPoint}
+          initModalTitle={title}
+          initModalContent={content}
+          setCurrentData={setCurrentData}
+          dimensions={3}
+        ></LevelUserLineGame>
+      ),
+      link: "klass3D",
+    },
+  ];
+  const levelButtons = levels.map(
+    ({ initModalTitle, initModalContent, level, link }) => (
+      <Link to={"/level/" + link} key={link + "-link"}>
+        <Grid.Col span={4}>
+          <Button>{initModalTitle}</Button>
+        </Grid.Col>
+      </Link>
+    )
+  );
+  const levelRoutes = levels.map(
+    ({ initModalTitle, initModalContent, level, link }) => (
+      <Route
+        path={link}
+        element={level(initModalTitle, initModalContent)}
+        key={link + "-route"}
+      ></Route>
+    )
+  );
   return (
     <div className="App">
       <Router>
@@ -152,34 +232,8 @@ function App() {
           <Route
             path="level-selection"
             element={
-              <Center style={{width:"100vw", height:"100vh"}}>
-                <Grid>
-                  <Grid.Col span={4}>
-                    <Link to="/level/levelWeizen">
-                      <Button>Weizen 2</Button>
-                    </Link>
-                  </Grid.Col>
-                  <Grid.Col span={4}>
-                    <Link to="/level/levelWeizen">
-                      <Button>Weizen 2</Button>
-                    </Link>
-                  </Grid.Col>
-                  <Grid.Col span={4}>
-                    <Link to="/level/levelWeizen">
-                      <Button>Weizen 2</Button>
-                    </Link>
-                  </Grid.Col>
-                  <Grid.Col span={4}>
-                    <Link to="/level/levelWeizen">
-                      <Button>Weizen 2</Button>
-                    </Link>
-                  </Grid.Col>
-                  <Grid.Col span={4}>
-                    <Link to="/level/levelWeizen">
-                      <Button>Weizen 2</Button>
-                    </Link>
-                  </Grid.Col>
-                </Grid>
+              <Center style={{ width: "100vw", height: "100vh" }}>
+                <Grid>{levelButtons}</Grid>
               </Center>
             }
           ></Route>
@@ -187,7 +241,9 @@ function App() {
             path="level"
             element={
               <div>
-                <Link to="/level-selection"><Button>Exit</Button></Link>
+                <Link to="/level-selection">
+                  <Button>Exit</Button>
+                </Link>
                 <SimpleGrid cols={2} spacing="xs">
                   <TableWrapper
                     plot_data={currentData}
@@ -202,17 +258,7 @@ function App() {
               </div>
             }
           >
-            <Route
-              path="levelWeizen"
-              element={
-                <LevelWeizen2
-                  currentData={currentData}
-                  setDataSinglePoint={setDataSinglePoint}
-                  setSelectedAttrib={setSelectedAttrib}
-                  setCurrentData={setCurrentData}
-                ></LevelWeizen2>
-              }
-            ></Route>
+            {levelRoutes}
             <Route
               path="robot"
               element={
@@ -222,29 +268,6 @@ function App() {
                   addPoint={addPoint}
                   setSelectedAttrib={setSelectedAttrib}
                 ></Layout2DRobotLine>
-              }
-            ></Route>
-            <Route
-              path="/level/userline"
-              element={
-                <Layout2DUserLine
-                  currentData={currentData}
-                  changePoint={changePoint}
-                  addPoint={addPoint}
-                  setDataSinglePoint={setDataSinglePoint}
-                  addRandomPoint={addRandomPoint}
-                  setSelectedAttrib={setSelectedAttrib}
-                ></Layout2DUserLine>
-              }
-            ></Route>
-            <Route
-              path="/level/oneD"
-              element={
-                <Layout1DUserLine
-                  currentData={currentData}
-                  setDataSinglePoint={setDataSinglePoint}
-                  setSelectedAttrib={setSelectedAttrib}
-                ></Layout1DUserLine>
               }
             ></Route>
           </Route>
