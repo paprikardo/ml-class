@@ -4,8 +4,9 @@ interface IData2DPoint {
   x: number;
   y: number;
 }
-
-export const colors = ["#E64848", "#89CFFD", "#FFE9AE", "#CFE8A9", "gray"]; //LIMITATION: ALLOW MAXIMUM OF 4 DIFFERENT CLASSES
+//red before: #E64848
+//colors for the different classes
+export const colors = ["#f27052", "#89CFFD", "#FFE9AE", "#CFE8A9", "gray"]; //LIMITATION: ALLOW MAXIMUM OF 4 DIFFERENT CLASSES
 
 export type IDataPoint = number[];
 
@@ -227,6 +228,7 @@ export const irisDataset: IData = {
   selected_attrib: [0, 1],
   selected_class: [0, 1],
 };
+//dummy dataset for game with 2 classes, 3 dimensions
 export const dummy2C3D: IData = {
   data: [
     {
@@ -243,6 +245,24 @@ export const dummy2C3D: IData = {
   selected_attrib: [0, 1],
   selected_class: [0, 1],
 };
+//dummy dataset for game with 2 classes, 3 dimensions but just one selected attribute
+export const dummy2C3D1A: IData = {
+  data: [
+    {
+      className: "Klasse 1",
+      points: [],
+    },
+    {
+      className: "Klasse 2",
+      points: [],
+    }
+  ],
+  attrib: ["Attribut 1", "Attribut 2", "Attribut 3"],
+  newPoint: [10, 10, 10],
+  selected_attrib: 0,
+  selected_class: [0, 1],
+};
+//dummy dataset for game with 2 classes, 2 dimensions
 export const dummy2C2D: IData = {
   data: [
     {
@@ -257,6 +277,23 @@ export const dummy2C2D: IData = {
   attrib: ["Attribut 1", "Attribut 2"],
   newPoint: [10, 10, 10],
   selected_attrib: [0, 1],
+  selected_class: [0, 1],
+};
+//dummy dataset for game with 2 classes, 2 dimensions but just one selected attribute
+export const dummy2C2D1A: IData = {
+  data: [
+    {
+      className: "Klasse 1",
+      points: [],
+    },
+    {
+      className: "Klasse 2",
+      points: [],
+    }
+  ],
+  attrib: ["Attribut 1", "Attribut 2"],
+  newPoint: [10, 10, 10],
+  selected_attrib: 0,
   selected_class: [0, 1],
 };
 export const weizen2Dataset1D: IData = {

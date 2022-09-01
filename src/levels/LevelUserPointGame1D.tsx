@@ -1,8 +1,9 @@
+//mostly copied from LevelUserLineGame2D
 import { useEffect, useState } from "react";
-import Layout2DUserLine from "../components/Layout2DUserLine";
+import Layout1DUserLine from "../components/Layout1DUserLine";
 import {
-  dummy2C3D,
-  dummy2C2D,
+  dummy2C3D1A,
+  dummy2C2D1A,
   IData,
   IDataPoint,
   weizen2Dataset1D,
@@ -30,9 +31,12 @@ export default ({
   setCurrentData: React.Dispatch<React.SetStateAction<IData>>;
   dimensions: number;
 }): JSX.Element => {
-  const dataset = dimensions == 2 ? dummy2C2D : dummy2C3D;
+  const dataset = dimensions == 2 ? dummy2C2D1A : dummy2C3D1A;
   const numClasses = dataset.data.length;
-  const [classMeans, setClassMeans] = useState(newMeans(numClasses,dimensions));
+  console.log(newMeans(numClasses, dimensions));
+  const [classMeans, setClassMeans] = useState(
+    newMeans(numClasses, dimensions)
+  );
   //initialize dataset to single point
   useEffect(() => {
     setCurrentData(dataset);
@@ -43,23 +47,21 @@ export default ({
     const minLengthForUserline = 3;
     if (
       //resample points if they are to close to each other
-      Math.abs(p0[0] - p1[0]) + Math.abs(p0[1] - p1[1]) <=
-      minLengthForUserline
+      Math.abs(p0[0] - p1[0]) <= minLengthForUserline
     ) {
-      console.log("loop");
-      setClassMeans(newMeans(numClasses,dimensions));
+      setClassMeans(newMeans(numClasses, dimensions));
       setDataSinglePoint(classMeans);
     }
   }, []);
   return (
     <div>
       <InitModal title={initModalTitle}>{initModalContent}</InitModal>
-      <Layout2DUserLine
+      <Layout1DUserLine
         currentData={currentData}
         setDataSinglePoint={setDataSinglePoint}
         onNextGameRound={() => addRandomPoint(classMeans)}
         setSelectedAttrib={setSelectedAttrib}
-      ></Layout2DUserLine>
+      ></Layout1DUserLine>
     </div>
   );
 };

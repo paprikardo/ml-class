@@ -174,7 +174,7 @@ function Layout2DUserLine({
         enableUserDraw={enableUserDraw}
         setSelectedAttrib={setSelectedAttrib}
       ></MyPlot>
-      <RobotWrapper class_result={messageState}></RobotWrapper>
+      <RobotWrapper message={<>{messageState}</>}></RobotWrapper>
     </div>
   );
 }

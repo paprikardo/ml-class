@@ -1,5 +1,6 @@
 import { IDataPoint } from "../Data";
 import '../App.css'
+import { Card, Text } from "@mantine/core";
 const Table = ({
   class_name,
   attribs,
@@ -19,13 +20,13 @@ const Table = ({
 }) => {
   const highlightedClassName = highlighted?" highlighted":""
   return (
-    <div className="Centred Table" style={{backgroundColor:color}} onClick={onClickHandler}>
-      <h3><p>{class_name}</p></h3>
+    <Card className="Centred Table" style={{backgroundColor:color}} onClick={onClickHandler}>
+      <Text align="center" size="lg" weight={500} underline>Datenpunkte für {class_name}</Text>
       <table className={"Centred Table "+highlightedClassName}>
         <thead>
           <tr>
             {attribs.map((s) => (
-              <th key={s}>{s}</th>
+              <th key={s}><Text align="center">{s}</Text></th>
             ))}
           </tr>
         </thead>
@@ -49,7 +50,7 @@ const Table = ({
           ))}
         </tbody>
       </table>
-    </div>
+    </Card>
   );
 };
 

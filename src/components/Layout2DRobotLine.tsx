@@ -1,6 +1,8 @@
 import { IData, IDataPoint } from "../Data";
 import Table from "./Table";
 import MyPlot from "./MyPlot";
+import RobotWrapper from "./RobotWrapper";
+import { Kbd } from "@mantine/core";
 
 function Layout2DRobotLine({
   currentData,
@@ -13,6 +15,12 @@ function Layout2DRobotLine({
   addPoint: (cl: number, new_point: IDataPoint) => void;
   setSelectedAttrib: (xAxisAttrib: number, yAxisAttrib?: number) => void;
 }): JSX.Element {
+  const robotMessage =<>
+  "Benutze"
+  <Kbd>shift</Kbd> + <Kbd>M</Kbd>
+  Klick oder Shift+Klick um neue Punkte hinzuzufügen. Ich werde versuchen die Punkte zu separieren. Schaffst du es, dass ich sie nicht mehr separieren kann?";
+  
+  </>
   return (
     <div>
       <MyPlot
@@ -20,12 +28,13 @@ function Layout2DRobotLine({
         addPoint={addPoint}
         setSelectedAttrib={setSelectedAttrib}
       ></MyPlot>
-      <Table
+      {/* <Table
         class_name="Neuer zu klassifizierender Punkt"
         attribs={currentData.attrib}
         points={[currentData.newPoint]}
         change_cl_data={(k, new_point) => changeNewPoint(new_point)}
-      ></Table>
+      ></Table> */}
+      <RobotWrapper message={robotMessage}></RobotWrapper>
     </div>
   );
 }

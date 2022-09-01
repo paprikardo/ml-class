@@ -4,7 +4,15 @@ import "./App.css";
 import Layout2DRobotLine from "./components/Layout2DRobotLine";
 import Layout2DUserLine from "./components/Layout2DUserLine";
 import Layout1DUserLine from "./components/Layout1DUserLine";
-import { Button, Center, Grid, SimpleGrid } from "@mantine/core";
+import {
+  Button,
+  Card,
+  Center,
+  Grid,
+  SimpleGrid,
+  Stack,
+  Title,
+} from "@mantine/core";
 import TableWrapper from "./components/TableWrapper";
 import {
   BrowserRouter as Router,
@@ -17,6 +25,9 @@ import { randomPoint, rand_0_10_point } from "./Random";
 import { parse } from "papaparse";
 import LevelWeizen2 from "./levels/LevelWeizen2";
 import LevelUserLineGame from "./levels/LevelUserLineGame2D";
+import LevelUserPointGame1D from "./levels/LevelUserPointGame1D";
+import LevelRobotLineGame2D from "./levels/LevelRobotLineGame2D";
+import RobotWrapper from "./components/RobotWrapper";
 function App() {
   const [currentData, setCurrentData] = useState(irisDataset);
   const dimensions = currentData.attrib.length;
@@ -144,11 +155,55 @@ function App() {
     level: (title: string, content: string) => JSX.Element;
     link: string;
   }
-
+  const pointKlassModalContent = (dim: number) =>
+    "Versuche die " +
+    dim +
+    " dimensionalen Punkte zu klassifizieren. Klicke mit der Maus und versuche die beiden Punktwolken (von Klasse 1 und von Klasse 2) voneinander zu separieren. Sind die zwei Klassen separierbar?";
+  const robotKlassModalContent = (dim: number) =>
+    "Ich werde versuchen die " +
+    dim +
+    " dimensionalen Punkte zu klassifizieren. Klicke mit deiner Maus um einen neuen Punkt zu Klasse 1 hinzuzufügen. Drücke zusätzlich Shift um einen neuen Punkt zu Klasse 2 hinzuzufügen";
   const levels: ILevel[] = [
     {
+      initModalTitle: "Roboter-Klassifizieren in 2D",
+      initModalContent: robotKlassModalContent(2),
+      level: (title, content) => (
+        <LevelRobotLineGame2D
+          currentData={currentData}
+          setDataSinglePoint={setDataSinglePoint}
+          changeNewPoint={changeNewPoint}
+          addPoint={addPoint}
+          setSelectedAttrib={setSelectedAttrib}
+          initModalTitle={title}
+          initModalContent={content}
+          setCurrentData={setCurrentData}
+          dimensions={2}
+        ></LevelRobotLineGame2D>
+      ),
+      link: "robot-klassifizieren-2D",
+    },
+    {
+      initModalTitle: "Roboter-Klassifizieren in 3D",
+      initModalContent: robotKlassModalContent(3),
+      level: (title, content) => (
+        <LevelRobotLineGame2D
+          currentData={currentData}
+          setDataSinglePoint={setDataSinglePoint}
+          changeNewPoint={changeNewPoint}
+          addPoint={addPoint}
+          setSelectedAttrib={setSelectedAttrib}
+          initModalTitle={title}
+          initModalContent={content}
+          setCurrentData={setCurrentData}
+          dimensions={3}
+        ></LevelRobotLineGame2D>
+      ),
+      link: "robot-klassifizieren-3D",
+    },
+    {
       initModalTitle: "Sind die Weizen-Daten linear separierbar?",
-      initModalContent: "Von zwei Weizenarten wurden von je 70 Körnern die Breite, Länge und Fläche vermessen. Finde die Messung mit der sich die beiden Klassen perfekt linear separieren lassen.",
+      initModalContent:
+        "Von zwei Weizenarten wurden von je 70 Körnern die Breite, Länge und Fläche vermessen. Finde die Messung mit der sich die beiden Klassen perfekt linear separieren lassen.",
       level: (title, content) => (
         <LevelWeizen2
           currentData={currentData}
@@ -162,7 +217,41 @@ function App() {
       link: "weizen2",
     },
     {
-      initModalTitle: "Klassifizieren in 2D",
+      initModalTitle: "Punkt-Klassifizieren in 3D",
+      initModalContent: pointKlassModalContent(3),
+      level: (title, content) => (
+        <LevelUserPointGame1D
+          currentData={currentData}
+          setDataSinglePoint={setDataSinglePoint}
+          setSelectedAttrib={setSelectedAttrib}
+          addRandomPoint={addRandomPoint}
+          initModalTitle={title}
+          initModalContent={content}
+          setCurrentData={setCurrentData}
+          dimensions={3}
+        ></LevelUserPointGame1D>
+      ),
+      link: "punkt-klassifizieren-3D",
+    },
+    {
+      initModalTitle: "Punkt-Klassifizieren in 2D",
+      initModalContent: pointKlassModalContent(2),
+      level: (title, content) => (
+        <LevelUserPointGame1D
+          currentData={currentData}
+          setDataSinglePoint={setDataSinglePoint}
+          setSelectedAttrib={setSelectedAttrib}
+          addRandomPoint={addRandomPoint}
+          initModalTitle={title}
+          initModalContent={content}
+          setCurrentData={setCurrentData}
+          dimensions={2}
+        ></LevelUserPointGame1D>
+      ),
+      link: "punkt-klassifizieren-2D",
+    },
+    {
+      initModalTitle: "Linien-Klassifizieren in 2D",
       initModalContent:
         "Versuche die zwei dimensionalen Punkte zu klassifizieren. Klicke und ziehe mit der Maus und versuche die beiden Punktwolken (von Klasse 1 und von Klasse 2) voneinander zu separieren. Sind die zwei Klassen linear separierbar?",
       level: (title, content) => (
@@ -177,10 +266,10 @@ function App() {
           dimensions={2}
         ></LevelUserLineGame>
       ),
-      link: "klass2D",
+      link: "linien-klassifizieren-2D",
     },
     {
-      initModalTitle: "Klassifizieren in 3D",
+      initModalTitle: "Linien-Klassifizieren in 3D",
       initModalContent:
         "Versuche die drei dimensionalen Punkte zu klassifizieren. Klicke und ziehe mit der Maus und versuche die beiden Punktwolken (von Klasse 1 und von Klasse 2) voneinander zu separieren. Sind die zwei Klassen linear separierbar?",
       level: (title, content) => (
@@ -195,7 +284,7 @@ function App() {
           dimensions={3}
         ></LevelUserLineGame>
       ),
-      link: "klass3D",
+      link: "linien-klassifizieren-3D",
     },
   ];
   const levelButtons = levels.map(
@@ -216,6 +305,14 @@ function App() {
       ></Route>
     )
   );
+  const gameTitle = (
+    <Card className="GameTitle">
+      <Title order={1}>
+        Maschinelles Lernen: Punkt- und Linienklassifikatoren
+      </Title>
+      <Title order={4}>Eine Lernplattform von Ricardo Heinzmann</Title>
+    </Card>
+  );
   return (
     <div className="App">
       <Router>
@@ -227,22 +324,40 @@ function App() {
         <Routes>
           <Route
             path=""
-            element={<Link to="/level-selection"> start</Link>}
+            element={
+              <Stack>
+                {gameTitle}
+                <Link to="/level-selection">
+                  <Stack justify="flex-start" align="center">
+                    <RobotWrapper message={<>Bist du bereit?</>}></RobotWrapper>
+                    <Title order={2}>Klicke hier um zu beginnen</Title>
+                  </Stack>
+                </Link>
+              </Stack>
+            }
           ></Route>
           <Route
             path="level-selection"
             element={
-              <Center style={{ width: "100vw", height: "100vh" }}>
-                <Grid>{levelButtons}</Grid>
-              </Center>
+              <div>
+                {gameTitle}
+                <Center>
+                  <Stack align="center">
+                    <RobotWrapper
+                      message={<>"Welches Level möchtest du spielen?"</>}
+                    ></RobotWrapper>
+                    <Grid justify="center">{levelButtons}</Grid>
+                  </Stack>
+                </Center>
+              </div>
             }
           ></Route>
           <Route
             path="level"
             element={
-              <div>
+              <Stack style={{ paddingTop: "10px" }}>
                 <Link to="/level-selection">
-                  <Button>Exit</Button>
+                  <Button>Zurück zur Level-Auswahl</Button>
                 </Link>
                 <SimpleGrid cols={2} spacing="xs">
                   <TableWrapper
@@ -255,21 +370,10 @@ function App() {
                   ></TableWrapper>
                   <Outlet></Outlet>
                 </SimpleGrid>
-              </div>
+              </Stack>
             }
           >
             {levelRoutes}
-            <Route
-              path="robot"
-              element={
-                <Layout2DRobotLine
-                  currentData={currentData}
-                  changeNewPoint={changeNewPoint}
-                  addPoint={addPoint}
-                  setSelectedAttrib={setSelectedAttrib}
-                ></Layout2DRobotLine>
-              }
-            ></Route>
           </Route>
         </Routes>
       </Router>

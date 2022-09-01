@@ -2,12 +2,12 @@ import { Container, Grid } from "@mantine/core";
 import { ReactComponent as RobotIcon } from "../RobotIcon.svg";
 import SpeechBubble from "../SpeechBubble";
 import "./RobotWrapper.css";
-const RobotWrapper = ({ class_result }: { class_result: string }) => {
+const RobotWrapper = ({ message }: { message: JSX.Element }) => {
   return (
     <div className="RobotWrapper">      
         <RobotIcon className="RobotIcon" style={{}} />
         <div className="RobotMessage bubble">
-          <p>{class_result}</p>
+          <p>{message}</p>
         </div>
     </div>
   );

@@ -1,11 +1,3 @@
-# TODO
-* minimal graph size
-* 1 - dimensional
-* mehr dimensional
-* tables displays all dimensions
-* can select two tables and those get highlighted
-* 1 dimensional case is like multidimensional case but just "hide y axis" option activated
-
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

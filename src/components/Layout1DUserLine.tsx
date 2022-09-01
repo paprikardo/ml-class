@@ -8,10 +8,12 @@ const Layout1DUser = ({
   currentData,
   setDataSinglePoint,
   setSelectedAttrib,
+  onNextGameRound,
 }: {
   currentData: IData;
   setDataSinglePoint: (means: IDataPoint[]) => void;
   setSelectedAttrib: (xAxisAttrib: number, yAxisAttrib?: number) => void;
+  onNextGameRound?: () => void;
 }): JSX.Element => {
   const [gameState, setGameState] = useState("init");
   const [userPointXState, setUserPointXState] = useState(0);
@@ -46,22 +48,25 @@ const Layout1DUser = ({
       setMessageState(
         "Zeichne jetzt einen Klassifikator, der die Daten möglichst gut voneinander trennt "
       );
-      console.log(
-        "Zeichne jetzt einen Klassifikator, der die Daten möglichst gut voneinander trennt "
-      );
     }
     if (gameState == "line drawn") {
       setHideSplitPoint(false);
       const res = Math.round(computeScore());
-      setMessageState(
-        "Du hast " + res + " Prozent richtig klassifiziert. Sehr gut!"
-      );
-      console.log(
-        "Du hast " + res + " Prozent richtig klassifiziert. Sehr gut!"
-      );
+      if (res == 100) {
+        setMessageState(
+          "Du hast die Daten perfekt aufgeteilt. Sehr gut! Die Daten sind wohl separierbar"
+        );
+      } else {
+        setMessageState(
+          "Du hast " +
+            res +
+            " Prozent richtig klassifiziert. Sind die Daten noch separierbar?"
+        );
+      }
       //reset user line and change state after waiting
       const interval = setInterval(() => {
         resetUserLine();
+        typeof onNextGameRound == "function" && onNextGameRound();
         setGameState("init");
         clearInterval(interval);
       }, waitTime);
@@ -130,7 +135,7 @@ const Layout1DUser = ({
         setSelectedAttrib={setSelectedAttrib}
         isOneDimensional={true}
       ></MyPlot>
-      <RobotWrapper class_result={messageState}></RobotWrapper>
+      <RobotWrapper message={<>{messageState}</>}></RobotWrapper>
     </div>
   );
 };

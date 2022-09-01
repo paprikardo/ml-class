@@ -1,6 +1,7 @@
 import { colors, IData, IDataPoint } from "../Data";
 import Table from "./Table";
 import "../App.css";
+import { Card, Stack } from "@mantine/core";
 
 interface TableWrapperProps {
   plot_data: IData;
@@ -27,7 +28,8 @@ const TableWrapper = ({
     }
   };
   return (
-    <div className="TableWrapper">
+    <Card className="TableWrapper">
+      <Stack>
       {plot_data.data.map((cl, index) => (
         <Table
           key={"cl" + index}
@@ -42,7 +44,8 @@ const TableWrapper = ({
           onClickHandler={() => onClickTable(index)}
         ></Table>
       ))}
-    </div>
+      </Stack>
+    </Card>
   );
 };
 export default TableWrapper;
