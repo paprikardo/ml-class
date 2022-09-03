@@ -11,36 +11,26 @@ import {
 import InitModal from "../components/InitModal";
 import { rand_0_10 } from "../Others/Random";
 import { newMeans } from "../Others/newMeans";
+import { addRandomPoint, setCurrentDataType, setDataSinglePoint } from "../Others/currentDataHelperMethods";
 
 export default ({
-  currentData,
-  setDataSinglePoint,
-  setSelectedAttrib,
-  addRandomPoint,
+  dimensions,
   initModalTitle,
   initModalContent,
-  setCurrentData,
-  dimensions,
 }: {
-  currentData: IData;
-  setDataSinglePoint: (means: IDataPoint[]) => void;
-  setSelectedAttrib: (xAxisAttrib: number, yAxisAttrib?: number) => void;
-  addRandomPoint: (means: IDataPoint[], variance?: number) => void;
+  dimensions: number; //dimensions of the points displayed in this 1D game level
   initModalTitle: string;
   initModalContent: string;
-  setCurrentData: React.Dispatch<React.SetStateAction<IData>>;
-  dimensions: number;
 }): JSX.Element => {
   const dataset = dimensions == 2 ? dummy2C2D1A : dummy2C3D1A;
   const numClasses = dataset.data.length;
-  console.log(newMeans(numClasses, dimensions));
+  const [currentData,setCurrentData] = useState(dataset)
   const [classMeans, setClassMeans] = useState(
     newMeans(numClasses, dimensions)
   );
   //initialize dataset to single point
   useEffect(() => {
-    setCurrentData(dataset);
-    setDataSinglePoint(classMeans);
+    setDataSinglePoint(setCurrentData,classMeans);
     //sample new Means and generate new first points if they are too close to each other
     const p0 = currentData.data[0].points[0];
     const p1 = currentData.data[1].points[0];
@@ -50,7 +40,7 @@ export default ({
       Math.abs(p0[0] - p1[0]) <= minLengthForUserline
     ) {
       setClassMeans(newMeans(numClasses, dimensions));
-      setDataSinglePoint(classMeans);
+      setDataSinglePoint(setCurrentData,classMeans);
     }
   }, []);
   return (
@@ -58,9 +48,8 @@ export default ({
       <InitModal title={initModalTitle}>{initModalContent}</InitModal>
       <Layout1DUserLine
         currentData={currentData}
-        setDataSinglePoint={setDataSinglePoint}
-        onNextGameRound={() => addRandomPoint(classMeans)}
-        setSelectedAttrib={setSelectedAttrib}
+        setCurrentData={setCurrentData}
+        onNextGameRound={() => addRandomPoint(setCurrentData,classMeans)}
       ></Layout1DUserLine>
     </div>
   );

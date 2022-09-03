@@ -1,12 +1,17 @@
 import { forwardRef, useEffect, useState } from "react";
 import { IData, IDataPoint, IDataClass, colors } from "../Data";
 import "../App.css";
-import { Title } from "@mantine/core";
+import { Card, Title } from "@mantine/core";
 import { getDiffLineGenerator, getDiffPoint } from "../Others/classifier";
 import {
   selectDimSelectClassData,
   selectDimSelectClassDataScaled,
 } from "../Others/selectData";
+import {
+  addPoint,
+  setCurrentDataType,
+  setSelectedAttrib,
+} from "../Others/currentDataHelperMethods";
 
 var pt: DOMPoint | undefined = undefined;
 var screenctm: any = null;
@@ -14,7 +19,7 @@ var screenctm: any = null;
 var shiftKey = false;
 interface IProps {
   currentData: IData;
-  addPoint: (cl: number, new_point: IDataPoint) => void;
+  setCurrentData: setCurrentDataType;
   enableUserDraw?: boolean; //toggles if the User is allowed to draw its own classifier into the plot
   userLineState?: {
     x1: number;
@@ -32,7 +37,6 @@ interface IProps {
     mouseHold: boolean,
     cursorpt: DOMPoint | undefined
   ) => void;
-  setSelectedAttrib: (xAxisAttrib: number, yAxisAttrib?: number) => void;
   overwriteClickHandler?: (cursorpt: DOMPoint | undefined) => void;
   wrongClassifiedPoints?: IDataPoint[];
 }
@@ -40,14 +44,13 @@ const MyPlot = forwardRef(
   (
     {
       currentData,
-      addPoint,
+      setCurrentData,
       userLineState,
       hideSplitLine,
       enableUserDraw = false,
       onMouseUpPlotHandler,
       onMouseDownPlotHandler,
       onMouseMovePlotHandler,
-      setSelectedAttrib,
       isOneDimensional,
       overwriteClickHandler,
       previewUserPoint,
@@ -61,7 +64,6 @@ const MyPlot = forwardRef(
     const yOneDimension = 0;
 
     const selectedClassPoints = selectDimSelectClassData(currentData); //selected classes with selected dimensions to display
-    const newPoint = currentData.newPoint;
     //in the following we refer to x as all points in the first selected dimension and y as the second
     const all_points_x = selectedClassPoints //extract all x values
       .map((clp) => clp.map((p) => p[0]))
@@ -160,9 +162,9 @@ const MyPlot = forwardRef(
         }
         if (shiftKey) {
           // add point to the second class if shiftKey
-          addPoint(currentData.selected_class[1], pointToAdd);
+          addPoint(setCurrentData, currentData.selected_class[1], pointToAdd);
         } else {
-          addPoint(currentData.selected_class[0], pointToAdd);
+          addPoint(setCurrentData, currentData.selected_class[0], pointToAdd);
         }
       }
     };
@@ -437,6 +439,7 @@ const MyPlot = forwardRef(
                 key={str + index}
                 onClick={() =>
                   setSelectedAttrib(
+                    setCurrentData,
                     index,
                     Array.isArray(currentData.selected_attrib) //if 2D
                       ? currentData.selected_attrib[1]
@@ -470,6 +473,7 @@ const MyPlot = forwardRef(
                   key={str + index}
                   onClick={() =>
                     setSelectedAttrib(
+                      setCurrentData,
                       Array.isArray(currentData.selected_attrib) //if 2D
                         ? currentData.selected_attrib[0]
                         : index,
@@ -562,7 +566,6 @@ const MyPlot = forwardRef(
 );
 
 const useKeyPress = () => {
-  // const [sh, setKeyPressed] = useState<boolean>(false);
   // If pressed key is our target key then set to true
   const downHandler = (ev: KeyboardEvent) => {
     if (ev.key === "Shift") {

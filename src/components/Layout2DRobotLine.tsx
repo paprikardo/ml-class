@@ -3,17 +3,14 @@ import Table from "./Table";
 import MyPlot from "./MyPlot";
 import RobotWrapper from "./RobotWrapper";
 import { Kbd } from "@mantine/core";
+import { setCurrentDataType } from "../Others/currentDataHelperMethods";
 
 function Layout2DRobotLine({
   currentData,
-  changeNewPoint,
-  addPoint,
-  setSelectedAttrib,
+  setCurrentData
 }: {
   currentData: IData;
-  changeNewPoint: (new_point: IDataPoint) => void;
-  addPoint: (cl: number, new_point: IDataPoint) => void;
-  setSelectedAttrib: (xAxisAttrib: number, yAxisAttrib?: number) => void;
+  setCurrentData:setCurrentDataType
 }): JSX.Element {
   const robotMessage = (
     <>
@@ -26,8 +23,7 @@ function Layout2DRobotLine({
     <div>
       <MyPlot
         currentData={currentData}
-        addPoint={addPoint}
-        setSelectedAttrib={setSelectedAttrib}
+        setCurrentData={setCurrentData}
       ></MyPlot>
       {/* <Table
         class_name="Neuer zu klassifizierender Punkt"

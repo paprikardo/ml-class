@@ -5,16 +5,15 @@ import NewPointTable from "./NewPointTable";
 import MyPlot from "./MyPlot";
 import { useEffect, useRef, useState } from "react";
 import { rand_0_10 } from "../Others/Random";
+import { setCurrentDataType } from "../Others/currentDataHelperMethods";
 function Layout2DUserLine({
   currentData,
-  setDataSinglePoint,
+  setCurrentData,
   onNextGameRound,
-  setSelectedAttrib,
 }: {
   currentData: IData;
-  setDataSinglePoint: (means: IDataPoint[]) => void;
+  setCurrentData:setCurrentDataType
   onNextGameRound: () => void;
-  setSelectedAttrib: (xAxisAttrib: number, yAxisAttrib?: number) => void;
 }): JSX.Element {
   const [gameState, setGameState] = useState("init");
   const [userLineState, setUserLineState] = useState({
@@ -177,16 +176,13 @@ function Layout2DUserLine({
       <MyPlot
         ref={plotRef}
         currentData={currentData}
-        addPoint={() => {
-          return 0;
-        }}
+        setCurrentData={setCurrentData}
         hideSplitLine={hideSplitLine}
         userLineState={userLineState}
         onMouseUpPlotHandler={onMouseUpPlotHandler}
         onMouseDownPlotHandler={onMouseDownPlotHandler}
         onMouseMovePlotHandler={onMouseMovePlotHandler}
         enableUserDraw={enableUserDraw}
-        setSelectedAttrib={setSelectedAttrib}
         wrongClassifiedPoints={wrongClassifiedPoints}
       ></MyPlot>
       <RobotWrapper message={<>{messageState}p</>}></RobotWrapper>
