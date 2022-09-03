@@ -269,7 +269,6 @@ function App() {
                 <Link to="/level-selection">
                   <Button>Zurück zur Level-Auswahl</Button>
                 </Link>
-
                 <Outlet></Outlet>
               </Stack>
             }

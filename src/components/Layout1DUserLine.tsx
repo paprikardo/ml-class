@@ -5,6 +5,7 @@ import MyPlot from "./MyPlot";
 import { useEffect, useRef, useState } from "react";
 import { rand_0_10 } from "../Others/Random";
 import { setCurrentDataType, setDataSinglePoint } from "../Others/currentDataHelperMethods";
+import GridLayout from "./GridLayout";
 const Layout1DUser = ({
   currentData,
   setCurrentData,
@@ -114,7 +115,7 @@ const Layout1DUser = ({
     }
   };
   return (
-    <div>
+    <GridLayout currentData={currentData} setCurrentData={setCurrentData}>
       <MyPlot
         currentData={currentData}
         setCurrentData={setCurrentData}
@@ -127,7 +128,7 @@ const Layout1DUser = ({
         wrongClassifiedPoints={wrongClassifiedPoints}
       ></MyPlot>
       <RobotWrapper message={<>{messageState}</>}></RobotWrapper>
-    </div>
+    </GridLayout>
   );
 };
 

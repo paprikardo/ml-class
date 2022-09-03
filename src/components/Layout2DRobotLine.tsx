@@ -4,6 +4,7 @@ import MyPlot from "./MyPlot";
 import RobotWrapper from "./RobotWrapper";
 import { Kbd } from "@mantine/core";
 import { setCurrentDataType } from "../Others/currentDataHelperMethods";
+import GridLayout from "./GridLayout";
 
 function Layout2DRobotLine({
   currentData,
@@ -20,19 +21,13 @@ function Layout2DRobotLine({
     </>
   );
   return (
-    <div>
+    <GridLayout currentData={currentData} setCurrentData={setCurrentData}>
       <MyPlot
         currentData={currentData}
         setCurrentData={setCurrentData}
       ></MyPlot>
-      {/* <Table
-        class_name="Neuer zu klassifizierender Punkt"
-        attribs={currentData.attrib}
-        points={[currentData.newPoint]}
-        change_cl_data={(k, new_point) => changeNewPoint(new_point)}
-      ></Table> */}
       <RobotWrapper message={robotMessage}></RobotWrapper>
-    </div>
+    </GridLayout>
   );
 }
 

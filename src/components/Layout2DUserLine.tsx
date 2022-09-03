@@ -6,13 +6,16 @@ import MyPlot from "./MyPlot";
 import { useEffect, useRef, useState } from "react";
 import { rand_0_10 } from "../Others/Random";
 import { setCurrentDataType } from "../Others/currentDataHelperMethods";
+import LevelLayout from "./GridLayout";
+import { Grid } from "@mantine/core";
+import GridLayout from "./GridLayout";
 function Layout2DUserLine({
   currentData,
   setCurrentData,
   onNextGameRound,
 }: {
   currentData: IData;
-  setCurrentData:setCurrentDataType
+  setCurrentData: setCurrentDataType;
   onNextGameRound: () => void;
 }): JSX.Element {
   const [gameState, setGameState] = useState("init");
@@ -172,7 +175,7 @@ function Layout2DUserLine({
     }
   };
   return (
-    <div>
+    <GridLayout currentData={currentData} setCurrentData={setCurrentData}>
       <MyPlot
         ref={plotRef}
         currentData={currentData}
@@ -186,7 +189,7 @@ function Layout2DUserLine({
         wrongClassifiedPoints={wrongClassifiedPoints}
       ></MyPlot>
       <RobotWrapper message={<>{messageState}p</>}></RobotWrapper>
-    </div>
+    </GridLayout>
   );
 }
 

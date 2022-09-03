@@ -268,7 +268,7 @@ const MyPlot = forwardRef(
         );
       })
     );
-    console.log("wrong:", wrongClassifiedPoints);
+
     const svgCirclesWrongClassified = wrongClassifiedPoints?.map(
       (p, points_index) => {
         const xs = scaleX(
