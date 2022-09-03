@@ -45,7 +45,7 @@ export const generateRouteFromLevel = (level: ILevel) => (
   ></Route>
 );
 
-const levels: ILevel[] = [
+const levelRoboter: ILevel[] = [
   {
     initModalTitle: "Roboter-Klassifizieren in 2D",
     initModalContent: robotKlassModalContent(2),
@@ -70,6 +70,8 @@ const levels: ILevel[] = [
     ),
     link: "robot-klassifizieren-3D",
   },
+];
+const levelUser: ILevel[] = [
   {
     initModalTitle: "Punkt-Klassifizieren in 2D",
     initModalContent: pointKlassModalContent(2),
@@ -121,7 +123,7 @@ const levels: ILevel[] = [
     link: "linien-klassifizieren-3D",
   },
 ];
-const datasetLevels: ILevel[] = [
+const weizenLevels: ILevel[] = [
   {
     initModalTitle: "Sind die Weizen-Daten in 1D separierbar?",
     initModalContent:
@@ -129,32 +131,63 @@ const datasetLevels: ILevel[] = [
     getLevelComponent: (title, content) => (
       <LevelWeizen2 initModalTitle={title} initModalContent={content} />
     ),
-    link: "weizen2",
+    link: "weizen1D",
   },
+];
+const schierlingInitModalContent =
+  "Der griechische Philosoph Sokrates wurde im Athen des Jahres 399 v. Chr. zum Tode verurteilt und mit dem Schierlingsbecher hingerichtet. Mit diesem Becher wurde dem Verurteilten ein Getränk verabreicht, das aus einer Pflanze, dem giftigen Gefleckten Schierling, hergestellt wurde. Der Schierling ist für Laien leicht zu verwechseln mit anderen häufig vorkommenden Pflanzen, etwa der Hundspetersilie, die ebenfalls giftig ist, oder dem Wiesen­Kerbel, der ungiftig ist und zum Würzen von Salaten und Wildkräutersuppen verwendet wird. Alle drei Pflanzen haben ähnliche Blätter, blühen in weissen Dolden und bilden längliche Früchte.";
+const schierlingLevels: ILevel[] = [
   {
     initModalTitle: "Sind die Schierling-Daten in 1D separierbar?",
-    initModalContent:
-      "Der griechische Philosoph Sokrates wurde im Athen des Jahres 399 v. Chr. zum Tode verurteilt und mit dem Schierlingsbecher hingerichtet. Mit diesem Becher wurde dem Verurteilten ein Getränk verabreicht, das aus einer Pflanze, dem giftigen Gefleckten Schierling, hergestellt wurde. Der Schierling ist für Laien leicht zu verwechseln mit anderen häufig vorkommenden Pflanzen, etwa der Hundspetersilie, die ebenfalls giftig ist, oder dem Wiesen­Kerbel, der ungiftig ist und zum Würzen von Salaten und Wildkräutersuppen verwendet wird. Alle drei Pflanzen haben ähnliche Blätter, blühen in weissen Dolden und bilden längliche Früchte.",
+    initModalContent: schierlingInitModalContent,
     getLevelComponent: (title, content) => (
       <LevelSchierling1D initModalTitle={title} initModalContent={content} />
     ),
-    link: "schierling",
+    link: "schierling1D",
   },
   {
     initModalTitle: "Sind die Schierling-Daten in 2D separierbar?",
-    initModalContent:
-      "Der griechische Philosoph Sokrates wurde im Athen des Jahres 399 v. Chr. zum Tode verurteilt und mit dem Schierlingsbecher hingerichtet. Mit diesem Becher wurde dem Verurteilten ein Getränk verabreicht, das aus einer Pflanze, dem giftigen Gefleckten Schierling, hergestellt wurde. Der Schierling ist für Laien leicht zu verwechseln mit anderen häufig vorkommenden Pflanzen, etwa der Hundspetersilie, die ebenfalls giftig ist, oder dem Wiesen­Kerbel, der ungiftig ist und zum Würzen von Salaten und Wildkräutersuppen verwendet wird. Alle drei Pflanzen haben ähnliche Blätter, blühen in weissen Dolden und bilden längliche Früchte.",
+    initModalContent: schierlingInitModalContent,
     getLevelComponent: (title, content) => (
       <LevelSchierling2D initModalTitle={title} initModalContent={content} />
     ),
     link: "schierling2D",
   },
 ];
-
+const getRealeDatensätzeSectionName = (s: string) =>
+  "Reale Datensätze: Klassifiziere den " + s + "-Datensatz!";
+const levelSections: ILevelSection[] = [
+  {
+    sectionName:
+      "Lass den Roboter (die künstliche Intelligenz) deine Daten klassifizieren!",
+    levels: levelRoboter,
+  },
+  {
+    sectionName: "Klassifiziere selber vom Robotor generierte Daten!",
+    levels: levelUser,
+  },
+  {
+    sectionName: getRealeDatensätzeSectionName("Schierling"),
+    levels: schierlingLevels,
+  },
+  {
+    sectionName: getRealeDatensätzeSectionName("Weizen"),
+    levels: weizenLevels,
+  },
+  // {
+  //   sectionName:getRealeDatensätzeSectionName("Weinsorten"),
+  //   levels:
+  // }
+];
 export const getAllLevelSections = (): ILevelSection[] => {
-  return [];
+  return levelSections;
 };
 
-export const getAllLevelRoutes = ():JSX.Element => {
-  return <></>
-}
+export const getAllLevelRoutes = (): JSX.Element[] => {
+  const emptyRouteArray: JSX.Element[] = [];
+  return emptyRouteArray.concat(
+    ...levelSections.map((levelSection) =>
+      levelSection.levels.map((level) => generateRouteFromLevel(level))
+    )
+  );
+};
