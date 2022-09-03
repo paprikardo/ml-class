@@ -1,11 +1,11 @@
-import LevelWeizen2 from "./LevelWeizen1D";
 import LevelUserLineGame2D from "./LevelUserLineGame2D";
 import LevelUserPointGame1D from "./LevelUserPointGame1D";
 import LevelRobotLineGame2D from "./LevelRobotLineGame2D";
-import LevelSchierling2D from "./LevelSchierling2D";
-import LevelSchierling1D from "./LevelSchierling1D";
 import { Link, Route } from "react-router-dom";
 import { Button, Grid } from "@mantine/core";
+import RealDataLevel1D from "./realDataLevel1D";
+import { gegenstaendeDataset, irisDataset, schierlingDataset, weinsortenDataset, weizen2Dataset } from "../Data";
+import RealDataLevel2D from "./realDataLevel2D";
 
 interface ILevel {
   initModalTitle: string;
@@ -44,7 +44,8 @@ export const generateRouteFromLevel = (level: ILevel) => (
     key={level.link + "-route"}
   ></Route>
 );
-
+//    RANDOM DATA
+//Robot classsification levels
 const levelRoboter: ILevel[] = [
   {
     initModalTitle: "Roboter-Klassifizieren in 2D",
@@ -71,6 +72,7 @@ const levelRoboter: ILevel[] = [
     link: "robot-klassifizieren-3D",
   },
 ];
+//User classification levels
 const levelUser: ILevel[] = [
   {
     initModalTitle: "Punkt-Klassifizieren in 2D",
@@ -123,37 +125,120 @@ const levelUser: ILevel[] = [
     link: "linien-klassifizieren-3D",
   },
 ];
+//    REAL DATA
+const getRealeDatensätzeInitModalTitle = (s: string, d: number) =>
+  s + "-Daten in " + d + "D";
+//Weizen levels
+const weizenInitModalContent =
+  "Von zwei Weizenarten wurden von je 70 Körnern die Breite, Länge und Fläche vermessen. Finde die Messung mit der sich die beiden Klassen perfekt linear separieren lassen.";
 const weizenLevels: ILevel[] = [
   {
-    initModalTitle: "Sind die Weizen-Daten in 1D separierbar?",
-    initModalContent:
-      "Von zwei Weizenarten wurden von je 70 Körnern die Breite, Länge und Fläche vermessen. Finde die Messung mit der sich die beiden Klassen perfekt linear separieren lassen.",
+    initModalTitle: getRealeDatensätzeInitModalTitle("Weizen", 1),
+    initModalContent: weizenInitModalContent,
     getLevelComponent: (title, content) => (
-      <LevelWeizen2 initModalTitle={title} initModalContent={content} />
+      <RealDataLevel1D
+        initModalTitle={title}
+        initModalContent={content}
+        dataset={weizen2Dataset}
+      />
     ),
     link: "weizen1D",
   },
+  {
+    initModalTitle: getRealeDatensätzeInitModalTitle("Weizen", 2),
+    initModalContent: weizenInitModalContent,
+    getLevelComponent: (title, content) => (
+      <RealDataLevel2D
+        initModalTitle={title}
+        initModalContent={content}
+        dataset={weizen2Dataset}
+      />
+    ),
+    link: "weizen2D",
+  },
 ];
+//Schierling levels
 const schierlingInitModalContent =
   "Der griechische Philosoph Sokrates wurde im Athen des Jahres 399 v. Chr. zum Tode verurteilt und mit dem Schierlingsbecher hingerichtet. Mit diesem Becher wurde dem Verurteilten ein Getränk verabreicht, das aus einer Pflanze, dem giftigen Gefleckten Schierling, hergestellt wurde. Der Schierling ist für Laien leicht zu verwechseln mit anderen häufig vorkommenden Pflanzen, etwa der Hundspetersilie, die ebenfalls giftig ist, oder dem Wiesen­Kerbel, der ungiftig ist und zum Würzen von Salaten und Wildkräutersuppen verwendet wird. Alle drei Pflanzen haben ähnliche Blätter, blühen in weissen Dolden und bilden längliche Früchte.";
 const schierlingLevels: ILevel[] = [
   {
-    initModalTitle: "Sind die Schierling-Daten in 1D separierbar?",
+    initModalTitle: getRealeDatensätzeInitModalTitle("Schierling", 1),
     initModalContent: schierlingInitModalContent,
     getLevelComponent: (title, content) => (
-      <LevelSchierling1D initModalTitle={title} initModalContent={content} />
+      <RealDataLevel1D initModalTitle={title} initModalContent={content} dataset={schierlingDataset}/>
     ),
     link: "schierling1D",
   },
   {
-    initModalTitle: "Sind die Schierling-Daten in 2D separierbar?",
+    initModalTitle: getRealeDatensätzeInitModalTitle("Schierling", 2),
     initModalContent: schierlingInitModalContent,
     getLevelComponent: (title, content) => (
-      <LevelSchierling2D initModalTitle={title} initModalContent={content} />
+      <RealDataLevel2D initModalTitle={title} initModalContent={content} dataset={schierlingDataset}/>
     ),
     link: "schierling2D",
   },
 ];
+//Weinsorten levels
+const weinsortenInitModalContent = "";
+const weinsortenLevels: ILevel[] = [
+  {
+    initModalTitle: getRealeDatensätzeInitModalTitle("Weinsorten", 1),
+    initModalContent: weinsortenInitModalContent,
+    getLevelComponent: (title, content) => (
+      <RealDataLevel1D initModalTitle={title} initModalContent={content} dataset={weinsortenDataset}/>
+    ),
+    link: "weinsorten1D",
+  },
+  {
+    initModalTitle: getRealeDatensätzeInitModalTitle("Weinsorten", 2),
+    initModalContent: weinsortenInitModalContent,
+    getLevelComponent: (title, content) => (
+      <RealDataLevel2D initModalTitle={title} initModalContent={content} dataset={weinsortenDataset}/>
+    ),
+    link: "weinsorten2D",
+  },
+];
+//Iris levels
+const irisInitModalContent = "";
+const irisLevels: ILevel[] = [
+  {
+    initModalTitle: getRealeDatensätzeInitModalTitle("Iris", 1),
+    initModalContent: irisInitModalContent,
+    getLevelComponent: (title, content) => (
+      <RealDataLevel1D initModalTitle={title} initModalContent={content} dataset={irisDataset}/>
+    ),
+    link: "iris1D",
+  },
+  {
+    initModalTitle: getRealeDatensätzeInitModalTitle("Iris", 2),
+    initModalContent: irisInitModalContent,
+    getLevelComponent: (title, content) => (
+      <RealDataLevel2D initModalTitle={title} initModalContent={content} dataset={irisDataset}/>
+    ),
+    link: "iris2D",
+  },
+];
+//Gegenstaende levels
+const gstInitModalContent = "";
+const gstLevels: ILevel[] = [
+  {
+    initModalTitle: getRealeDatensätzeInitModalTitle("Gegenstände", 1),
+    initModalContent: gstInitModalContent,
+    getLevelComponent: (title, content) => (
+      <RealDataLevel1D initModalTitle={title} initModalContent={content} dataset={gegenstaendeDataset}/>
+    ),
+    link: "gst1D",
+  },
+  {
+    initModalTitle: getRealeDatensätzeInitModalTitle("Gegenstände", 2),
+    initModalContent: gstInitModalContent,
+    getLevelComponent: (title, content) => (
+      <RealDataLevel2D initModalTitle={title} initModalContent={content} dataset={gegenstaendeDataset}/>
+    ),
+    link: "gst2D",
+  },
+];
+//    LEVEL SECTIONS
 const getRealeDatensätzeSectionName = (s: string) =>
   "Reale Datensätze: Klassifiziere den " + s + "-Datensatz!";
 const levelSections: ILevelSection[] = [
@@ -174,11 +259,20 @@ const levelSections: ILevelSection[] = [
     sectionName: getRealeDatensätzeSectionName("Weizen"),
     levels: weizenLevels,
   },
-  // {
-  //   sectionName:getRealeDatensätzeSectionName("Weinsorten"),
-  //   levels:
-  // }
+  {
+    sectionName: getRealeDatensätzeSectionName("Weinsorten"),
+    levels: weinsortenLevels,
+  },
+  {
+    sectionName: getRealeDatensätzeSectionName("Iris"),
+    levels: irisLevels,
+  },
+  {
+    sectionName: getRealeDatensätzeSectionName("Gegenstände"),
+    levels: gstLevels,
+  },
 ];
+//Getter functions
 export const getAllLevelSections = (): ILevelSection[] => {
   return levelSections;
 };

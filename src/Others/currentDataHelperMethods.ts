@@ -6,17 +6,17 @@ export type setCurrentDataType = React.Dispatch<React.SetStateAction<IData>>;
 export const addRandomPoint = (
   setCurrentData: setCurrentDataType,
   means: IDataPoint[],
-  variance: number = 2,
+  variance: number = 2
 ) => {
   means.forEach((cl_mean, i) => {
-    addPoint(setCurrentData,i, randomPoint(cl_mean, variance));
+    addPoint(setCurrentData, i, randomPoint(cl_mean, variance));
   });
 };
 //adds a point to the Data.data array (i.e. the cl'th class/group)
 export const addPoint = (
   setCurrentData: setCurrentDataType,
   cl: number,
-  new_point: IDataPoint,
+  new_point: IDataPoint
 ): void => {
   setCurrentData((prev) => {
     const newPrev = { ...prev };
@@ -31,7 +31,7 @@ export const changePoint = (
   setCurrentData: setCurrentDataType,
   cl: number,
   key: number,
-  new_point: IDataPoint,
+  new_point: IDataPoint
 ): void => {
   setCurrentData((prev) => {
     prev.data[cl].points[key] = new_point;
@@ -43,7 +43,7 @@ export const changePoint = (
 export const setSelectedAttrib = (
   setCurrentData: setCurrentDataType,
   xAxisAttrib: number,
-  yAxisAttrib?: number,
+  yAxisAttrib?: number
 ) => {
   setCurrentData((prev) => {
     const newPrev = { ...prev };
@@ -69,7 +69,7 @@ export const setSelectedAttrib = (
 export const setSelectedClasses = (
   setCurrentData: setCurrentDataType,
   class1: number,
-  class2: number,
+  class2: number
 ) => {
   setCurrentData((prev) => {
     const newPrev = { ...prev };
@@ -79,7 +79,7 @@ export const setSelectedClasses = (
 };
 export const changeNewPoint = (
   setCurrentData: setCurrentDataType,
-  new_point: IDataPoint,
+  new_point: IDataPoint
 ): void => {
   setCurrentData((prev) => {
     prev.newPoint = new_point;
@@ -87,16 +87,19 @@ export const changeNewPoint = (
     return newPrev;
   });
 };
+//set the currentData to a single point per class each. The points are randomly sampled following a mean.
+//The points also have a minimum distance in each dimension
 export const setDataSinglePoint = (
   setCurrentData: setCurrentDataType,
-  means: IDataPoint[],
+  means: IDataPoint[]
 ) => {
   setCurrentData((prev): IData => {
+    const randomPointsMinDistance = getRandomPointsWithMinDistance(means);
     return {
       data: prev.data.map((cl, cl_index) => {
         return {
           className: cl.className,
-          points: [randomPoint(means[cl_index])],
+          points: [randomPointsMinDistance[cl_index]],
         };
       }),
       selected_attrib: prev.selected_attrib,
@@ -106,10 +109,27 @@ export const setDataSinglePoint = (
     };
   });
 };
+const getRandomPointsWithMinDistance = (means: IDataPoint[]): IDataPoint[] => {
+  const minDistanceInEachDimension = 3;
+  const isTooClose = (x: IDataPoint, y: IDataPoint) =>
+    x
+      .map((el, i) => Math.abs(el - y[i]))
+      .some((el) => el < minDistanceInEachDimension);
+  const newPoints = means.map((m) => randomPoint(m));
+  console.log(newPoints);
+  for (var i = 0; i < newPoints.length; i++) {
+    for (var j = 0; j < newPoints.length; j++) {
+      if (isTooClose(newPoints[i], newPoints[j])) {
+        return getRandomPointsWithMinDistance(means);
+      }
+    }
+  }
+  return newPoints;
+};
 //generates "numSamples" new points for both classes from a random variance and mean
 export const newRandomData = (
   setCurrentData: setCurrentDataType,
-  currentData: IData,
+  currentData: IData
 ) => {
   const dimensions = currentData.attrib.length;
   const numClasses = currentData.data.length;

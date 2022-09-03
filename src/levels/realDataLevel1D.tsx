@@ -1,27 +1,27 @@
 import { useState } from "react";
 import Layout1DUser from "../components/Layout1DUserLine";
-import { weizen2Dataset } from "../Data";
 import InitModal from "../components/InitModal";
-import Layout2DUserLine from "../components/Layout2DUserLine";
+import { IData } from "../Data";
 
 export default ({
   initModalTitle,
   initModalContent,
+  dataset,
 }: {
   initModalTitle: string;
   initModalContent: React.ReactNode;
+  dataset: IData;
 }): JSX.Element => {
-  const dataset = { ...weizen2Dataset };
+  const dataset1D = { ...dataset };
   dataset.selected_attrib = 0;
-  const [currentData, setCurrentData] = useState(dataset);
+  const [currentData, setCurrentData] = useState(dataset1D);
   return (
     <div>
       <InitModal title={initModalTitle}>{initModalContent}</InitModal>
-      <Layout2DUserLine
+      <Layout1DUser
         currentData={currentData}
         setCurrentData={setCurrentData}
-        onNextGameRound={() => null}
-      ></Layout2DUserLine>
+      ></Layout1DUser>
     </div>
   );
 };

@@ -28,17 +28,6 @@ export default ({
   //initialize dataset to single point
   useEffect(() => {
     setDataSinglePoint(setCurrentData,classMeans);
-    //sample new Means and generate new first points if they are too close to each other
-    const p0 = currentData.data[0].points[0];
-    const p1 = currentData.data[1].points[0];
-    const minLengthForUserline = 3;
-    if (
-      //resample points if they are to close to each other
-      Math.abs(p0[0] - p1[0]) <= minLengthForUserline
-    ) {
-      setClassMeans(newMeans(numClasses, dimensions));
-      setDataSinglePoint(setCurrentData,classMeans);
-    }
   }, []);
   return (
     <div>

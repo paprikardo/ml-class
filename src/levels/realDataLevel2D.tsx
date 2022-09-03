@@ -1,16 +1,17 @@
 import { useState } from "react";
-import { weinsortenDataset } from "../Data";
 import InitModal from "../components/InitModal";
 import Layout2DUserLine from "../components/Layout2DUserLine";
+import { IData } from "../Data";
 
 export default ({
   initModalTitle,
   initModalContent,
+  dataset,
 }: {
   initModalTitle: string;
   initModalContent: React.ReactNode;
+  dataset: IData;
 }): JSX.Element => {
-  const dataset = { ...weinsortenDataset };
   const [currentData, setCurrentData] = useState(dataset);
   return (
     <div>
