@@ -4,8 +4,7 @@ import {
   dummy2C3D,
   dummy2C2D,
   IData,
-  IDataPoint,
-  weizen2Dataset1D,
+  IDataPoint
 } from "../Data";
 import InitModal from "../components/InitModal";
 import { rand_0_10 } from "../Others/Random";

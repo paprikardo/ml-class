@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import Layout1DUser from "../components/Layout1DUserLine";
-import { IData, IDataPoint, weizen2Dataset1D } from "../Data";
+import { useState } from "react";
+import { weinsortenDataset } from "../Data";
 import InitModal from "../components/InitModal";
+import Layout2DUserLine from "../components/Layout2DUserLine";
 
 export default ({
   initModalTitle,
@@ -10,15 +10,16 @@ export default ({
   initModalTitle: string;
   initModalContent: React.ReactNode;
 }): JSX.Element => {
-  const dataset = weizen2Dataset1D;
+  const dataset = { ...weinsortenDataset };
   const [currentData, setCurrentData] = useState(dataset);
   return (
     <div>
       <InitModal title={initModalTitle}>{initModalContent}</InitModal>
-      <Layout1DUser
+      <Layout2DUserLine
         currentData={currentData}
         setCurrentData={setCurrentData}
-      ></Layout1DUser>
+        onNextGameRound={() => null}
+      ></Layout2DUserLine>
     </div>
   );
 };

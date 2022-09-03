@@ -3,10 +3,7 @@ import { useEffect, useState } from "react";
 import Layout1DUserLine from "../components/Layout1DUserLine";
 import {
   dummy2C3D1A,
-  dummy2C2D1A,
-  IData,
-  IDataPoint,
-  weizen2Dataset1D,
+  dummy2C2D1A
 } from "../Data";
 import InitModal from "../components/InitModal";
 import { rand_0_10 } from "../Others/Random";
