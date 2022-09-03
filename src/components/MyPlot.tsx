@@ -59,7 +59,10 @@ const MyPlot = forwardRef(
     }: IProps,
     ref
   ): JSX.Element => {
-    const dimensions = currentData.data[0].points[0].length;
+    const isEmpty = currentData.data[0].points.length == 0; //if the first class does not contain a point we consider the data as empty and do not plot anything
+    const dimensions = isEmpty
+      ? undefined
+      : currentData.data[0].points[0].length;
     const oneDimensional = isOneDimensional ? true : dimensions === 1;
     const yOneDimension = 0;
 
@@ -208,12 +211,14 @@ const MyPlot = forwardRef(
     const [diffLineYmax, setDiffLineYmax] = useState(0);
     //only recompute the classificators if the state changes to improve performance
     useEffect(() => {
-      if (oneDimensional) {
-        setDiffPointX(getDiffPoint(...selectedDataScaled));
-      } else {
-        const diffLine = getDiffLineGenerator(...selectedDataScaled);
-        setDiffLineYmin(diffLine(scaleX(xmin)));
-        setDiffLineYmax(diffLine(scaleX(xmax)));
+      if (!isEmpty) {
+        if (oneDimensional) {
+          setDiffPointX(getDiffPoint(...selectedDataScaled));
+        } else {
+          const diffLine = getDiffLineGenerator(...selectedDataScaled);
+          setDiffLineYmin(diffLine(scaleX(xmin)));
+          setDiffLineYmax(diffLine(scaleX(xmax)));
+        }
       }
     }, [
       currentData.data,
