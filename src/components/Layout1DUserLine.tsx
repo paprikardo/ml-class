@@ -17,6 +17,11 @@ const Layout1DUser = ({
 }): JSX.Element => {
   const [gameState, setGameState] = useState("init");
   const [userPointXState, setUserPointXState] = useState(0);
+  const wrongClassPointsInit: IDataPoint[] = [];
+  const [wrongClassifiedPoints, setWrongClassifiedPoints]: [
+    IDataPoint[],
+    (x: IDataPoint[]) => void
+  ] = useState(wrongClassPointsInit);
   const resetUserLine = () => {
     setUserPointXState(0);
   };
@@ -67,45 +72,46 @@ const Layout1DUser = ({
       const interval = setInterval(() => {
         resetUserLine();
         typeof onNextGameRound == "function" && onNextGameRound();
+        setWrongClassifiedPoints([]); //reset the wrong classified points
         setGameState("init");
         clearInterval(interval);
       }, waitTime);
     }
   }, [gameState]);
+  //compute the score of the user point classificator in percent
   const computeScore = () => {
     const pointsA = currentData.data[selClassA].points;
     const pointsB = currentData.data[selClassB].points;
-    var percentage = -5; //random value, should never be used
     if (!Array.isArray(currentData.selected_attrib)) {
       const selAttrib = currentData.selected_attrib;
+      //points on left Side
       const pAonSide = pointsA.filter(
         (point) => point[selAttrib] < userPointXState
-      ).length;
+      );
       const pBonSide = pointsB.filter(
         (point) => point[selAttrib] < userPointXState
-      ).length;
-      percentage =
-        (pAonSide + (pointsB.length - pBonSide)) /
+      );
+      //percentage of points where A is left and B is right
+      const percentage =
+        (pAonSide.length + (pointsB.length - pBonSide.length)) /
         (pointsA.length + pointsB.length);
+      if (percentage < 0.5) {
+        //swap sides
+        const wrongClassA = pAonSide;
+        const wrongClassB = pointsB.filter((point) =>
+          !pBonSide.includes(point)
+        );
+        setWrongClassifiedPoints(wrongClassA.concat(wrongClassB));
+        return (1 - percentage) * 100; //convert to %
+      }
+      const wrongClassA = pointsA.filter((point) => !pAonSide.includes(point));
+      const wrongClassB = pBonSide;
+      setWrongClassifiedPoints(wrongClassA.concat(wrongClassB));
+      return percentage * 100; //convert to %
     } else {
       console.log("ERROR: selAttrib should be 1D");
+      return -1;
     }
-    if (percentage < 0.5) {
-      return (1 - percentage) * 100; //convert to %
-    }
-    return percentage * 100; //convert to %
-  };
-  const isOnOneSideOfLine = (
-    m: number, //m Steigung
-    c: number, //c yAchensabschnitt
-    x: number,
-    y: number //x y , punkt
-  ): boolean => {
-    //point on line fullfills y = mx+c, we check if y > mx+c and invert result if smaller 50% because which side is for which class does not matter
-    if (y > m * x + c) {
-      return true;
-    }
-    return false;
   };
 
   const onMouseUpPlotHandler = () => {
@@ -123,7 +129,7 @@ const Layout1DUser = ({
   return (
     <div>
       <MyPlot
-        plot_data={currentData}
+        currentData={currentData}
         addPoint={() => {
           return 0;
         }}
@@ -134,6 +140,7 @@ const Layout1DUser = ({
         enableUserDraw={enableUserDraw}
         setSelectedAttrib={setSelectedAttrib}
         isOneDimensional={true}
+        wrongClassifiedPoints={wrongClassifiedPoints}
       ></MyPlot>
       <RobotWrapper message={<>{messageState}</>}></RobotWrapper>
     </div>

@@ -4,7 +4,7 @@ import "../App.css";
 import { Card, Stack } from "@mantine/core";
 
 interface TableWrapperProps {
-  plot_data: IData;
+  currentData: IData;
   change_data: (id: number, key: number, new_point: IDataPoint) => void;
   new_random_data: () => void;
   set_iris_data: () => void;
@@ -13,7 +13,7 @@ interface TableWrapperProps {
 }
 
 const TableWrapper = ({
-  plot_data,
+  currentData,
   change_data,
   new_random_data,
   set_iris_data,
@@ -30,17 +30,17 @@ const TableWrapper = ({
   return (
     <Card className="TableWrapper">
       <Stack>
-      {plot_data.data.map((cl, index) => (
+      {currentData.data.map((cl, index) => (
         <Table
           key={"cl" + index}
           class_name={cl.className}
           points={cl.points}
-          attribs={plot_data.attrib}
+          attribs={currentData.attrib}
           change_cl_data={(key: number, new_point: IDataPoint) =>
             change_data(index, key, new_point)
           }
           color={colors[index]}
-          highlighted={plot_data.selected_class.includes(index)}
+          highlighted={currentData.selected_class.includes(index)}
           onClickHandler={() => onClickTable(index)}
         ></Table>
       ))}

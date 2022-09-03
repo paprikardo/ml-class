@@ -1,11 +1,11 @@
 import { IDataPoint } from "../Data";
 
 interface NewPointTableProps {
-  plot_data: IDataPoint[];
+  currentData: IDataPoint[];
   change_data:(cl: number, key: number, new_point:IDataPoint) => void;
 }
 
-const NewPointTable = ({plot_data, change_data}:NewPointTableProps) => {
+const NewPointTable = ({currentData, change_data}:NewPointTableProps) => {
   return (
     <div>
       <div>

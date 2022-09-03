@@ -23,6 +23,11 @@ function Layout2DUserLine({
     y1: 0,
     y2: 0,
   });
+  const wrongClassPointsInit: IDataPoint[] = [];
+  const [wrongClassifiedPoints, setWrongClassifiedPoints]: [
+    IDataPoint[],
+    (x: IDataPoint[]) => void
+  ] = useState(wrongClassPointsInit);
   const resetUserLine = () => {
     setUserLineState({
       x1: 0,
@@ -59,14 +64,17 @@ function Layout2DUserLine({
         );
       } else {
         setMessageState(
-          "Du hast " + res + " Prozent richtig klassifiziert. Sind die Daten noch linear separierbar?"
+          "Du hast " +
+            res +
+            " Prozent richtig klassifiziert. Sind die Daten noch linear separierbar?"
         );
       }
       //reset user line and change state after waiting
       const interval = setInterval(() => {
         resetUserLine();
-        setGameState("init");
         onNextGameRound();
+        setWrongClassifiedPoints([]); //reset the wrong classified points
+        setGameState("init");
         clearInterval(interval);
       }, waitTime);
     }
@@ -79,22 +87,28 @@ function Layout2DUserLine({
       (userLineState.y2 - userLineState.y1) /
       (userLineState.x2 - userLineState.x1);
     const cUserLine = userLineState.y1 - mUserLine * userLineState.x1;
-    const pAonSide = pointsA
-      .map(([x, y]) => {
-        return isOnOneSideOfLine(mUserLine, cUserLine, x, y);
-      })
-      .filter(Boolean).length;
-    const pBonSide = pointsB
-      .map(([x, y]) => {
-        return isOnOneSideOfLine(mUserLine, cUserLine, x, y);
-      })
-      .filter(Boolean).length;
+    const pAonSide = pointsA.filter(([x, y]) =>
+      isOnOneSideOfLine(mUserLine, cUserLine, x, y)
+    );
+    const pBonSide = pointsB.filter(([x, y]) =>
+      isOnOneSideOfLine(mUserLine, cUserLine, x, y)
+    );
     const percentage =
-      (pAonSide + (pointsB.length - pBonSide)) /
+      (pAonSide.length + (pointsB.length - pBonSide.length)) /
       (pointsA.length + pointsB.length);
     if (percentage < 0.5) {
+      //set wrong classified points
+      const wrongClassA = pAonSide;
+      const wrongClassB = pointsB.filter((point) => !pBonSide.includes(point));
+      setWrongClassifiedPoints(wrongClassA.concat(wrongClassB));
+      //return result
       return (1 - percentage) * 100; //convert to %
     }
+    //set wrong classified points
+    const wrongClassA = pointsA.filter((point) => !pAonSide.includes(point));
+    const wrongClassB = pBonSide;
+    setWrongClassifiedPoints(wrongClassA.concat(wrongClassB));
+    //return result
     return percentage * 100; //convert to %
   };
   const isOnOneSideOfLine = (
@@ -117,7 +131,7 @@ function Layout2DUserLine({
       if (
         Math.abs(userLineState.x1 - userLineState.x2) +
           Math.abs(userLineState.y1 - userLineState.y2) >
-        3
+        2
       ) {
         setGameState("line drawn");
       } else {
@@ -162,7 +176,7 @@ function Layout2DUserLine({
     <div>
       <MyPlot
         ref={plotRef}
-        plot_data={currentData}
+        currentData={currentData}
         addPoint={() => {
           return 0;
         }}
@@ -173,6 +187,7 @@ function Layout2DUserLine({
         onMouseMovePlotHandler={onMouseMovePlotHandler}
         enableUserDraw={enableUserDraw}
         setSelectedAttrib={setSelectedAttrib}
+        wrongClassifiedPoints={wrongClassifiedPoints}
       ></MyPlot>
       <RobotWrapper message={<>{messageState}p</>}></RobotWrapper>
     </div>

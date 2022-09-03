@@ -428,7 +428,7 @@ function App() {
                 </Link>
                 <SimpleGrid cols={2} spacing="xs">
                   <TableWrapper
-                    plot_data={currentData}
+                    currentData={currentData}
                     change_data={changePoint}
                     new_random_data={newRandomData}
                     set_iris_data={setIrisData}

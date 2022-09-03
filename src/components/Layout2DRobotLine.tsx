@@ -25,7 +25,7 @@ function Layout2DRobotLine({
   return (
     <div>
       <MyPlot
-        plot_data={currentData}
+        currentData={currentData}
         addPoint={addPoint}
         setSelectedAttrib={setSelectedAttrib}
       ></MyPlot>
