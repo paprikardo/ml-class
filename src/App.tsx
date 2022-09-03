@@ -22,7 +22,7 @@ import {
   Link,
   Outlet,
 } from "react-router-dom";
-import { randomPoint, rand_0_10_point } from "./Random";
+import { randomPoint, rand_0_10_point } from "./Others/Random";
 import { parse } from "papaparse";
 import LevelWeizen2 from "./levels/LevelWeizen2";
 import LevelUserLineGame from "./levels/LevelUserLineGame2D";

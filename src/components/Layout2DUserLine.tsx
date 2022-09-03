@@ -4,7 +4,7 @@ import RobotWrapper from "./RobotWrapper";
 import NewPointTable from "./NewPointTable";
 import MyPlot from "./MyPlot";
 import { useEffect, useRef, useState } from "react";
-import { rand_0_10 } from "../Random";
+import { rand_0_10 } from "../Others/Random";
 function Layout2DUserLine({
   currentData,
   setDataSinglePoint,

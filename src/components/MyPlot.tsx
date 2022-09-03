@@ -256,7 +256,7 @@ const MyPlot = forwardRef(
             r="0.3"
             stroke="black"
             strokeWidth="0.09"
-            fill={colors[cl_index]}
+            fill={colors[currentData.selected_class[cl_index]]}
           />
         );
       })

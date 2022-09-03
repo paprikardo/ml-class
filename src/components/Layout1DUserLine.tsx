@@ -3,7 +3,7 @@ import { IData, IDataPoint } from "../Data";
 import RobotWrapper from "./RobotWrapper";
 import MyPlot from "./MyPlot";
 import { useEffect, useRef, useState } from "react";
-import { rand_0_10 } from "../Random";
+import { rand_0_10 } from "../Others/Random";
 const Layout1DUser = ({
   currentData,
   setDataSinglePoint,
