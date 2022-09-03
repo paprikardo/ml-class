@@ -39,7 +39,7 @@ function Layout2DUserLine({
     });
   };
   const [messageState, setMessageState] = useState("");
-
+  
   const [selClassA, selClassB] = currentData.selected_class;
   const enableUserDraw = true;
   const [hideSplitLine, setHideSplitLine] = useState(true);
@@ -54,7 +54,7 @@ function Layout2DUserLine({
     if (gameState == "init") {
       setHideSplitLine(true);
       setMessageState(
-        "Zeichne jetzt einen Klassifikator, der die Daten möglichst gut voneinander trennt "
+        "Zeichne jetzt einen Klassifikator, der die Daten möglichst gut voneinander trennt"
       );
     }
     if (gameState == "line drawn") {
@@ -188,7 +188,7 @@ function Layout2DUserLine({
         enableUserDraw={enableUserDraw}
         wrongClassifiedPoints={wrongClassifiedPoints}
       ></MyPlot>
-      <RobotWrapper message={<>{messageState}p</>}></RobotWrapper>
+      <RobotWrapper message={<>{messageState}</>}></RobotWrapper>
     </GridLayout>
   );
 }

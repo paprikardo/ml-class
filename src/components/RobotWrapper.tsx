@@ -5,9 +5,9 @@ import "./RobotWrapper.css";
 const RobotWrapper = ({ message }: { message: JSX.Element }) => {
   return (
     <div className="RobotWrapper">      
-        <RobotIcon className="RobotIcon" style={{}} />
+        <RobotIcon className="RobotIcon"/>
         <div className="RobotMessage bubble">
-          <p>{message}</p>
+          {message}
         </div>
     </div>
   );

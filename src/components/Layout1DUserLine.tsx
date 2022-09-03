@@ -39,7 +39,7 @@ const Layout1DUser = ({
     if (gameState == "init") {
       setHideSplitPoint(true);
       setMessageState(
-        "Klicke und bestimme einen Punkt-Klassifikator, der die Daten möglichst gut voneinander trennt "
+        "Klicke und bestimme einen Punkt-Klassifikator, der die Daten möglichst gut voneinander trennt"
       );
     }
     if (gameState == "line drawn") {
@@ -47,7 +47,7 @@ const Layout1DUser = ({
       const res = Math.round(computeScore());
       if (res == 100) {
         setMessageState(
-          "Du hast die Daten perfekt aufgeteilt. Sehr gut! Die Daten sind wohl separierbar"
+          "Du hast die Daten perfekt aufgeteilt. Sehr gut! Die Daten sind wohl separierbar!"
         );
       } else {
         setMessageState(
@@ -127,7 +127,7 @@ const Layout1DUser = ({
         isOneDimensional={true}
         wrongClassifiedPoints={wrongClassifiedPoints}
       ></MyPlot>
-      <RobotWrapper message={<>{messageState}</>}></RobotWrapper>
+      <RobotWrapper message={<div>messageState</div>}></RobotWrapper>
     </GridLayout>
   );
 };

@@ -110,7 +110,7 @@ export const setDataSinglePoint = (
   });
 };
 const getRandomPointsWithMinDistance = (means: IDataPoint[]): IDataPoint[] => {
-  const minDistanceInEachDimension = 3;
+  const minDistanceInEachDimension = 1;
   const isTooClose = (x: IDataPoint, y: IDataPoint) =>
     x
       .map((el, i) => Math.abs(el - y[i]))
@@ -118,7 +118,7 @@ const getRandomPointsWithMinDistance = (means: IDataPoint[]): IDataPoint[] => {
   const newPoints = means.map((m) => randomPoint(m));
   console.log(newPoints);
   for (var i = 0; i < newPoints.length; i++) {
-    for (var j = 0; j < newPoints.length; j++) {
+    for (var j = i+1; j < newPoints.length; j++) {
       if (isTooClose(newPoints[i], newPoints[j])) {
         return getRandomPointsWithMinDistance(means);
       }
