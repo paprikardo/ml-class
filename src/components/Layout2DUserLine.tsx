@@ -9,6 +9,16 @@ import { setCurrentDataType } from "../Others/currentDataHelperMethods";
 import LevelLayout from "./GridLayout";
 import { Grid } from "@mantine/core";
 import GridLayout from "./GridLayout";
+import { isLinearSeperable } from "../Others/classifier";
+import { selectDimSelectClassData } from "../Others/selectData";
+import { computePercentAndWrongPoints2D } from "../Others/computeScore";
+import { useGameLogic } from "../Others/UserLineGameLogic";
+export type IUserLineState = {
+  x1: number;
+  x2: number;
+  y1: number;
+  y2: number;
+};
 function Layout2DUserLine({
   currentData,
   setCurrentData,
@@ -19,18 +29,17 @@ function Layout2DUserLine({
   onNextGameRound: () => void;
 }): JSX.Element {
   const [gameState, setGameState] = useState("init");
-  const [userLineState, setUserLineState] = useState({
+  const [userLineState, setUserLineState]: [
+    IUserLineState,
+    React.Dispatch<React.SetStateAction<IUserLineState>>
+  ] = useState({
     x1: 0,
     x2: 0,
     y1: 0,
     y2: 0,
   });
-  const wrongClassPointsInit: IDataPoint[] = [];
-  const [wrongClassifiedPoints, setWrongClassifiedPoints]: [
-    IDataPoint[],
-    (x: IDataPoint[]) => void
-  ] = useState(wrongClassPointsInit);
-  const resetUserLine = () => {
+  //helper method
+  const resetUserClassifier = () => {
     setUserLineState({
       x1: 0,
       x2: 0,
@@ -38,94 +47,21 @@ function Layout2DUserLine({
       y2: 0,
     });
   };
-  const [messageState, setMessageState] = useState("");
-  
-  const [selClassA, selClassB] = currentData.selected_class;
+  //game state logic
+  const [hideUserClassifier, wrongClassifiedPoints, messageState] =
+    useGameLogic(
+      currentData,
+      gameState,
+      setGameState,
+      userLineState,
+      resetUserClassifier,
+      onNextGameRound
+    );
   const enableUserDraw = true;
   const [hideSplitLine, setHideSplitLine] = useState(true);
-  const plotRef = useRef();
-  //initialize game state
-  useEffect(() => {
-    setHideSplitLine(false);
-  }, []);
-  //game state logic
-  const waitTime = 2000;
-  useEffect(() => {
-    if (gameState == "init") {
-      setHideSplitLine(true);
-      setMessageState(
-        "Zeichne jetzt einen Klassifikator, der die Daten möglichst gut voneinander trennt"
-      );
-    }
-    if (gameState == "line drawn") {
-      setHideSplitLine(false);
-      const res = Math.round(computeScore());
-      if (res == 100) {
-        setMessageState(
-          "Du hast die Daten perfekt aufgeteilt. Sehr gut! Die Daten sind wohl linear separierbar"
-        );
-      } else {
-        setMessageState(
-          "Du hast " +
-            res +
-            " Prozent richtig klassifiziert. Sind die Daten noch linear separierbar?"
-        );
-      }
-      //reset user line and change state after waiting
-      const interval = setInterval(() => {
-        resetUserLine();
-        onNextGameRound();
-        setWrongClassifiedPoints([]); //reset the wrong classified points
-        setGameState("init");
-        clearInterval(interval);
-      }, waitTime);
-    }
-  }, [gameState]);
 
-  const computeScore = () => {
-    const pointsA = currentData.data[selClassA].points;
-    const pointsB = currentData.data[selClassB].points;
-    const mUserLine =
-      (userLineState.y2 - userLineState.y1) /
-      (userLineState.x2 - userLineState.x1);
-    const cUserLine = userLineState.y1 - mUserLine * userLineState.x1;
-    const pAonSide = pointsA.filter(([x, y]) =>
-      isOnOneSideOfLine(mUserLine, cUserLine, x, y)
-    );
-    const pBonSide = pointsB.filter(([x, y]) =>
-      isOnOneSideOfLine(mUserLine, cUserLine, x, y)
-    );
-    const percentage =
-      (pAonSide.length + (pointsB.length - pBonSide.length)) /
-      (pointsA.length + pointsB.length);
-    if (percentage < 0.5) {
-      //set wrong classified points
-      const wrongClassA = pAonSide;
-      const wrongClassB = pointsB.filter((point) => !pBonSide.includes(point));
-      setWrongClassifiedPoints(wrongClassA.concat(wrongClassB));
-      //return result
-      return (1 - percentage) * 100; //convert to %
-    }
-    //set wrong classified points
-    const wrongClassA = pointsA.filter((point) => !pAonSide.includes(point));
-    const wrongClassB = pBonSide;
-    setWrongClassifiedPoints(wrongClassA.concat(wrongClassB));
-    //return result
-    return percentage * 100; //convert to %
-  };
-  const isOnOneSideOfLine = (
-    m: number, //m Steigung
-    c: number, //c yAchensabschnitt
-    x: number,
-    y: number //x y , punkt
-  ): boolean => {
-    //point on line fullfills y = mx+c, we check if y > mx+c and invert result if smaller 50% because which side is for which class does not matter
-    if (y > m * x + c) {
-      return true;
-    }
-    return false;
-  };
-
+      
+  //TODO
   const onMouseUpPlotHandler = () => {
     const minLengthForUserline = 3;
     if (enableUserDraw) {
@@ -137,9 +73,9 @@ function Layout2DUserLine({
       ) {
         setGameState("line drawn");
       } else {
-        setMessageState(
-          "Dein gezeichneter Linien-Klassifikator ist zu kurz. Versuche es erneut."
-        );
+        // setMessageState(
+        //   "Dein gezeichneter Linien-Klassifikator ist zu kurz. Versuche es erneut."
+        // );
       }
     }
   };
@@ -174,10 +110,12 @@ function Layout2DUserLine({
       );
     }
   };
+  //Is linearly seperable
+  isLinearSeperable(...selectDimSelectClassData(currentData));
+
   return (
     <GridLayout currentData={currentData} setCurrentData={setCurrentData}>
       <MyPlot
-        ref={plotRef}
         currentData={currentData}
         setCurrentData={setCurrentData}
         hideSplitLine={hideSplitLine}

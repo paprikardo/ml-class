@@ -4,7 +4,14 @@ import LevelRobotLineGame2D from "./LevelRobotLineGame2D";
 import { Link, Route } from "react-router-dom";
 import { Button, Grid } from "@mantine/core";
 import RealDataLevel1D from "./realDataLevel1D";
-import { gegenstaendeDataset, irisDataset, schierlingDataset, weinsortenDataset, weizen2Dataset } from "../Data";
+import {
+  gegenstaendeDataset,
+  irisDataset,
+  ki67positiveZellen,
+  schierlingDataset,
+  weinsortenDataset,
+  weizen2Dataset,
+} from "../Data";
 import RealDataLevel2D from "./realDataLevel2D";
 
 interface ILevel {
@@ -142,7 +149,7 @@ const weizenLevels: ILevel[] = [
         dataset={weizen2Dataset}
       />
     ),
-    link: "weizen1D",
+    link: "weizen-1D",
   },
   {
     initModalTitle: getRealeDatensätzeInitModalTitle("Weizen", 2),
@@ -154,7 +161,7 @@ const weizenLevels: ILevel[] = [
         dataset={weizen2Dataset}
       />
     ),
-    link: "weizen2D",
+    link: "weizen-2D",
   },
 ];
 //Schierling levels
@@ -165,17 +172,25 @@ const schierlingLevels: ILevel[] = [
     initModalTitle: getRealeDatensätzeInitModalTitle("Schierling", 1),
     initModalContent: schierlingInitModalContent,
     getLevelComponent: (title, content) => (
-      <RealDataLevel1D initModalTitle={title} initModalContent={content} dataset={schierlingDataset}/>
+      <RealDataLevel1D
+        initModalTitle={title}
+        initModalContent={content}
+        dataset={schierlingDataset}
+      />
     ),
-    link: "schierling1D",
+    link: "schierling-1D",
   },
   {
     initModalTitle: getRealeDatensätzeInitModalTitle("Schierling", 2),
     initModalContent: schierlingInitModalContent,
     getLevelComponent: (title, content) => (
-      <RealDataLevel2D initModalTitle={title} initModalContent={content} dataset={schierlingDataset}/>
+      <RealDataLevel2D
+        initModalTitle={title}
+        initModalContent={content}
+        dataset={schierlingDataset}
+      />
     ),
-    link: "schierling2D",
+    link: "schierling-2D",
   },
 ];
 //Weinsorten levels
@@ -185,17 +200,25 @@ const weinsortenLevels: ILevel[] = [
     initModalTitle: getRealeDatensätzeInitModalTitle("Weinsorten", 1),
     initModalContent: weinsortenInitModalContent,
     getLevelComponent: (title, content) => (
-      <RealDataLevel1D initModalTitle={title} initModalContent={content} dataset={weinsortenDataset}/>
+      <RealDataLevel1D
+        initModalTitle={title}
+        initModalContent={content}
+        dataset={weinsortenDataset}
+      />
     ),
-    link: "weinsorten1D",
+    link: "weinsorten-1D",
   },
   {
     initModalTitle: getRealeDatensätzeInitModalTitle("Weinsorten", 2),
     initModalContent: weinsortenInitModalContent,
     getLevelComponent: (title, content) => (
-      <RealDataLevel2D initModalTitle={title} initModalContent={content} dataset={weinsortenDataset}/>
+      <RealDataLevel2D
+        initModalTitle={title}
+        initModalContent={content}
+        dataset={weinsortenDataset}
+      />
     ),
-    link: "weinsorten2D",
+    link: "weinsorten-2D",
   },
 ];
 //Iris levels
@@ -205,17 +228,25 @@ const irisLevels: ILevel[] = [
     initModalTitle: getRealeDatensätzeInitModalTitle("Iris", 1),
     initModalContent: irisInitModalContent,
     getLevelComponent: (title, content) => (
-      <RealDataLevel1D initModalTitle={title} initModalContent={content} dataset={irisDataset}/>
+      <RealDataLevel1D
+        initModalTitle={title}
+        initModalContent={content}
+        dataset={irisDataset}
+      />
     ),
-    link: "iris1D",
+    link: "iris-1D",
   },
   {
     initModalTitle: getRealeDatensätzeInitModalTitle("Iris", 2),
     initModalContent: irisInitModalContent,
     getLevelComponent: (title, content) => (
-      <RealDataLevel2D initModalTitle={title} initModalContent={content} dataset={irisDataset}/>
+      <RealDataLevel2D
+        initModalTitle={title}
+        initModalContent={content}
+        dataset={irisDataset}
+      />
     ),
-    link: "iris2D",
+    link: "iris-2D",
   },
 ];
 //Gegenstaende levels
@@ -225,17 +256,41 @@ const gstLevels: ILevel[] = [
     initModalTitle: getRealeDatensätzeInitModalTitle("Gegenstände", 1),
     initModalContent: gstInitModalContent,
     getLevelComponent: (title, content) => (
-      <RealDataLevel1D initModalTitle={title} initModalContent={content} dataset={gegenstaendeDataset}/>
+      <RealDataLevel1D
+        initModalTitle={title}
+        initModalContent={content}
+        dataset={gegenstaendeDataset}
+      />
     ),
-    link: "gst1D",
+    link: "gst-1D",
   },
   {
     initModalTitle: getRealeDatensätzeInitModalTitle("Gegenstände", 2),
     initModalContent: gstInitModalContent,
     getLevelComponent: (title, content) => (
-      <RealDataLevel2D initModalTitle={title} initModalContent={content} dataset={gegenstaendeDataset}/>
+      <RealDataLevel2D
+        initModalTitle={title}
+        initModalContent={content}
+        dataset={gegenstaendeDataset}
+      />
     ),
-    link: "gst2D",
+    link: "gst-2D",
+  },
+];
+//Ki67 levels
+const ki67InitModalContent = "";
+const ki67Levels: ILevel[] = [
+  {
+    initModalTitle: getRealeDatensätzeInitModalTitle("Ki67", 1),
+    initModalContent: ki67InitModalContent,
+    getLevelComponent: (title, content) => (
+      <RealDataLevel1D
+        initModalTitle={title}
+        initModalContent={content}
+        dataset={ki67positiveZellen}
+      />
+    ),
+    link: "ki67-1D",
   },
 ];
 //    LEVEL SECTIONS
@@ -271,6 +326,7 @@ const levelSections: ILevelSection[] = [
     sectionName: getRealeDatensätzeSectionName("Gegenstände"),
     levels: gstLevels,
   },
+  { sectionName: getRealeDatensätzeSectionName("Ki67"), levels: ki67Levels },
 ];
 //Getter functions
 export const getAllLevelSections = (): ILevelSection[] => {

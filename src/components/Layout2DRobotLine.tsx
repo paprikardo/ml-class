@@ -5,6 +5,7 @@ import RobotWrapper from "./RobotWrapper";
 import { Kbd } from "@mantine/core";
 import { setCurrentDataType } from "../Others/currentDataHelperMethods";
 import GridLayout from "./GridLayout";
+import { isLinearSeperable } from "../Others/classifier";
 
 function Layout2DRobotLine({
   currentData,
@@ -13,6 +14,9 @@ function Layout2DRobotLine({
   currentData: IData;
   setCurrentData:setCurrentDataType
 }): JSX.Element {
+  //TODO
+  //isLinearSeperable(...selectDimSelectClassData(currentData));
+  
   const robotMessage = (
     <>
       Benutze <Kbd>Maus-L</Kbd> oder <Kbd>shift</Kbd> + <Kbd>Maus-L</Kbd> um

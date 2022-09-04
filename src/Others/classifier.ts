@@ -1,4 +1,4 @@
-import { assert } from "console";
+import hull from "hull.js";
 import { IDataPoint } from "../Data";
 //This class implements the used classifiers
 
@@ -18,11 +18,11 @@ const computeSVMBorderWeights = (c1: IDataPoint[], c2: IDataPoint[]) => {
   ];
   const svm = new svmjs.SVM();
   //const trainstats
-  svm.train(data, labels, { kernel: "linear", C: 10000 }); // C is a parameter to SVM
-  const c1Margins:number[] = svm.margins(c1);
-  const c2Margins:number[] = svm.margins(c2);
-  if(c1Margins.some((x)=>x>0) || c2Margins.some((x)=>x<0)){
-    console.log("NON_SEP")
+  svm.train(data, labels, { kernel: "linear", C: Number.MAX_SAFE_INTEGER }); // C is a parameter to SVM, we pick 2^32
+  const c1Margins: number[] = svm.margins(c1);
+  const c2Margins: number[] = svm.margins(c2);
+  if (c1Margins.some((x) => x > 0) || c2Margins.some((x) => x < 0)) {
+    console.log("SVM classified something wrong");
   }
   const w = svm.getWeights();
   return w;
@@ -37,29 +37,25 @@ const computeSVMBorderWeights = (c1: IDataPoint[], c2: IDataPoint[]) => {
 const computePointHeu = (c1: IDataPoint[], c2: IDataPoint[]) => {
   const t1 = c1.map((p) => p[0]).sort((a, b) => a - b); //sorted arrays
   const t2 = c2.map((p) => p[0]).sort((a, b) => a - b); //sorted arrays
-  const smallerClass = [...(t1[0] < t2[0] ? t1 : t2)].reverse();//reverse the elements so that biggest first
-  const biggerClass = t1[0] < t2[0] ? t2 : t1
+  const smallerClass = [...(t1[0] < t2[0] ? t1 : t2)].reverse(); //reverse the elements so that biggest first
+  const biggerClass = t1[0] < t2[0] ? t2 : t1;
   for (var i = 0; i < t1.length; i++) {
     if (smallerClass[i] > biggerClass[i]) {
       console.log("NONSEP");
-    }
-    else{
-      return aritMean(biggerClass[i], smallerClass[i])
+    } else {
+      return aritMean(biggerClass[i], smallerClass[i]);
     }
   }
   console.log("ERROR: This should never happen. Concept of algorithm is wrong");
   return -1;
 };
 //Heuristical method line classifier, "heu"
-//iterate through all point pairs and 
-const computeLineGeneratorHeu= (c1: IDataPoint[], c2: IDataPoint[]) => {
-  for(var i = 0;i < c1.length;i++){
-    for(var j =0;j<c2.length;j++){
-
-    }
+//iterate through all point pairs and
+const computeLineGeneratorHeu = (c1: IDataPoint[], c2: IDataPoint[]) => {
+  for (var i = 0; i < c1.length; i++) {
+    for (var j = 0; j < c2.length; j++) {}
   }
-}
-
+};
 
 //Helper methods
 const aritMean = (m1: number, m2: number) => {
@@ -92,11 +88,13 @@ export const getDiffPoint = (
   c1: IDataPoint[],
   c2: IDataPoint[],
   alg: string = "heu"
-):number => {
+): number => {
   if (!(c1[0].length == 1 && c1[0].length == 1)) {
     //input must be array of 1-dimensional points
     console.log(
-      "ERROR: Called with wrong input dimensions: "+c1[0].length +". Maybe you have not selected the distincitive feature"
+      "ERROR: Called with wrong input dimensions: " +
+        c1[0].length +
+        ". Maybe you have not selected the distincitive feature"
     );
   }
   if (alg == "svm") {
@@ -119,7 +117,9 @@ export const getDiffLineGenerator = (
   if (!(c1[0].length == 2 && c1[0].length == 2)) {
     //input must be array of 2-dimensional points
     console.log(
-      "ERROR: Called with wrong input dimensions: "+c1[0].length +". Maybe you have not selected the 2 distincitive features"
+      "ERROR: Called with wrong input dimensions: " +
+        c1[0].length +
+        ". Maybe you have not selected the 2 distincitive features"
     );
   }
   if (alg == "svm") {
@@ -128,4 +128,10 @@ export const getDiffLineGenerator = (
   } else {
     return () => 0;
   }
+};
+
+//Computes if two lines are linearly seperable
+//uses convex hull algorithm
+export const isLinearSeperable = (c1: IDataPoint[], c2: IDataPoint[]) => {
+  console.log(c1,hull(c1,100))
 };

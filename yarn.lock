@@ -2101,6 +2101,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/hull.js@^1.0.2":
+  "integrity" "sha512-7zNbT+oMjnyVEQTNArmUdlLWxdqVsxCChQq1wmc1gATAjKC/45I/rBk3JBGJSID5IAqWveRbWfzfCWGjRXZm2w=="
+  "resolved" "https://registry.npmjs.org/@types/hull.js/-/hull.js-1.0.2.tgz"
+  "version" "1.0.2"
+
 "@types/istanbul-lib-coverage@*", "@types/istanbul-lib-coverage@^2.0.0", "@types/istanbul-lib-coverage@^2.0.1":
   "integrity" "sha512-z/QT1XN4K4KYuslS23k62yDIDLwLFkzxOuMplDtObz0+y7VqJCaO2o+SPwHCvLFZh7xazvvoor2tA/hPz9ee7g=="
   "resolved" "https://registry.npmjs.org/@types/istanbul-lib-coverage/-/istanbul-lib-coverage-2.0.4.tgz"
@@ -5221,6 +5226,11 @@
   dependencies:
     "agent-base" "6"
     "debug" "4"
+
+"hull.js@^1.0.2":
+  "integrity" "sha512-C1VJyrSnWqU7tp3T3QzViEdopHLm/G5ocnk8zBuS5BROaleDMBePvmgc7VdeNxR4BOzq/nzxkLFUS1L8S/wXTA=="
+  "resolved" "https://registry.npmjs.org/hull.js/-/hull.js-1.0.2.tgz"
+  "version" "1.0.2"
 
 "human-signals@^2.1.0":
   "integrity" "sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw=="

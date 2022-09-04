@@ -116,7 +116,6 @@ const getRandomPointsWithMinDistance = (means: IDataPoint[]): IDataPoint[] => {
       .map((el, i) => Math.abs(el - y[i]))
       .some((el) => el < minDistanceInEachDimension);
   const newPoints = means.map((m) => randomPoint(m));
-  console.log(newPoints);
   for (var i = 0; i < newPoints.length; i++) {
     for (var j = i+1; j < newPoints.length; j++) {
       if (isTooClose(newPoints[i], newPoints[j])) {
