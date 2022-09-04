@@ -82,6 +82,11 @@ const MyPlot = forwardRef(
     var xmax = Math.max(...all_points_x);
     var ymin = Math.min(...all_points_y);
     var ymax = Math.max(...all_points_y);
+    if (xmin === xmax && xmin === 0) {
+      //data is empty, set xmax to some value so plot does not collapse
+      xmax = 15;
+      ymax = 15;
+    }
     // //set the minimum intervall that we want to show on the axis, this avoides that the plotted graph will zoom in too much when the points are very close to each other
     // const minIntervalLength = 8;
     // const xdistance = xmax - xmin;

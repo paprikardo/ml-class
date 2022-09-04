@@ -34,6 +34,9 @@ const computeSVM = (c1: IDataPoint[], c2: IDataPoint[]) => {
 
 //helper
 export const svmSeperatedPerfect = (c1: IDataPoint[], c2: IDataPoint[]) => {
+  if (c1.length === 0 || c2.length === 0) {
+    return true;
+  }
   return computeSVM(c1, c2).seperatedData;
 };
 
@@ -116,6 +119,9 @@ export const getDiffLineGenerator = (
   c2: IDataPoint[],
   alg: string = "svm"
 ): ((x: number) => number) => {
+  if (c1.length === 0 || c2.length === 0) {
+    return () => 0;
+  }
   if (!(c1[0].length == 2 && c1[0].length == 2)) {
     //input must be array of 2-dimensional points
     console.log(

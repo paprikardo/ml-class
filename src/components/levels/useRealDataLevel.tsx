@@ -1,17 +1,10 @@
 import { Button, Stack, Text } from "@mantine/core";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { IData } from "../../Data";
-import {
-  addRandomPoint,
-  setCurrentDataType,
-  setDataSinglePoint,
-} from "../../Others/currentDataHelperMethods";
-import { newMeans } from "../../Others/newMeans";
+import { setCurrentDataType } from "../../Others/currentDataHelperMethods";
 import { isSeperable } from "../../Others/seperable";
 import BackToLevelSelectionButton from "../smallerComponents/BackToLevelSelectionButton";
 import EndModal from "../smallerComponents/EndModal";
-import GameScore from "../smallerComponents/GameScore";
 export const useRealDataLevel = (
   dataset: IData
 ): [
