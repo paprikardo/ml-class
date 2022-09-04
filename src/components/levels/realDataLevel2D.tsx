@@ -1,7 +1,8 @@
 import { useState } from "react";
-import InitModal from "../components/InitModal";
-import Layout2DUserLine from "../components/Layout2DUserLine";
-import { IData } from "../Data";
+import InitModal from "../smallerComponents/InitModal";
+import Layout2DUserLine from "../UserClassifier/Layout2DUserClass";
+import { IData } from "../../Data";
+import { useRealDataLevel } from "./useRealDataLevel";
 
 export default ({
   initModalTitle,
@@ -12,14 +13,15 @@ export default ({
   initModalContent: React.ReactNode;
   dataset: IData;
 }): JSX.Element => {
-  const [currentData, setCurrentData] = useState(dataset);
+  const [currentData, setCurrentData,elements,onNextGameRound] = useRealDataLevel(dataset);
   return (
     <div>
       <InitModal title={initModalTitle}>{initModalContent}</InitModal>
+      {elements}
       <Layout2DUserLine
         currentData={currentData}
         setCurrentData={setCurrentData}
-        onNextGameRound={() => null}
+        onNextGameRound={onNextGameRound}
       ></Layout2DUserLine>
     </div>
   );

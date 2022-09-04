@@ -1,6 +1,6 @@
 import { SimpleGrid } from "@mantine/core";
-import { IData } from "../Data";
-import { setCurrentDataType } from "../Others/currentDataHelperMethods";
+import { IData } from "../../Data";
+import { setCurrentDataType } from "../../Others/currentDataHelperMethods";
 import TableWrapper from "./TableWrapper";
 
 export default ({

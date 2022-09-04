@@ -9,7 +9,12 @@ import {
 } from "react-router-dom";
 
 import RobotWrapper from "./components/RobotWrapper";
-import { generateButtonFromLevel, getAllLevelSections, getAllLevelRoutes } from "./levels/Levels";
+import {
+  generateButtonFromLevel,
+  getAllLevelSections,
+  getAllLevelRoutes,
+} from "./components/levels/Levels";
+import BackToLevelSelectionButton from "./components/smallerComponents/BackToLevelSelectionButton";
 function App() {
   /**
    * samples a random point each from the given mean and variance and adds them to the respective classes
@@ -75,10 +80,10 @@ function App() {
                     ></RobotWrapper>
                     {allLevelSections.map(({ sectionName, levels }) => {
                       return (
-                        <div key={sectionName+"section"}>
+                        <div key={sectionName + "section"}>
                           <Title order={4}>{sectionName}</Title>
                           <Grid justify="center">
-                          {levels.map((l) => generateButtonFromLevel(l))}
+                            {levels.map((l) => generateButtonFromLevel(l))}
                           </Grid>
                         </div>
                       );
@@ -92,9 +97,7 @@ function App() {
             path="level"
             element={
               <Stack style={{ paddingTop: "10px" }}>
-                <Link to="/level-selection">
-                  <Button>Zurück zur Level-Auswahl</Button>
-                </Link>
+                <BackToLevelSelectionButton />
                 <Outlet></Outlet>
               </Stack>
             }

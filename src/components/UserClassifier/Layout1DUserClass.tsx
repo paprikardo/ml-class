@@ -1,24 +1,24 @@
-import { IData, IDataPoint } from "../Data";
+import { IData, IDataPoint } from "../../Data";
 
-import RobotWrapper from "./RobotWrapper";
-import MyPlot from "./MyPlot";
+import RobotWrapper from "../RobotWrapper";
+import MyPlot from "../EssentialComponents/MyPlot";
 import { useEffect, useRef, useState } from "react";
-import { rand_0_10 } from "../Others/Random";
+import { rand_0_10 } from "../../Others/Random";
 import {
   setCurrentDataType,
   setDataSinglePoint,
-} from "../Others/currentDataHelperMethods";
-import GridLayout from "./GridLayout";
-import { computePercentAndWrongPoints1D } from "../Others/computeScore";
-import { useGameLogic } from "../Others/UserLineGameLogic";
-const Layout1DUser = ({
+} from "../../Others/currentDataHelperMethods";
+import GridLayout from "../EssentialComponents/GridLayout";
+import { computePercentAndWrongPoints1D } from "../../Others/computeScore";
+import { useGameLogic } from "./useGameLogic";
+const Layout1DUserClass = ({
   currentData,
   setCurrentData,
   onNextGameRound,
 }: {
   currentData: IData;
   setCurrentData: setCurrentDataType;
-  onNextGameRound?: () => void;
+  onNextGameRound: (perfectlySeperatedByUser:boolean) => void;
 }): JSX.Element => {
   const [gameState, setGameState] = useState("init");
   const [userPointXState, setUserPointXState] = useState(0);
@@ -27,7 +27,7 @@ const Layout1DUser = ({
     setUserPointXState(0);
   };
   //game state logic
-  const [hideUserClassifier, wrongClassifiedPoints, messageState] =
+  const [hideRobotClassifier, wrongClassifiedPoints, messageState] =
     useGameLogic(
       currentData,
       gameState,
@@ -45,7 +45,7 @@ const Layout1DUser = ({
     mouseHold: boolean,
     cursorpt: DOMPoint | undefined
   ) => {
-    if (hideUserClassifier) {
+    if (hideRobotClassifier) {
       // only move the point when the point is "hidden", so in preview state
       setUserPointXState(cursorpt!.x);
     }
@@ -55,7 +55,7 @@ const Layout1DUser = ({
       <MyPlot
         currentData={currentData}
         setCurrentData={setCurrentData}
-        previewUserPoint={hideUserClassifier} //"hidden" is identical to "just in preview"
+        previewUserPoint={hideRobotClassifier} //"hidden" is identical to "just in preview"
         userPointXState={userPointXState} //
         onMouseUpPlotHandler={onMouseUpPlotHandler}
         onMouseMovePlotHandler={onMouseMovePlotHandler}
@@ -68,4 +68,4 @@ const Layout1DUser = ({
   );
 };
 
-export default Layout1DUser;
+export default Layout1DUserClass;

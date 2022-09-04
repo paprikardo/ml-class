@@ -1,6 +1,6 @@
-import LevelUserLineGame2D from "./LevelUserLineGame2D";
-import LevelUserPointGame1D from "./LevelUserPointGame1D";
-import LevelRobotLineGame2D from "./LevelRobotLineGame2D";
+import LevelUserClassGame2D from "./LevelUserClassGame2D";
+import LevelUserClassGame1D from "./LevelUserClassGame1D";
+import LevelRobotClassGame2D from "./LevelRobotClassGame2D";
 import { Link, Route } from "react-router-dom";
 import { Button, Grid } from "@mantine/core";
 import RealDataLevel1D from "./realDataLevel1D";
@@ -11,7 +11,7 @@ import {
   schierlingDataset,
   weinsortenDataset,
   weizen2Dataset,
-} from "../Data";
+} from "../../Data";
 import RealDataLevel2D from "./realDataLevel2D";
 
 interface ILevel {
@@ -58,11 +58,11 @@ const levelRoboter: ILevel[] = [
     initModalTitle: "Roboter-Klassifizieren in 2D",
     initModalContent: robotKlassModalContent(2),
     getLevelComponent: (title, content) => (
-      <LevelRobotLineGame2D
+      <LevelRobotClassGame2D
         initModalTitle={title}
         initModalContent={content}
         dimensions={2}
-      ></LevelRobotLineGame2D>
+      ></LevelRobotClassGame2D>
     ),
     link: "robot-klassifizieren-2D",
   },
@@ -70,11 +70,11 @@ const levelRoboter: ILevel[] = [
     initModalTitle: "Roboter-Klassifizieren in 3D",
     initModalContent: robotKlassModalContent(3),
     getLevelComponent: (title, content) => (
-      <LevelRobotLineGame2D
+      <LevelRobotClassGame2D
         initModalTitle={title}
         initModalContent={content}
         dimensions={3}
-      ></LevelRobotLineGame2D>
+      ></LevelRobotClassGame2D>
     ),
     link: "robot-klassifizieren-3D",
   },
@@ -85,11 +85,11 @@ const levelUser: ILevel[] = [
     initModalTitle: "Punkt-Klassifizieren in 2D",
     initModalContent: pointKlassModalContent(2),
     getLevelComponent: (title, content) => (
-      <LevelUserPointGame1D
+      <LevelUserClassGame1D
         dimensions={2}
         initModalTitle={title}
         initModalContent={content}
-      ></LevelUserPointGame1D>
+      ></LevelUserClassGame1D>
     ),
     link: "punkt-klassifizieren-2D",
   },
@@ -97,11 +97,11 @@ const levelUser: ILevel[] = [
     initModalTitle: "Punkt-Klassifizieren in 3D",
     initModalContent: pointKlassModalContent(3),
     getLevelComponent: (title, content) => (
-      <LevelUserPointGame1D
+      <LevelUserClassGame1D
         initModalTitle={title}
         initModalContent={content}
         dimensions={3}
-      ></LevelUserPointGame1D>
+      ></LevelUserClassGame1D>
     ),
     link: "punkt-klassifizieren-3D",
   },
@@ -110,11 +110,11 @@ const levelUser: ILevel[] = [
     initModalContent:
       "Versuche die zwei dimensionalen Punkte zu klassifizieren. Klicke und ziehe mit der Maus und versuche die beiden Punktwolken (von Klasse 1 und von Klasse 2) voneinander zu separieren. Sind die zwei Klassen linear separierbar?",
     getLevelComponent: (title, content) => (
-      <LevelUserLineGame2D
+      <LevelUserClassGame2D
         initModalTitle={title}
         initModalContent={content}
         dimensions={2}
-      ></LevelUserLineGame2D>
+      ></LevelUserClassGame2D>
     ),
     link: "linien-klassifizieren-2D",
   },
@@ -123,11 +123,11 @@ const levelUser: ILevel[] = [
     initModalContent:
       "Versuche die drei dimensionalen Punkte zu klassifizieren. Klicke und ziehe mit der Maus und versuche die beiden Punktwolken (von Klasse 1 und von Klasse 2) voneinander zu separieren. Sind die zwei Klassen linear separierbar?",
     getLevelComponent: (title, content) => (
-      <LevelUserLineGame2D
+      <LevelUserClassGame2D
         initModalTitle={title}
         initModalContent={content}
         dimensions={3}
-      ></LevelUserLineGame2D>
+      ></LevelUserClassGame2D>
     ),
     link: "linien-klassifizieren-3D",
   },

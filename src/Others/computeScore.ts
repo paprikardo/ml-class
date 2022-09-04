@@ -1,5 +1,6 @@
-import { IUserLineState } from "../components/Layout2DUserLine";
+import { IUserLineState } from "../components/UserClassifier/Layout2DUserClass";
 import { IData } from "../Data";
+import { isOnLeftSideOfLine } from "./linearLineHelpers";
 import { selectDimSelectClassData } from "./selectData";
 
 //compute the percent of correctly classified points by a user point classificator (1D) in percent and returns the wrong classified points
@@ -47,10 +48,10 @@ export const computePercentAndWrongPoints2D = (
     (userLineState.x2 - userLineState.x1);
   const cUserLine = userLineState.y1 - mUserLine * userLineState.x1;
   const pAonSide = pointsA.filter(([x, y]) =>
-    isOnOneSideOfLine(mUserLine, cUserLine, x, y)
+    isOnLeftSideOfLine(mUserLine, cUserLine, x, y)
   );
   const pBonSide = pointsB.filter(([x, y]) =>
-    isOnOneSideOfLine(mUserLine, cUserLine, x, y)
+    isOnLeftSideOfLine(mUserLine, cUserLine, x, y)
   );
   const percentage =
     (pAonSide.length + (pointsB.length - pBonSide.length)) /
@@ -73,17 +74,4 @@ export const computePercentAndWrongPoints2D = (
     percent: percentage * 100,
     wrongPoints: wrongClassA.concat(wrongClassB),
   }; //convert to %
-};
-
-const isOnOneSideOfLine = (
-  m: number, //m Steigung
-  c: number, //c yAchensabschnitt
-  x: number,
-  y: number //x y , punkt
-): boolean => {
-  //point on line fullfills y = mx+c, we check if y > mx+c and invert result if smaller 50% because which side is for which class does not matter
-  if (y > m * x + c) {
-    return true;
-  }
-  return false;
 };

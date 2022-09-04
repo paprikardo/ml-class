@@ -1,11 +1,11 @@
 import { IData, IDataPoint } from "../Data";
-import Table from "./Table";
-import MyPlot from "./MyPlot";
+import Table from "./EssentialComponents/Table";
+import MyPlot from "./EssentialComponents/MyPlot";
 import RobotWrapper from "./RobotWrapper";
 import { Kbd } from "@mantine/core";
 import { setCurrentDataType } from "../Others/currentDataHelperMethods";
-import GridLayout from "./GridLayout";
-import { isLinearSeperable } from "../Others/classifier";
+import GridLayout from "./EssentialComponents/GridLayout";
+import { isSeperable } from "../Others/seperable";
 
 function Layout2DRobotLine({
   currentData,
@@ -14,9 +14,6 @@ function Layout2DRobotLine({
   currentData: IData;
   setCurrentData:setCurrentDataType
 }): JSX.Element {
-  //TODO
-  //isLinearSeperable(...selectDimSelectClassData(currentData));
-  
   const robotMessage = (
     <>
       Benutze <Kbd>Maus-L</Kbd> oder <Kbd>shift</Kbd> + <Kbd>Maus-L</Kbd> um
@@ -24,6 +21,7 @@ function Layout2DRobotLine({
       Schaffst du es, dass ich sie nicht mehr separieren kann?";
     </>
   );
+  console.log(isSeperable(currentData));
   return (
     <GridLayout currentData={currentData} setCurrentData={setCurrentData}>
       <MyPlot

@@ -1,17 +1,17 @@
 import { forwardRef, useEffect, useState } from "react";
-import { IData, IDataPoint, IDataClass, colors } from "../Data";
-import "../App.css";
+import { IData, IDataPoint, IDataClass, colors } from "../../Data";
+import "../../App.css";
 import { Card, Title } from "@mantine/core";
-import { getDiffLineGenerator, getDiffPoint } from "../Others/classifier";
+import { getDiffLineGenerator, getDiffPoint } from "../../Others/classifier";
 import {
   selectDimSelectClassData,
   selectDimSelectClassDataScaled,
-} from "../Others/selectData";
+} from "../../Others/selectData";
 import {
   addPoint,
   setCurrentDataType,
   setSelectedAttrib,
-} from "../Others/currentDataHelperMethods";
+} from "../../Others/currentDataHelperMethods";
 
 var pt: DOMPoint | undefined = undefined;
 var screenctm: any = null;

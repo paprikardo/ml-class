@@ -1,11 +1,13 @@
 import hull from "hull.js";
-import { IDataPoint } from "../Data";
+import { IData, IDataPoint } from "../Data";
+import { selectDimSelectClassData } from "./selectData";
 //This class implements the used classifiers
 
 //SVM method "svm"
 const svmjs = require("svm");
 //c1 and c2 are the arrays of 2D or 1D data points, i.e. the selection to 2 features/1 feature has to happen before calling this function, use getSelectedData() for the selection
-const computeSVMBorderWeights = (c1: IDataPoint[], c2: IDataPoint[]) => {
+//returns the SVM weights AND if the SVM seperated the points perfectly
+const computeSVM = (c1: IDataPoint[], c2: IDataPoint[]) => {
   if (![1, 2].includes(c1[0].length) || ![1, 2].includes(c2[0].length)) {
     console.log(
       "ERROR: Calles SVM with wrong input dimensions. Maybe you have not selected the 2 or 1 distincitive features"
@@ -21,11 +23,18 @@ const computeSVMBorderWeights = (c1: IDataPoint[], c2: IDataPoint[]) => {
   svm.train(data, labels, { kernel: "linear", C: Number.MAX_SAFE_INTEGER }); // C is a parameter to SVM, we pick 2^32
   const c1Margins: number[] = svm.margins(c1);
   const c2Margins: number[] = svm.margins(c2);
+  var seperatedData = true;
   if (c1Margins.some((x) => x > 0) || c2Margins.some((x) => x < 0)) {
     console.log("SVM classified something wrong");
+    seperatedData = false;
   }
   const w = svm.getWeights();
-  return w;
+  return { weights: w, seperatedData: seperatedData };
+};
+
+//helper
+export const svmSeperatedPerfect = (c1: IDataPoint[], c2: IDataPoint[]) => {
+  return computeSVM(c1, c2).seperatedData;
 };
 
 //Heuristical method point classifier, "heu"
@@ -48,13 +57,6 @@ const computePointHeu = (c1: IDataPoint[], c2: IDataPoint[]) => {
   }
   console.log("ERROR: This should never happen. Concept of algorithm is wrong");
   return -1;
-};
-//Heuristical method line classifier, "heu"
-//iterate through all point pairs and
-const computeLineGeneratorHeu = (c1: IDataPoint[], c2: IDataPoint[]) => {
-  for (var i = 0; i < c1.length; i++) {
-    for (var j = 0; j < c2.length; j++) {}
-  }
 };
 
 //Helper methods
@@ -98,7 +100,7 @@ export const getDiffPoint = (
     );
   }
   if (alg == "svm") {
-    const weights = computeSVMBorderWeights(c1, c2);
+    const weights = computeSVM(c1, c2).weights;
     return getDiffPointFromWeights(weights);
   } else {
     return computePointHeu(c1, c2);
@@ -123,15 +125,9 @@ export const getDiffLineGenerator = (
     );
   }
   if (alg == "svm") {
-    const weights = computeSVMBorderWeights(c1, c2);
-    return getDiffLineGeneratorFromWeights(weights);
+    const weights = computeSVM(c1, c2);
+    return getDiffLineGeneratorFromWeights(weights.weights);
   } else {
     return () => 0;
   }
-};
-
-//Computes if two lines are linearly seperable
-//uses convex hull algorithm
-export const isLinearSeperable = (c1: IDataPoint[], c2: IDataPoint[]) => {
-  console.log(c1,hull(c1,100))
 };

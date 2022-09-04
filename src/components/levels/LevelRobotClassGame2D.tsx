@@ -1,9 +1,9 @@
-import InitModal from "../components/InitModal";
-import Layout2DRobotLine from "../components/Layout2DRobotLine";
-import { dummy2C2D, dummy2C3D, IData, IDataPoint } from "../Data";
+import InitModal from "../smallerComponents/InitModal";
+import Layout2DRobotLine from "../Layout2DRobotLine";
+import { dummy2C2D, dummy2C3D, IData, IDataPoint } from "../../Data";
 import { useEffect, useState } from "react";
-import { newMeans } from "../Others/newMeans";
-import { setDataSinglePoint } from "../Others/currentDataHelperMethods";
+import { newMeans } from "../../Others/newMeans";
+import { setDataSinglePoint } from "../../Others/currentDataHelperMethods";
 export default ({
   initModalTitle,
   initModalContent,

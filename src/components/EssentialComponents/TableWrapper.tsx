@@ -1,12 +1,12 @@
-import { colors, IData, IDataPoint } from "../Data";
+import { colors, IData, IDataPoint } from "../../Data";
 import Table from "./Table";
-import "../App.css";
+import "../../App.css";
 import { Card, Stack } from "@mantine/core";
 import {
   changePoint,
   setCurrentDataType,
   setSelectedClasses,
-} from "../Others/currentDataHelperMethods";
+} from "../../Others/currentDataHelperMethods";
 
 interface TableWrapperProps {
   currentData: IData;

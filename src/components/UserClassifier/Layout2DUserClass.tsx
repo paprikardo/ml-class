@@ -1,32 +1,26 @@
-import { IData, IDataPoint } from "../Data";
+import { IData, IDataPoint } from "../../Data";
 
-import RobotWrapper from "./RobotWrapper";
-import NewPointTable from "./NewPointTable";
-import MyPlot from "./MyPlot";
-import { useEffect, useRef, useState } from "react";
-import { rand_0_10 } from "../Others/Random";
-import { setCurrentDataType } from "../Others/currentDataHelperMethods";
-import LevelLayout from "./GridLayout";
-import { Grid } from "@mantine/core";
-import GridLayout from "./GridLayout";
-import { isLinearSeperable } from "../Others/classifier";
-import { selectDimSelectClassData } from "../Others/selectData";
-import { computePercentAndWrongPoints2D } from "../Others/computeScore";
-import { useGameLogic } from "../Others/UserLineGameLogic";
+import RobotWrapper from "../RobotWrapper";
+import NewPointTable from "../NewPointTable";
+import MyPlot from "../EssentialComponents/MyPlot";
+import {useState } from "react";
+import { setCurrentDataType } from "../../Others/currentDataHelperMethods";
+import GridLayout from "../EssentialComponents/GridLayout";
+import { useGameLogic } from "./useGameLogic";
 export type IUserLineState = {
   x1: number;
   x2: number;
   y1: number;
   y2: number;
 };
-function Layout2DUserLine({
+function Layout2DUserClass({
   currentData,
   setCurrentData,
   onNextGameRound,
 }: {
   currentData: IData;
   setCurrentData: setCurrentDataType;
-  onNextGameRound: () => void;
+  onNextGameRound: (perfectlySeperatedByUser:boolean) => void;
 }): JSX.Element {
   const [gameState, setGameState] = useState("init");
   const [userLineState, setUserLineState]: [
@@ -48,7 +42,7 @@ function Layout2DUserLine({
     });
   };
   //game state logic
-  const [hideUserClassifier, wrongClassifiedPoints, messageState] =
+  const [hideRobotClassifier, wrongClassifiedPoints, messageState] =
     useGameLogic(
       currentData,
       gameState,
@@ -58,7 +52,6 @@ function Layout2DUserLine({
       onNextGameRound
     );
   const enableUserDraw = true;
-  const [hideSplitLine, setHideSplitLine] = useState(true);
 
       
   //TODO
@@ -110,15 +103,13 @@ function Layout2DUserLine({
       );
     }
   };
-  //Is linearly seperable
-  isLinearSeperable(...selectDimSelectClassData(currentData));
 
   return (
     <GridLayout currentData={currentData} setCurrentData={setCurrentData}>
       <MyPlot
         currentData={currentData}
         setCurrentData={setCurrentData}
-        hideSplitLine={hideSplitLine}
+        hideSplitLine={hideRobotClassifier}
         userLineState={userLineState}
         onMouseUpPlotHandler={onMouseUpPlotHandler}
         onMouseDownPlotHandler={onMouseDownPlotHandler}
@@ -131,4 +122,4 @@ function Layout2DUserLine({
   );
 }
 
-export default Layout2DUserLine;
+export default Layout2DUserClass;
