@@ -458,7 +458,7 @@ export const getAllLevelRoutes = (): JSX.Element[] => {
 
 //Helper methods
 export const generateButtonFromLevel = (level: ILevel) => (
-  <Link to={"/level/" + level.link} key={level.link + "-link"}>
+  <Link to={"/ml-class/level/" + level.link} key={level.link + "-link"}>
     <Grid.Col span={4}>
       <Button>{level.initModalTitle}</Button>
     </Grid.Col>

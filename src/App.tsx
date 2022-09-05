@@ -53,7 +53,7 @@ function App() {
               element={
                 <Stack>
                   {gameTitle}
-                  <Link to="/level-selection">
+                  <Link to="/ml-class/level-selection">
                     <Stack justify="flex-start" align="center">
                       <RobotWrapper
                         notSticky
