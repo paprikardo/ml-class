@@ -2,7 +2,7 @@
   "name": "ml-class",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://paprikardo.github.io/ml-class",
+  "homepage": "https://paprikardo.github.io/ml-class",
   "dependencies": {
     "@mantine/core": "^4.1.3",
     "@mantine/hooks": "^4.1.3",
