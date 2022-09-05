@@ -42,7 +42,11 @@ export const selectDimSelectClassData = (
     ];
   }
 };
-
+//return data points of the selected classes
+export const selectClassData = (currentData: IData) => {
+  const [c0, c1] = currentData.selected_class;
+  return [currentData.data[c0].points, currentData.data[c1].points];
+};
 //result of selectDimSelectClassData but scaled to the SVG points
 export const selectDimSelectClassDataScaled = (
   currentData: IData,

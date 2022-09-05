@@ -15,6 +15,7 @@ import {
   getAllLevelRoutes,
 } from "./components/levels/Levels";
 import BackToLevelSelectionButton from "./components/smallerComponents/BackToLevelSelectionButton";
+import PageNotFound from "./components/smallerComponents/PageNotFound";
 function App() {
   /**
    * samples a random point each from the given mean and variance and adds them to the respective classes
@@ -44,7 +45,7 @@ function App() {
                 {gameTitle}
                 <Link to="/level-selection">
                   <Stack justify="flex-start" align="center">
-                    <RobotWrapper message={<>Bist du bereit?</>}></RobotWrapper>
+                    <RobotWrapper notSticky message={<>Bist du bereit?</>}></RobotWrapper>
                     <Title order={2}>Klicke hier um zu beginnen</Title>
                   </Stack>
                 </Link>
@@ -77,6 +78,7 @@ function App() {
                     </Text>
                     <RobotWrapper
                       message={<>"Welches Level möchtest du spielen?"</>}
+                      notSticky
                     ></RobotWrapper>
                     {allLevelSections.map(({ sectionName, levels }) => {
                       return (
@@ -103,7 +105,9 @@ function App() {
             }
           >
             {getAllLevelRoutes()}
+            <Route path="*" element={<PageNotFound></PageNotFound>}></Route>
           </Route>
+          <Route path="*" element={<PageNotFound></PageNotFound>}></Route>
         </Routes>
       </Router>
     </div>

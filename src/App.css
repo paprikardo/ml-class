@@ -1,4 +1,4 @@
-body{
+body {
   background-color: #bccce3;
 }
 .App {
@@ -10,15 +10,16 @@ body{
   border: 1px solid gray;
 }
 
-
+.MyPlot {
+  overflow-y: visible;
+}
+.MyPlot,
 .TableWrapper {
-  max-height: 80vh;
+  max-height: 90vh;
   overflow: auto;
   border: 1px solid black;
   padding: 10px;
-
 }
-
 .Table {
   padding: 10px;
   margin: 10px;
@@ -32,8 +33,16 @@ body{
 .Centred {
   margin: auto;
 }
-.GameTitle{
+.GameTitle {
   margin: 20px;
   padding: 20px;
 }
-
+.AttributeSelection {
+  border-radius: 5px;
+}
+.AttribSelect {
+  backdrop-filter: blur(2px);
+  background-color: rgba(215, 209, 209, 0.2);
+  box-shadow: 0 2px 5px rgba(184, 178, 178, 0.2);
+  border-radius: 5px;
+}

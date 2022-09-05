@@ -12,7 +12,7 @@ export const computePercentAndWrongPoints1D = (
   if (!Array.isArray(currentData.selected_attrib)) {
     //points on left Side
     const pAonSide = pointsA.filter((point) => point[0] < userPointX);
-    const pBonSide = pointsB.filter((point) => point[0] < userPointX);
+    const pBonSide = [...pointsB.filter((point) => point[0] < userPointX)];
     //percentage of points where A is left and B is right
     const percentage =
       (pAonSide.length + (pointsB.length - pBonSide.length)) /

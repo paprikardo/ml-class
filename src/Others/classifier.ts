@@ -25,7 +25,6 @@ const computeSVM = (c1: IDataPoint[], c2: IDataPoint[]) => {
   const c2Margins: number[] = svm.margins(c2);
   var seperatedData = true;
   if (c1Margins.some((x) => x > 0) || c2Margins.some((x) => x < 0)) {
-    console.log("SVM classified something wrong");
     seperatedData = false;
   }
   const w = svm.getWeights();
@@ -53,7 +52,7 @@ const computePointHeu = (c1: IDataPoint[], c2: IDataPoint[]) => {
   const biggerClass = t1[0] < t2[0] ? t2 : t1;
   for (var i = 0; i < t1.length; i++) {
     if (smallerClass[i] > biggerClass[i]) {
-      console.log("NONSEP");
+      //console.log("NONSEP");
     } else {
       return aritMean(biggerClass[i], smallerClass[i]);
     }

@@ -21,7 +21,6 @@ function Layout2DRobotLine({
       Schaffst du es, dass ich sie nicht mehr separieren kann?";
     </>
   );
-  console.log(isSeperable(currentData));
   return (
     <GridLayout currentData={currentData} setCurrentData={setCurrentData}>
       <MyPlot

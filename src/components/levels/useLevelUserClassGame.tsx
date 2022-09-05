@@ -75,10 +75,10 @@ export const useLevelUserClassGame = (
       key="endModalLose"
     >
       <Text>
-        Die Daten sind, wie du vermutlich schon bemerkt hast, nicht separierbar.
-        Es kann in vielen Szenarien trotzdem Sinn machen einen möglichst guten
-        Klassifikator zu bestimmen. Möchtest du weiter herumprobieren, das Level
-        neu starten, oder zu einem anderen Level wechseln?
+        Die Daten sind nicht mehr separierbar. Es kann in vielen Szenarien
+        trotzdem Sinn machen einen möglichst guten Klassifikator zu bestimmen.
+        Möchtest du weiter herumprobieren und versuchen einen zu finden, das
+        Level neu starten, oder zu einem anderen Level wechseln?
       </Text>
       {optionButtons}
     </EndModal>

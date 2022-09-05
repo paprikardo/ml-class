@@ -17,6 +17,8 @@ export const useRealDataLevel = (
   const [currentData, setCurrentData] = useState(dataset);
   const [numTries, setNumTries] = useState(0);
   const [gameAround, setGameAround] = useState(false); //if true the user wants to stay in the level and should not get the prompt all the time
+  const [winModalOpen, setWinModalOpen] = useState(false);
+  const [loseModalOpen, setLoseModalOpen] = useState(false);
   //EndModal
   const stayButton = (
     <Button
@@ -35,8 +37,6 @@ export const useRealDataLevel = (
       <BackToLevelSelectionButton></BackToLevelSelectionButton>
     </Stack>
   );
-  const [winModalOpen, setWinModalOpen] = useState(false);
-  const [loseModalOpen, setLoseModalOpen] = useState(false);
   const endModalWin = (
     <EndModal
       opened={winModalOpen}

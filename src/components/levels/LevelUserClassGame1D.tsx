@@ -1,4 +1,3 @@
-//mostly copied from LevelUserLineGame2D
 import Layout1DUserClass from "../UserClassifier/Layout1DUserClass";
 import { dummy2C3D1A, dummy2C2D1A } from "../../Data";
 import InitModal from "../smallerComponents/InitModal";

@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useState } from "react";
 import { IData, IDataPoint, IDataClass, colors } from "../../Data";
 import "../../App.css";
-import { Card, Title } from "@mantine/core";
+import { Card, SimpleGrid, Stack, Title } from "@mantine/core";
 import { getDiffLineGenerator, getDiffPoint } from "../../Others/classifier";
 import {
   selectDimSelectClassData,
@@ -12,6 +12,7 @@ import {
   setCurrentDataType,
   setSelectedAttrib,
 } from "../../Others/currentDataHelperMethods";
+import { getMinMax, getScale } from "../../Others/myPlotHelpers";
 
 var pt: DOMPoint | undefined = undefined;
 var screenctm: any = null;
@@ -60,75 +61,23 @@ const MyPlot = forwardRef(
     ref
   ): JSX.Element => {
     const isEmpty = currentData.data[0].points.length == 0; //if the first class does not contain a point we consider the data as empty and do not plot anything
-    const dimensions = isEmpty
-      ? undefined
-      : currentData.data[0].points[0].length;
+    const dimensions = currentData.attrib.length;
     const oneDimensional = isOneDimensional ? true : dimensions === 1;
     const yOneDimension = 0;
 
-    const selectedClassPoints = selectDimSelectClassData(currentData); //selected classes with selected dimensions to display
+    const selectedPoints = selectDimSelectClassData(currentData); //selected classes with selected dimensions to display
     //in the following we refer to x as all points in the first selected dimension and y as the second
-    const all_points_x = selectedClassPoints //extract all x values
-      .map((clp) => clp.map((p) => p[0]))
-      .toString()
-      .split(",")
-      .map(Number); //extract x coords and flatten array
-    const all_points_y = selectedClassPoints
-      .map((clp) => clp.map((p) => p[1]))
-      .toString()
-      .split(",")
-      .map(Number); //extract x coords and flatten array
-    var xmin = Math.min(...all_points_x);
-    var xmax = Math.max(...all_points_x);
-    var ymin = Math.min(...all_points_y);
-    var ymax = Math.max(...all_points_y);
-    if (xmin === xmax && xmin === 0) {
-      //data is empty, set xmax to some value so plot does not collapse
-      xmax = 15;
-      ymax = 15;
-    }
-    // //set the minimum intervall that we want to show on the axis, this avoides that the plotted graph will zoom in too much when the points are very close to each other
-    // const minIntervalLength = 8;
-    // const xdistance = xmax - xmin;
-    // if (xdistance < minIntervalLength) {
-    //   xmax = xmax + (minIntervalLength - xdistance) / 2;
-    //   xmin = xmin - (minIntervalLength - xdistance) / 2;
-    // }
-    // const ydistance = ymax - ymin;
-    // if (ydistance < minIntervalLength) {
-    //   ymax = ymax + (minIntervalLength - ydistance) / 2;
-    //   ymin = ymin - (minIntervalLength - ydistance) / 2;
-    // }
 
     const [mouseHold, setMouseHold] = useState(false);
-    const afterScalingIntervall = 15;
+
     //scales any point to the desired max Intervall
-    const scaleY = (y: number) => {
-      return scale(y, ymin, ymax);
-    };
-    const scaleX = (x: number) => {
-      return scale(x, xmin, xmax);
-    };
-    const scaleXInv = (x: number) => {
-      return scaleInv(x, xmin, xmax);
-    };
-    const scaleYInv = (y: number) => {
-      return scaleInv(y, ymin, ymax);
-    };
-    //if v=vmin it is mapped to itself. All other values are mapped proportionally to its distance such that vmax is mapped to vmin + afterScalingMaxIntervall
-    const scale = (v: number, vmin: number, vmax: number) => {
-      if (vmin == vmax) {
-        return v;
-      }
-      return vmin + (afterScalingIntervall * (v - vmin)) / (vmax - vmin);
-    };
-    //inverse
-    const scaleInv = (v: number, vmin: number, vmax: number) => {
-      if (vmin == vmax) {
-        return v;
-      }
-      return vmin + ((v - vmin) * (vmax - vmin)) / afterScalingIntervall;
-    };
+    const [xmin, xmax, ymin, ymax] = getMinMax(selectedPoints);
+    const [scaleX, scaleXInv, scaleY, scaleYInv] = getScale(
+      xmin,
+      xmax,
+      ymin,
+      ymax
+    );
 
     const getSVGCoords = (evt: React.MouseEvent<SVGSVGElement>) => {
       if (pt == null) {
@@ -154,7 +103,7 @@ const MyPlot = forwardRef(
         // overwrite the normal click handler with overwriteclickhandler if it exists
         overwriteClickHandler(cursorpt);
       } else if (!enableUserDraw) {
-        //only add new points on click if not draw User Line mode
+        //only add new points on click if not draw User Class mode
         const pointToAdd = new Array(dimensions).fill(0);
         if (Array.isArray(currentData.selected_attrib)) {
           //2D case i.e. two axis shown
@@ -256,7 +205,7 @@ const MyPlot = forwardRef(
         vectorEffect="non-scaling-stroke"
       />
     );
-    const svgCircles = selectedClassPoints.map((points, cl_index) =>
+    const svgCircles = selectedPoints.map((points, cl_index) =>
       points.map((p, points_index) => {
         const xs = scaleX(p[0]);
         const ys = oneDimensional ? yOneDimension : scaleY(p[1]);
@@ -276,21 +225,11 @@ const MyPlot = forwardRef(
 
     const svgCirclesWrongClassified = wrongClassifiedPoints?.map(
       (p, points_index) => {
-        const xs = scaleX(
-          p[
-            Array.isArray(currentData.selected_attrib)
-              ? currentData.selected_attrib[0]
-              : currentData.selected_attrib
-          ]
-        );
+        const xs = scaleX(p[0]);
         const ys = oneDimensional
           ? yOneDimension
           : scaleY(
-              p[
-                Array.isArray(currentData.selected_attrib)
-                  ? currentData.selected_attrib[1]
-                  : yOneDimension
-              ]
+              p[Array.isArray(currentData.selected_attrib) ? 1 : yOneDimension]
             );
         return (
           <circle
@@ -440,43 +379,10 @@ const MyPlot = forwardRef(
     const svgPadding = 2; //padding arround the svg elements
     useKeyPress();
     return (
-      <div>
-        <div>
-          <Title order={5}>Attribut auf der X-Axis</Title>
-          <div>
-            {currentData.attrib.map((str, index) => (
-              <button
-                key={str + index}
-                onClick={() =>
-                  setSelectedAttrib(
-                    setCurrentData,
-                    index,
-                    Array.isArray(currentData.selected_attrib) //if 2D
-                      ? currentData.selected_attrib[1]
-                      : undefined
-                  )
-                }
-                style={
-                  Array.isArray(currentData.selected_attrib) //if 2D
-                    ? currentData.selected_attrib[0] == index
-                      ? { backgroundColor: "#8db8cc" }
-                      : {}
-                    : currentData.selected_attrib == index
-                    ? { backgroundColor: "#8db8cc" }
-                    : {}
-                }
-              >
-                {str}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {oneDimensional ? (
-          <></>
-        ) : (
-          <div>
-            <Title order={5}>Attribut auf der Y-Axis</Title>
+      <Card className="MyPlot">
+        <SimpleGrid className="AttributeSelection" cols={2}>
+          <div className="AttribSelect">
+            <Title order={5}>Attribut auf der X-Axis</Title>
             <div>
               {currentData.attrib.map((str, index) => (
                 <button
@@ -484,17 +390,19 @@ const MyPlot = forwardRef(
                   onClick={() =>
                     setSelectedAttrib(
                       setCurrentData,
+                      index,
                       Array.isArray(currentData.selected_attrib) //if 2D
-                        ? currentData.selected_attrib[0]
-                        : index,
-                      index
+                        ? currentData.selected_attrib[1]
+                        : undefined
                     )
                   }
                   style={
                     Array.isArray(currentData.selected_attrib) //if 2D
-                      ? currentData.selected_attrib[1] == index
+                      ? currentData.selected_attrib[0] == index
                         ? { backgroundColor: "#8db8cc" }
                         : {}
+                      : currentData.selected_attrib == index
+                      ? { backgroundColor: "#8db8cc" }
                       : {}
                   }
                 >
@@ -503,7 +411,40 @@ const MyPlot = forwardRef(
               ))}
             </div>
           </div>
-        )}
+
+          {oneDimensional ? (
+            <></>
+          ) : (
+            <div className="AttribSelect">
+              <Title order={5}>Attribut auf der Y-Axis</Title>
+              <div>
+                {currentData.attrib.map((str, index) => (
+                  <button
+                    key={str + index}
+                    onClick={() =>
+                      setSelectedAttrib(
+                        setCurrentData,
+                        Array.isArray(currentData.selected_attrib) //if 2D
+                          ? currentData.selected_attrib[0]
+                          : index,
+                        index
+                      )
+                    }
+                    style={
+                      Array.isArray(currentData.selected_attrib) //if 2D
+                        ? currentData.selected_attrib[1] == index
+                          ? { backgroundColor: "#8db8cc" }
+                          : {}
+                        : {}
+                    }
+                  >
+                    {str}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </SimpleGrid>
         <svg
           height="100%"
           width="100%"
@@ -570,7 +511,7 @@ const MyPlot = forwardRef(
             )}
           </g>
         </svg>
-      </div>
+      </Card>
     );
   }
 );
