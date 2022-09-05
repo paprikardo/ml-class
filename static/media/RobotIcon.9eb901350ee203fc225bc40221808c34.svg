@@ -1,0 +1,210 @@
+<svg
+      xmlns="http://www.w3.org/2000/svg"
+      version="1.1"
+      viewBox="0 0 100 100"
+      xmlSpace="preserve"
+    >
+      <path
+        fill="#666766"
+        stroke="#333"
+        strokeMiterlimit="10"
+        strokeWidth="3.5"
+        d="M78.857 78.057h-1.023a6.69 6.69 0 01-6.69-6.69V57.366a6.69 6.69 0 016.69-6.69h1.023a6.69 6.69 0 016.69 6.69v14.002a6.69 6.69 0 01-6.69 6.689z"
+      ></path>
+      <path
+        stroke="#000"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeMiterlimit="10"
+        strokeWidth="3.5"
+        d="M82.344 51.683c.426.88.672 1.864.672 2.907v14.002a6.69 6.69 0 01-6.69 6.69h-1.023a6.662 6.662 0 01-2.89-.663c-.161-.035-.326-.06-.482-.105a6.687 6.687 0 005.903 3.544h1.023a6.69 6.69 0 006.69-6.69V57.366c0-2.412-1.288-4.507-3.203-5.683z"
+        opacity="0.2"
+      ></path>
+      <path
+        fill="none"
+        stroke="#333"
+        strokeMiterlimit="10"
+        strokeWidth="3.5"
+        d="M50 17.903v31.733"
+      ></path>
+      <circle
+        cx="50"
+        cy="17.903"
+        r="7.903"
+        fill="#e15c64"
+        stroke="#333"
+        strokeMiterlimit="10"
+        strokeWidth="3.5"
+      ></circle>
+      <path
+        stroke="#000"
+        strokeLinejoin="round"
+        strokeMiterlimit="10"
+        strokeWidth="3.5"
+        d="M56.537 13.462a15.457 15.457 0 01-1.259 4.328c-1.863 4.104-5.151 6.87-8.323 7.406a7.903 7.903 0 009.582-11.734z"
+        opacity="0.2"
+      ></path>
+      <path
+        fill="#666766"
+        stroke="#333"
+        strokeMiterlimit="10"
+        strokeWidth="3.5"
+        d="M21.143 78.057h1.023a6.69 6.69 0 006.69-6.69V57.366a6.69 6.69 0 00-6.69-6.69h-1.023a6.69 6.69 0 00-6.69 6.69v14.002a6.69 6.69 0 006.69 6.689z"
+      ></path>
+      <path
+        stroke="#000"
+        strokeLinejoin="round"
+        strokeMiterlimit="10"
+        strokeWidth="3.5"
+        d="M24.974 51.3c.048.322.08.649.08.984v14.002a6.69 6.69 0 01-6.69 6.69h-1.023a6.661 6.661 0 01-2.808-.624c.477 3.227 3.25 5.706 6.609 5.706h1.023a6.69 6.69 0 006.69-6.69V57.366a6.682 6.682 0 00-3.881-6.066z"
+        opacity="0.2"
+      ></path>
+      <path
+        fill="#e0e0e0"
+        stroke="#333"
+        strokeMiterlimit="10"
+        strokeWidth="3.5"
+        d="M71.646 90H28.354a5.133 5.133 0 01-5.133-5.133V41.399a5.133 5.133 0 015.133-5.133h43.293a5.133 5.133 0 015.133 5.133v43.468A5.134 5.134 0 0171.646 90z"
+      ></path>
+      <path
+        stroke="#000"
+        strokeMiterlimit="10"
+        strokeWidth="3.5"
+        d="M71.646 36.266h-1.533V78.43a5.133 5.133 0 01-5.133 5.133H23.22v1.304A5.133 5.133 0 0028.353 90h43.293a5.133 5.133 0 005.133-5.133V41.399a5.133 5.133 0 00-5.133-5.133z"
+        opacity="0.2"
+      ></path>
+      <path
+        fill="#fff"
+        stroke="#333"
+        strokeMiterlimit="10"
+        strokeWidth="3.5"
+        d="M37.944 69.948a6.057 6.057 0 00-6.057 6.057 6.057 6.057 0 006.057 6.057h1.658V69.948h-1.658z"
+      ></path>
+      <path
+        fill="#fff"
+        stroke="#333"
+        strokeMiterlimit="10"
+        strokeWidth="3.5"
+        d="M39.602 69.948h6.932v12.115h-6.932z"
+      ></path>
+      <path
+        fill="#fff"
+        stroke="#333"
+        strokeMiterlimit="10"
+        strokeWidth="3.5"
+        d="M46.534 69.948h6.932v12.115h-6.932z"
+      ></path>
+      <path
+        fill="#fff"
+        stroke="#333"
+        strokeMiterlimit="10"
+        strokeWidth="3.5"
+        d="M62.056 69.948h-1.658v12.115h1.658a6.057 6.057 0 006.057-6.057 6.057 6.057 0 00-6.057-6.058z"
+      ></path>
+      <path
+        fill="#fff"
+        stroke="#333"
+        strokeMiterlimit="10"
+        strokeWidth="3.5"
+        d="M53.466 69.948h6.932v12.115h-6.932z"
+      ></path>
+      <path
+        fill="none"
+        stroke="#fff"
+        strokeLinecap="round"
+        strokeMiterlimit="10"
+        strokeWidth="3.5"
+        d="M28.356 54.625v.925"
+      ></path>
+      <path
+        fill="none"
+        stroke="#fff"
+        strokeLinecap="round"
+        strokeMiterlimit="10"
+        strokeWidth="3.5"
+        d="M28.356 42.375v7.261"
+      ></path>
+      <path
+        stroke="#000"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeMiterlimit="10"
+        strokeWidth="3.5"
+        d="M32.169 77.833a6.058 6.058 0 005.775 4.229h24.112c2.708 0 5-1.778 5.775-4.229H32.169z"
+        opacity="0.2"
+      ></path>
+      <g
+        strokeDasharray="none"
+        strokeWidth="2"
+        transform="matrix(1.0909 0 0 1.0909 -4.854 -3.91)"
+      >
+        <circle
+          cx="59.008"
+          cy="53.731"
+          r="4.5"
+          fill="#fff"
+          stroke="#333"
+          strokeOpacity="1"
+          strokeWidth="2"
+          display="inline"
+        ></circle>
+        <ellipse
+          cx="59.742"
+          cy="52.403"
+          fill="#333"
+          strokeWidth="2.537"
+          display="inline"
+          rx="1.046"
+          ry="1.085"
+        ></ellipse>
+      </g>
+      <g
+        strokeDasharray="none"
+        strokeWidth="2"
+        transform="matrix(1.0909 0 0 1.0909 -24.133 -4.279)"
+      >
+        <circle
+          cx="59.008"
+          cy="53.731"
+          r="4.5"
+          fill="#fff"
+          stroke="#333"
+          strokeOpacity="1"
+          strokeWidth="2"
+          display="inline"
+        ></circle>
+        <ellipse
+          cx="60.316"
+          cy="52.834"
+          fill="#333"
+          strokeWidth="2.537"
+          display="inline"
+          rx="1.046"
+          ry="1.085"
+        ></ellipse>
+      </g>
+      <path
+        fill="none"
+        stroke="#333"
+        strokeDasharray="none"
+        strokeOpacity="1"
+        strokeWidth="2.182"
+        d="M45.814 48.439v0"
+      ></path>
+      <path
+        fill="none"
+        stroke="#333"
+        strokeDasharray="none"
+        strokeOpacity="1"
+        strokeWidth="2.182"
+        d="M33.06 46.32c.684-.422 1.41-.777 2.164-1.059a12.54 12.54 0 019.255.23"
+      ></path>
+      <path
+        fill="none"
+        stroke="#333"
+        strokeDasharray="none"
+        strokeOpacity="1"
+        strokeWidth="2.182"
+        d="M54.622 45.935a3.118 3.118 0 011.177-1.448 3.118 3.118 0 011.796-.508c.703.022 1.377.282 2 .607s1.209.718 1.835 1.036c1.323.673 2.82 1 4.304.94"
+      ></path>
+    </svg>
