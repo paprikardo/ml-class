@@ -2,7 +2,7 @@ import LevelUserClassGame2D from "./LevelUserClassGame2D";
 import LevelUserClassGame1D from "./LevelUserClassGame1D";
 import LevelRobotClassGame2D from "./LevelRobotClassGame2D";
 import { Link, Route } from "react-router-dom";
-import { Button, Grid } from "@mantine/core";
+import { Button, Grid, Kbd, Text, Title } from "@mantine/core";
 import RealDataLevel1D from "./realDataLevel1D";
 import {
   gegenstaendeDataset,
@@ -13,46 +13,34 @@ import {
   weizen2Dataset,
 } from "../../Data";
 import RealDataLevel2D from "./realDataLevel2D";
-
+//Interfaces
 interface ILevel {
   initModalTitle: string;
-  initModalContent: string;
-  getLevelComponent: (title: string, content: string) => JSX.Element;
+  initModalContent: JSX.Element;
+  getLevelComponent: (title: string, content: JSX.Element) => JSX.Element;
   link: string;
 }
 interface ILevelSection {
-  sectionName: string;
+  sectionHeader: JSX.Element;
   levels: ILevel[];
 }
 
-const pointKlassModalContent = (dim: number) =>
-  "Versuche die " +
-  dim +
-  " dimensionalen Punkte zu klassifizieren. Klicke mit der Maus und versuche die beiden Punktwolken (von Klasse 1 und von Klasse 2) voneinander zu separieren. Sind die zwei Klassen separierbar?";
-const robotKlassModalContent = (dim: number) =>
-  "Der Roboter wird versuchen die " +
-  dim +
-  " dimensionalen Punkte zu klassifizieren. Klicke mit deiner Maus um einen neuen Punkt zu Klasse 1 hinzuzufügen. Drücke zusätzlich Shift um einen neuen Punkt zu Klasse 2 hinzuzufügen";
-
-export const generateButtonFromLevel = (level: ILevel) => (
-  <Link to={"/level/" + level.link} key={level.link + "-link"}>
-    <Grid.Col span={4}>
-      <Button>{level.initModalTitle}</Button>
-    </Grid.Col>
-  </Link>
-);
-export const generateRouteFromLevel = (level: ILevel) => (
-  <Route
-    path={level.link}
-    element={level.getLevelComponent(
-      level.initModalTitle,
-      level.initModalContent
-    )}
-    key={level.link + "-route"}
-  ></Route>
-);
 //    RANDOM DATA
 //Robot classsification levels
+const robotKlassModalContent = (dim: number) => (
+  <>
+    <Text>
+      Der Roboter wird versuchen die {dim} dimensionalen Punkte zu
+      klassifizieren. Du kannst bei ihm beobachten, wie er den Klassifikator
+      bestimmt.
+    </Text>
+    <Text weight={700} align="center">
+      <Kbd>Klicke</Kbd> mit deiner Maus um einen neuen Punkt zu Klasse 1
+      hinzuzufügen. Drücke zusätzlich <Kbd>Shift</Kbd> um einen neuen Punkt zu
+      Klasse 2 hinzuzufügen.
+    </Text>
+  </>
+);
 const levelRoboter: ILevel[] = [
   {
     initModalTitle: "Roboter-Klassifizieren in 2D",
@@ -79,11 +67,42 @@ const levelRoboter: ILevel[] = [
     link: "robot-klassifizieren-3D",
   },
 ];
+//User and real data helpers
+//returns the basic Task Description ("Use the mouse to classify in 2D/1D"...) for the bottom of the initModal Content for dimension d
+const getTaskRealDataAndUserInitModalContent = (d: number) =>
+  d === 1 ? (
+    <Text weight={700} align="center">
+      Klicke mit der Maus um einen Klassifikator zu bestimmen
+    </Text>
+  ) : (
+    <Text weight={700} align="center">
+      Klicke und ziehe mit der Maus um einen Klassifikator zu zeichnen
+    </Text>
+  );
+const getRealDataAndUserInitModalContent = (
+  element: JSX.Element,
+  d: number
+) => (
+  <>
+    {element}
+    {getTaskRealDataAndUserInitModalContent(d)}
+  </>
+);
 //User classification levels
+//args: dim = dimension of points, d: dimension of plot
+const userClassModalContent = (dim: number, d: number) =>
+  getRealDataAndUserInitModalContent(
+    <Text>
+      Versuche die {d} dimensionalen Punktewolken der beiden Klassen zu
+      separieren. Dein Score erhöht sich jedes mal, wenn du die Daten perfekt
+      separierst!
+    </Text>,
+    d
+  );
 const levelUser: ILevel[] = [
   {
     initModalTitle: "Punkt-Klassifizieren in 2D",
-    initModalContent: pointKlassModalContent(2),
+    initModalContent: userClassModalContent(2, 1),
     getLevelComponent: (title, content) => (
       <LevelUserClassGame1D
         dimensions={2}
@@ -95,7 +114,7 @@ const levelUser: ILevel[] = [
   },
   {
     initModalTitle: "Punkt-Klassifizieren in 3D",
-    initModalContent: pointKlassModalContent(3),
+    initModalContent: userClassModalContent(3, 1),
     getLevelComponent: (title, content) => (
       <LevelUserClassGame1D
         initModalTitle={title}
@@ -107,8 +126,7 @@ const levelUser: ILevel[] = [
   },
   {
     initModalTitle: "Linien-Klassifizieren in 2D",
-    initModalContent:
-      "Versuche die zwei dimensionalen Punkte zu klassifizieren. Klicke und ziehe mit der Maus und versuche die beiden Punktwolken (von Klasse 1 und von Klasse 2) voneinander zu separieren. Sind die zwei Klassen linear separierbar?",
+    initModalContent: userClassModalContent(2, 2),
     getLevelComponent: (title, content) => (
       <LevelUserClassGame2D
         initModalTitle={title}
@@ -120,8 +138,7 @@ const levelUser: ILevel[] = [
   },
   {
     initModalTitle: "Linien-Klassifizieren in 3D",
-    initModalContent:
-      "Versuche die drei dimensionalen Punkte zu klassifizieren. Klicke und ziehe mit der Maus und versuche die beiden Punktwolken (von Klasse 1 und von Klasse 2) voneinander zu separieren. Sind die zwei Klassen linear separierbar?",
+    initModalContent: userClassModalContent(3, 2),
     getLevelComponent: (title, content) => (
       <LevelUserClassGame2D
         initModalTitle={title}
@@ -136,12 +153,19 @@ const levelUser: ILevel[] = [
 const getRealeDatensätzeInitModalTitle = (s: string, d: number) =>
   s + "-Daten in " + d + "D";
 //Weizen levels
-const weizenInitModalContent =
-  "Von zwei Weizenarten wurden von je 70 Körnern die Breite, Länge und Fläche vermessen. Finde die Messung mit der sich die beiden Klassen perfekt linear separieren lassen.";
+const weizenInitModalContent = (d: number) =>
+  getRealDataAndUserInitModalContent(
+    <Text>
+      Von zwei Weizenarten wurden von je 70 Körnern die Breite, Länge und Fläche
+      vermessen. Finde das Attribut mit der sich die beiden Klassen perfekt
+      linear separieren lassen.
+    </Text>,
+    d
+  );
 const weizenLevels: ILevel[] = [
   {
     initModalTitle: getRealeDatensätzeInitModalTitle("Weizen", 1),
-    initModalContent: weizenInitModalContent,
+    initModalContent: weizenInitModalContent(1),
     getLevelComponent: (title, content) => (
       <RealDataLevel1D
         initModalTitle={title}
@@ -153,7 +177,7 @@ const weizenLevels: ILevel[] = [
   },
   {
     initModalTitle: getRealeDatensätzeInitModalTitle("Weizen", 2),
-    initModalContent: weizenInitModalContent,
+    initModalContent: weizenInitModalContent(2),
     getLevelComponent: (title, content) => (
       <RealDataLevel2D
         initModalTitle={title}
@@ -165,12 +189,26 @@ const weizenLevels: ILevel[] = [
   },
 ];
 //Schierling levels
-const schierlingInitModalContent =
-  "Der griechische Philosoph Sokrates wurde im Athen des Jahres 399 v. Chr. zum Tode verurteilt und mit dem Schierlingsbecher hingerichtet. Mit diesem Becher wurde dem Verurteilten ein Getränk verabreicht, das aus einer Pflanze, dem giftigen Gefleckten Schierling, hergestellt wurde. Der Schierling ist für Laien leicht zu verwechseln mit anderen häufig vorkommenden Pflanzen, etwa der Hundspetersilie, die ebenfalls giftig ist, oder dem Wiesen­Kerbel, der ungiftig ist und zum Würzen von Salaten und Wildkräutersuppen verwendet wird. Alle drei Pflanzen haben ähnliche Blätter, blühen in weissen Dolden und bilden längliche Früchte.";
+const schierlingInitModalContent = (d: number) =>
+  getRealDataAndUserInitModalContent(
+    <Text>
+      Der griechische Philosoph Sokrates wurde im Athen des Jahres 399 v. Chr.
+      zum Tode verurteilt und mit dem Schierlingsbecher hingerichtet. Mit diesem
+      Becher wurde dem Verurteilten ein Getränk verabreicht, das aus einer
+      Pflanze, dem giftigen Gefleckten Schierling, hergestellt wurde. Der
+      Schierling ist für Laien leicht zu verwechseln mit anderen häufig
+      vorkommenden Pflanzen, etwa der Hundspetersilie, die ebenfalls giftig ist,
+      oder dem Wiesen­Kerbel, der ungiftig ist und zum Würzen von Salaten und
+      Wildkräutersuppen verwendet wird. Alle drei Pflanzen haben ähnliche
+      Blätter, blühen in weissen Dolden und bilden längliche Früchte. Versuche
+      die 3 Pflanzenarten zu klassifizieren.
+    </Text>,
+    d
+  );
 const schierlingLevels: ILevel[] = [
   {
     initModalTitle: getRealeDatensätzeInitModalTitle("Schierling", 1),
-    initModalContent: schierlingInitModalContent,
+    initModalContent: schierlingInitModalContent(1),
     getLevelComponent: (title, content) => (
       <RealDataLevel1D
         initModalTitle={title}
@@ -182,7 +220,7 @@ const schierlingLevels: ILevel[] = [
   },
   {
     initModalTitle: getRealeDatensätzeInitModalTitle("Schierling", 2),
-    initModalContent: schierlingInitModalContent,
+    initModalContent: schierlingInitModalContent(2),
     getLevelComponent: (title, content) => (
       <RealDataLevel2D
         initModalTitle={title}
@@ -194,11 +232,22 @@ const schierlingLevels: ILevel[] = [
   },
 ];
 //Weinsorten levels
-const weinsortenInitModalContent = "";
+const weinsortenInitModalContent = (d: number) =>
+  getRealDataAndUserInitModalContent(
+    <Text>
+      Die folgenden Datenpunkte sind von Weinen aus zwei verschiedenen
+      Anbaugebieten. Es werden die drei Attribute Ascheanteil, Phenolgehalt und
+      Farbintensität betrachtet. Bezüglich einer Kombination von zwei Attributen
+      lassen sich die Sorten mittels einer Geraden linear separieren, bezüglich
+      der anderen beiden Kombinationen nicht. Finde heraus, welche beiden
+      Attribute eine lineare Trennung ermöglichen.
+    </Text>,
+    d
+  );
 const weinsortenLevels: ILevel[] = [
   {
     initModalTitle: getRealeDatensätzeInitModalTitle("Weinsorten", 1),
-    initModalContent: weinsortenInitModalContent,
+    initModalContent: weinsortenInitModalContent(1),
     getLevelComponent: (title, content) => (
       <RealDataLevel1D
         initModalTitle={title}
@@ -210,7 +259,7 @@ const weinsortenLevels: ILevel[] = [
   },
   {
     initModalTitle: getRealeDatensätzeInitModalTitle("Weinsorten", 2),
-    initModalContent: weinsortenInitModalContent,
+    initModalContent: weinsortenInitModalContent(2),
     getLevelComponent: (title, content) => (
       <RealDataLevel2D
         initModalTitle={title}
@@ -222,11 +271,30 @@ const weinsortenLevels: ILevel[] = [
   },
 ];
 //Iris levels
-const irisInitModalContent = "";
+const irisInitModalContent = (d: number) =>
+  getRealDataAndUserInitModalContent(
+    <>
+      <Text>
+        {" "}
+        Die Schwertlilie (Iris) ist eine Pflanzengattung, deren Arten wegen
+        ihrer schönen und auffälligen Blüten als Zierpflanzen geschätzt werden.
+        Die Datensätze der Schwertlilie werden in Kursen für Maschinelles Lernen
+        sehr gerne als Beispiel-Datensätze verwendet. Im folgenden Level
+        betrachten wir so einen Datensatz.
+      </Text>
+      <Text>
+        Es sind die Stängel-, Blüttenblätter- und Spathalängen (in cm) von drei
+        Schwertlilien-Arten (I. barnumiae, I. gatesii und I. grant-duffii)
+        aufgelistet. Als Spatha bezeichnet man in der Botanik eine besondere
+        Form von Hochblättern. Wir wollen die Daten separieren.
+      </Text>
+    </>,
+    d
+  );
 const irisLevels: ILevel[] = [
   {
     initModalTitle: getRealeDatensätzeInitModalTitle("Iris", 1),
-    initModalContent: irisInitModalContent,
+    initModalContent: irisInitModalContent(1),
     getLevelComponent: (title, content) => (
       <RealDataLevel1D
         initModalTitle={title}
@@ -238,7 +306,7 @@ const irisLevels: ILevel[] = [
   },
   {
     initModalTitle: getRealeDatensätzeInitModalTitle("Iris", 2),
-    initModalContent: irisInitModalContent,
+    initModalContent: irisInitModalContent(2),
     getLevelComponent: (title, content) => (
       <RealDataLevel2D
         initModalTitle={title}
@@ -250,11 +318,22 @@ const irisLevels: ILevel[] = [
   },
 ];
 //Gegenstaende levels
-const gstInitModalContent = "";
+const gstInitModalContent = (d: number) =>
+  getRealDataAndUserInitModalContent(
+    <>
+      <Text>
+        In dem folgenden Level sind Volumen und Masse von verschiedenen
+        Gegenständen angegeben. Die Klasse, der sie angehören, bestimmt, ob der
+        Gegenstand im Wasser schwimmt oder sinkt.
+      </Text>
+      <Text>Wir wollen die Daten wieder separieren.</Text>
+    </>,
+    d
+  );
 const gstLevels: ILevel[] = [
   {
     initModalTitle: getRealeDatensätzeInitModalTitle("Gegenstände", 1),
-    initModalContent: gstInitModalContent,
+    initModalContent: gstInitModalContent(1),
     getLevelComponent: (title, content) => (
       <RealDataLevel1D
         initModalTitle={title}
@@ -266,7 +345,7 @@ const gstLevels: ILevel[] = [
   },
   {
     initModalTitle: getRealeDatensätzeInitModalTitle("Gegenstände", 2),
-    initModalContent: gstInitModalContent,
+    initModalContent: gstInitModalContent(2),
     getLevelComponent: (title, content) => (
       <RealDataLevel2D
         initModalTitle={title}
@@ -278,11 +357,31 @@ const gstLevels: ILevel[] = [
   },
 ];
 //Ki67 levels
-const ki67InitModalContent = "";
+const ki67InitModalContent = (d: number) =>
+  getRealDataAndUserInitModalContent(
+    <>
+      <Text>
+        Bei der Bestimmung von Brustkrebs werden Proliferationsmarker (= Marker
+        für Zellteilung) in die Evaluierung miteinbezogen. Ein
+        Proliferationsmarker für Brustkrebs ist der Marker Ki-67, ein Protein,
+        das sich in teilenden Zellen an der Oberfläche der Chromosomen anlagert
+        und somit gut zu detektieren ist.
+      </Text>
+      <Text>
+        Das Gewebe, welches man bei PatientInnen entnimmt, wird untersucht und
+        der Prozentanteil an Zellen, die Ki-67 aufweisen, bestimmt. In der
+        folgenden Tabelle wurden die Ki-67 Prozentwerte von 15 PatientInnen
+        ermittelt. Die zugehörige Klasse gibt an, ob der Datenpunkt eher negativ
+        oder eher positiv in die Prognose einfliesst.
+      </Text>
+      <Text>Wir wollen die Daten wieder separieren.</Text>
+    </>,
+    d
+  );
 const ki67Levels: ILevel[] = [
   {
     initModalTitle: getRealeDatensätzeInitModalTitle("Ki67", 1),
-    initModalContent: ki67InitModalContent,
+    initModalContent: ki67InitModalContent(1),
     getLevelComponent: (title, content) => (
       <RealDataLevel1D
         initModalTitle={title}
@@ -294,40 +393,55 @@ const ki67Levels: ILevel[] = [
   },
 ];
 //    LEVEL SECTIONS
-const getRealeDatensätzeSectionName = (s: string) =>
-  "Reale Datensätze: Klassifiziere den " + s + "-Datensatz!";
+const getRealeDatensätzeSectionName = (s: string) => (
+  <div key={s}>
+    <Title order={4} style={{color:"#1967ab"}}>
+      Reale Datensätze:
+    </Title>
+    <Title order={5}>Klassifiziere den {s}-Datensatz!</Title>
+  </div>
+);
 const levelSections: ILevelSection[] = [
   {
-    sectionName:
-      "Lass den Roboter (die künstliche Intelligenz) deine Daten klassifizieren!",
+    sectionHeader: (
+      <Title order={4} key="sectionHeader-robotClass">
+        Lass den Roboter (die künstliche Intelligenz) deine Daten
+        klassifizieren!
+      </Title>
+    ),
     levels: levelRoboter,
   },
   {
-    sectionName: "Klassifiziere selber vom Robotor generierte Daten!",
+    sectionHeader: (
+      <Title order={4} key="sectionHeader-userClass">
+        Klassifiziere Daten, die zufällig generiert werden!
+      </Title>
+    ),
     levels: levelUser,
   },
   {
-    sectionName: getRealeDatensätzeSectionName("Schierling"),
+    sectionHeader: getRealeDatensätzeSectionName("Schierling"),
     levels: schierlingLevels,
   },
   {
-    sectionName: getRealeDatensätzeSectionName("Weizen"),
+    sectionHeader: getRealeDatensätzeSectionName("Weizen"),
     levels: weizenLevels,
   },
   {
-    sectionName: getRealeDatensätzeSectionName("Weinsorten"),
+    sectionHeader: getRealeDatensätzeSectionName("Weinsorten"),
     levels: weinsortenLevels,
   },
   {
-    sectionName: getRealeDatensätzeSectionName("Iris"),
+    sectionHeader: getRealeDatensätzeSectionName("Iris"),
     levels: irisLevels,
   },
   {
-    sectionName: getRealeDatensätzeSectionName("Gegenstände"),
+    sectionHeader: getRealeDatensätzeSectionName("Gegenstände"),
     levels: gstLevels,
   },
-  { sectionName: getRealeDatensätzeSectionName("Ki67"), levels: ki67Levels },
+  { sectionHeader: getRealeDatensätzeSectionName("Ki67"), levels: ki67Levels },
 ];
+
 //Getter functions
 export const getAllLevelSections = (): ILevelSection[] => {
   return levelSections;
@@ -341,3 +455,22 @@ export const getAllLevelRoutes = (): JSX.Element[] => {
     )
   );
 };
+
+//Helper methods
+export const generateButtonFromLevel = (level: ILevel) => (
+  <Link to={"/level/" + level.link} key={level.link + "-link"}>
+    <Grid.Col span={4}>
+      <Button>{level.initModalTitle}</Button>
+    </Grid.Col>
+  </Link>
+);
+export const generateRouteFromLevel = (level: ILevel) => (
+  <Route
+    path={level.link}
+    element={level.getLevelComponent(
+      level.initModalTitle,
+      level.initModalContent
+    )}
+    key={level.link + "-route"}
+  ></Route>
+);

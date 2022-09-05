@@ -287,6 +287,8 @@ const MyPlot = forwardRef(
         />
       );
     };
+    //x-Axis and y-Axis components
+    //x points
     const xAxisPoints = [
       Math.round(xmin),
       Math.round(xmin + (xmax - xmin) / 2),
@@ -295,6 +297,18 @@ const MyPlot = forwardRef(
     const xAxisPointsScaled = xAxisPoints.map((x) => scaleX(x)); //scale points before putting them in svg
     const yValueXAxis = oneDimensional ? yOneDimension : ymin - 0.5; //y value where the x axis is displayed
     const yValueXAxisScaled = yValueXAxis; //no need to scale ymin
+    //y points
+    const yAxisPoints = oneDimensional //only render y axis if two dimensional
+      ? []
+      : [
+          Math.round(ymin),
+          Math.round(ymin + (ymax - ymin) / 2),
+          Math.round(ymax),
+        ];
+    const yAxisPointsScaled = yAxisPoints.map((y) => scaleY(y)); //scale points before putting them in svg
+    const xValueYAxis = xmin - 0.5;
+    const xValueYAxisScaled = xValueYAxis; //no need to scale xmin
+    //xAxis components
     const xTicks = xAxisPointsScaled.map((x, i) =>
       tickLine(
         x,
@@ -305,7 +319,7 @@ const MyPlot = forwardRef(
       )
     );
     const xAxis = axisLine(
-      xAxisPointsScaled[0] - 1,
+      xValueYAxisScaled,
       yValueXAxisScaled,
       xAxisPointsScaled[xAxisPoints.length - 1] + 1,
       yValueXAxisScaled,
@@ -322,26 +336,21 @@ const MyPlot = forwardRef(
         {x}
       </text>
     ));
-    const yAxisPoints = oneDimensional //only render y axis if two dimensional
-      ? []
-      : [
-          Math.round(ymin),
-          Math.round(ymin + (ymax - ymin) / 2),
-          Math.round(ymax),
-        ];
-    const yAxisPointsScaled = yAxisPoints.map((y) => scaleY(y)); //scale points before putting them in svg
-    const xValueYAxis = xmin - 0.5;
-    const xValueYAxisScaled = xValueYAxis; //no need to scale xmin
+    //yAxis components
     const yTicks = oneDimensional ? ( //only render y ticks if two dimensional
       <div></div>
     ) : (
       yAxisPointsScaled.map((y, i) =>
-        tickLine(
-          xValueYAxisScaled,
-          y,
-          xValueYAxisScaled - 0.2,
-          y,
-          "yTicks-" + i + " " + y
+        y < yValueXAxis ? ( //only show label if not below plot
+          <div key={y}></div>
+        ) : (
+          tickLine(
+            xValueYAxisScaled,
+            y,
+            xValueYAxisScaled - 0.2,
+            y,
+            "yTicks-" + i + " " + y
+          )
         )
       )
     );
@@ -357,25 +366,30 @@ const MyPlot = forwardRef(
       )
     );
     const yLabels = oneDimensional ? ( //only render y labels if two dimensional
-      <div></div>
+      <></>
     ) : (
       yAxisPoints.map(
         (
           y,
           i //take label from yAxisPoints but take point from scaled version
-        ) => (
-          <text
-            key={"yLabel-" + i + "-" + y}
-            x={xValueYAxisScaled - 0.5}
-            y={-yAxisPointsScaled[i] + 0.1}
-            fill="black"
-            fontSize="0.3"
-          >
-            {y}
-          </text>
-        )
+        ) => {
+          return yAxisPointsScaled[i] < yValueXAxis ? ( //only show label if not below plot
+            <div key={yAxisPointsScaled[i]}></div>
+          ) : (
+            <text
+              key={"yLabel-" + i + "-" + y}
+              x={xValueYAxisScaled - 0.7}
+              y={-yAxisPointsScaled[i] + 0.1}
+              fill="black"
+              fontSize="0.3"
+            >
+              {y}
+            </text>
+          );
+        }
       )
     );
+    //others
     const svgPadding = 2; //padding arround the svg elements
     useKeyPress();
     return (

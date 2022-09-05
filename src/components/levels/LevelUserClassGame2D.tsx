@@ -16,7 +16,7 @@ export default ({
   dimensions,
 }: {
   initModalTitle: string;
-  initModalContent: string;
+  initModalContent: JSX.Element;
   dimensions: number;
 }): JSX.Element => {
   const dataset = dimensions == 2 ? dummy2C2D : dummy2C3D;

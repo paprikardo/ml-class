@@ -10,7 +10,7 @@ export default ({
 }: {
   dimensions: number; //dimensions of the points displayed in this 1D game level
   initModalTitle: string;
-  initModalContent: string;
+  initModalContent: JSX.Element;
 }): JSX.Element => {
   const dataset = dimensions == 2 ? dummy2C2D1A : dummy2C3D1A;
   const [currentData, setCurrentData,elements,onNextGameRound] = useLevelUserClassGame(dimensions, dataset);

@@ -16,9 +16,9 @@ function Layout2DRobotLine({
 }): JSX.Element {
   const robotMessage = (
     <>
-      Benutze <Kbd>Maus-L</Kbd> oder <Kbd>shift</Kbd> + <Kbd>Maus-L</Kbd> um
+      Klicke mit oder ohne <Kbd>Shift</Kbd> gedrückt zu halten, um
       neue Punkte hinzuzufügen. Ich werde versuchen die Punkte zu separieren.
-      Schaffst du es, dass ich sie nicht mehr separieren kann?";
+      Schaffst du es, dass ich sie nicht mehr separieren kann?
     </>
   );
   return (
