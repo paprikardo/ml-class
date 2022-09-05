@@ -3,10 +3,15 @@ import { IData, IDataPoint } from "../../Data";
 import RobotWrapper from "../RobotWrapper";
 import NewPointTable from "../NewPointTable";
 import MyPlot from "../EssentialComponents/MyPlot";
-import {useState } from "react";
+import { useState } from "react";
 import { setCurrentDataType } from "../../Others/currentDataHelperMethods";
 import GridLayout from "../EssentialComponents/GridLayout";
 import { useGameLogic } from "./useGameLogic";
+import { getMinMax, getScale } from "../../Others/myPlotHelpers";
+import {
+  selectDimSelectClassData,
+  selectDimSelectClassDataScaled,
+} from "../../Others/selectData";
 export type IUserLineState = {
   x1: number;
   x2: number;
@@ -20,7 +25,7 @@ function Layout2DUserClass({
 }: {
   currentData: IData;
   setCurrentData: setCurrentDataType;
-  onNextGameRound: (perfectlySeperatedByUser:boolean) => void;
+  onNextGameRound: (perfectlySeperatedByUser: boolean) => void;
 }): JSX.Element {
   const [gameState, setGameState] = useState("init");
   const [userLineState, setUserLineState]: [
@@ -53,15 +58,16 @@ function Layout2DUserClass({
     );
   const enableUserDraw = true;
 
-      
-  //TODO
   const onMouseUpPlotHandler = () => {
     const minLengthForUserline = 3;
     if (enableUserDraw) {
       //if line is long enough to not be a mistake change state
+      const [scaleX, scaleXInv, scaleY, scaleYInv] = getScale(
+        ...getMinMax(selectDimSelectClassData(currentData))
+      );
       if (
-        Math.abs(userLineState.x1 - userLineState.x2) +
-          Math.abs(userLineState.y1 - userLineState.y2) >
+        Math.abs(scaleX(userLineState.x1) - scaleX(userLineState.x2)) +
+          Math.abs(scaleY(userLineState.y1) - scaleY(userLineState.y2)) >
         2
       ) {
         setGameState("line drawn");
