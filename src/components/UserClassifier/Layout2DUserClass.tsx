@@ -1,7 +1,6 @@
-import { IData, IDataPoint } from "../../Others/Data";
+import { IData } from "../../Others/Data";
 
 import RobotWrapper from "../RobotWrapper";
-import NewPointTable from "../NewPointTable";
 import MyPlot from "../EssentialComponents/MyPlot";
 import { useState } from "react";
 import { setCurrentDataType } from "../../Others/currentDataHelperMethods";
@@ -9,8 +8,7 @@ import GridLayout from "../EssentialComponents/GridLayout";
 import { useGameLogic } from "./useGameLogic";
 import { getMinMax, getScale } from "../../Others/myPlotHelpers";
 import {
-  selectDimSelectClassData,
-  selectDimSelectClassDataScaled,
+  selectDimSelectClassData
 } from "../../Others/selectData";
 export type IUserLineState = {
   x1: number;

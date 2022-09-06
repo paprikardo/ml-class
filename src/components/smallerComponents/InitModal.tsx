@@ -1,5 +1,5 @@
 import { Modal, Text } from "@mantine/core";
-import { useState, useEffect, Children } from "react";
+import { useState, useEffect } from "react";
 export default ({
   title,
   children,

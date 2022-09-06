@@ -1,6 +1,4 @@
-import { Container, Grid } from "@mantine/core";
-import { ReactComponent as RobotIcon } from "../RobotIcon.svg";
-import SpeechBubble from "../SpeechBubble";
+import { ReactComponent as RobotIcon } from "../svg/RobotIcon.svg";
 import "./RobotWrapper.css";
 const RobotWrapper = ({
   message,

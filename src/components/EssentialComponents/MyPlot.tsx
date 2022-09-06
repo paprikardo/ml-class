@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useState } from "react";
-import { IData, IDataPoint, IDataClass, colors } from "../../Others/Data";
+import { IData, IDataPoint, colors } from "../../Others/Data";
 import "../../App.css";
-import { Card, SimpleGrid, Stack, Title } from "@mantine/core";
+import { Card, SimpleGrid, Title } from "@mantine/core";
 import { getDiffLineGenerator, getDiffPoint } from "../../Others/classifier";
 import {
   selectDimSelectClassData,

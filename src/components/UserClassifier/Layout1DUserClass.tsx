@@ -2,14 +2,11 @@ import { IData, IDataPoint } from "../../Others/Data";
 
 import RobotWrapper from "../RobotWrapper";
 import MyPlot from "../EssentialComponents/MyPlot";
-import { useEffect, useRef, useState } from "react";
-import { rand_0_10 } from "../../Others/Random";
+import { useState } from "react";
 import {
   setCurrentDataType,
-  setDataSinglePoint,
 } from "../../Others/currentDataHelperMethods";
 import GridLayout from "../EssentialComponents/GridLayout";
-import { computePercentAndWrongPoints1D } from "../../Others/computeScore";
 import { useGameLogic } from "./useGameLogic";
 const Layout1DUserClass = ({
   currentData,
