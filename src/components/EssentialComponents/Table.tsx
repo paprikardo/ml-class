@@ -1,4 +1,4 @@
-import { IDataPoint } from "../../Data";
+import { IDataPoint } from "../../Others/Data";
 import "../../App.css";
 import { Card, Text } from "@mantine/core";
 const Table = ({

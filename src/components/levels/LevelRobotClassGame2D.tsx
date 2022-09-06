@@ -1,7 +1,7 @@
 import { Button, Stack, Text } from "@mantine/core";
 import InitModal from "../smallerComponents/InitModal";
 import Layout2DRobotLine from "../Layout2DRobotLine";
-import { dummy2C2D, dummy2C3D } from "../../Data";
+import { dummy2C2D, dummy2C3D } from "../../Others/Data";
 import { useEffect, useState } from "react";
 import { newMeans } from "../../Others/newMeans";
 import { setDataSinglePoint } from "../../Others/currentDataHelperMethods";

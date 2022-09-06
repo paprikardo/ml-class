@@ -1,4 +1,4 @@
-import { IData, IDataPoint } from "../Data";
+import { IData, IDataPoint } from "./Data";
 import { randomPoint, rand_0_10_point } from "./Random";
 
 export type setCurrentDataType = React.Dispatch<React.SetStateAction<IData>>;

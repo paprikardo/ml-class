@@ -1,7 +1,7 @@
 import { Button, Stack, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { IData } from "../../Data";
+import { IData } from "../../Others/Data";
 import {
   addRandomPoint,
   setCurrentDataType,

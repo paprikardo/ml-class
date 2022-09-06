@@ -1,5 +1,5 @@
 import hull from "hull.js";
-import { IData, IDataPoint } from "../Data";
+import { IData, IDataPoint } from "./Data";
 import { selectDimSelectClassData } from "./selectData";
 //This class implements the used classifiers
 

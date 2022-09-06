@@ -1,4 +1,4 @@
-import { IDataPoint } from "../Data";
+import { IDataPoint } from "../Others/Data";
 
 interface NewPointTableProps {
   currentData: IDataPoint[];

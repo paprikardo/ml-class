@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { IUserLineState } from "./Layout2DUserClass";
-import { IData, IDataPoint } from "../../Data";
+import { IData, IDataPoint } from "../../Others/Data";
 import {
   computePercentAndWrongPoints1D,
   computePercentAndWrongPoints2D,

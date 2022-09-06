@@ -1,6 +1,6 @@
 import { Button, Stack, Text } from "@mantine/core";
 import { useState } from "react";
-import { IData } from "../../Data";
+import { IData } from "../../Others/Data";
 import { setCurrentDataType } from "../../Others/currentDataHelperMethods";
 import { isSeperable } from "../../Others/seperable";
 import BackToLevelSelectionButton from "../smallerComponents/BackToLevelSelectionButton";

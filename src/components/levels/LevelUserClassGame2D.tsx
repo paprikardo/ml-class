@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Layout2DUserClass from "../UserClassifier/Layout2DUserClass";
-import { dummy2C3D, dummy2C2D, IData, IDataPoint } from "../../Data";
+import { dummy2C3D, dummy2C2D, IData, IDataPoint } from "../../Others/Data";
 import InitModal from "../smallerComponents/InitModal";
 import { rand_0_10 } from "../../Others/Random";
 import { newMeans } from "../../Others/newMeans";

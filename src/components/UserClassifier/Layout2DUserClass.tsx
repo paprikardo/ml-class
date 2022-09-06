@@ -1,4 +1,4 @@
-import { IData, IDataPoint } from "../../Data";
+import { IData, IDataPoint } from "../../Others/Data";
 
 import RobotWrapper from "../RobotWrapper";
 import NewPointTable from "../NewPointTable";

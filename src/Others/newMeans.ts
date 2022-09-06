@@ -1,4 +1,4 @@
-import { IDataPoint } from "../Data";
+import { IDataPoint } from "./Data";
 import { rand_0_10 } from "./Random";
 
 //computes new means for each class that have a minimum MSE of minMeanDistance

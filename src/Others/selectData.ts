@@ -1,4 +1,4 @@
-import { IData, IDataClass, IDataPoint } from "../Data";
+import { IData, IDataClass, IDataPoint } from "./Data";
 
 //return selected data of all of the classes (selected attributes of the points from all classes)
 const selectDimData = (currentData: IData): IDataClass[] => {

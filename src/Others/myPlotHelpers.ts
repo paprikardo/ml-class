@@ -1,4 +1,4 @@
-import { IDataPoint } from "../Data";
+import { IDataPoint } from "./Data";
 
 const getAllPointsX = (
   selectedClassPoints: [IDataPoint[], IDataPoint[]] //extract all x values

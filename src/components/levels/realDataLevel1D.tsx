@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Layout1DUserClass from "../UserClassifier/Layout1DUserClass";
 import InitModal from "../smallerComponents/InitModal";
-import { IData } from "../../Data";
+import { IData } from "../../Others/Data";
 import { useRealDataLevel } from "./useRealDataLevel";
 
 export default ({

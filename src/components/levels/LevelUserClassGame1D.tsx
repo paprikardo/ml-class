@@ -1,5 +1,5 @@
 import Layout1DUserClass from "../UserClassifier/Layout1DUserClass";
-import { dummy2C3D1A, dummy2C2D1A } from "../../Data";
+import { dummy2C3D1A, dummy2C2D1A } from "../../Others/Data";
 import InitModal from "../smallerComponents/InitModal";
 import { useLevelUserClassGame } from "./useLevelUserClassGame";
 

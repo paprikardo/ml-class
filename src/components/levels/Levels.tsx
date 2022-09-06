@@ -11,7 +11,7 @@ import {
   schierlingDataset,
   weinsortenDataset,
   weizen2Dataset,
-} from "../../Data";
+} from "../../Others/Data";
 import RealDataLevel2D from "./realDataLevel2D";
 //Interfaces
 interface ILevel {
