@@ -9,7 +9,7 @@ const RobotWrapper = ({
 }) => {
   return (
     <div
-      className={notSticky ? "RobotWrapper" : "RobotWrapper StickyBottomLeft"}
+      className={notSticky ? "RobotWrapper" : "RobotWrapper StickyBottomLeft StaticOverlay"}
     >
       <RobotIcon className="RobotIcon" />
       <div className="RobotMessage bubble">{message}</div>
