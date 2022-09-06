@@ -1,9 +1,9 @@
 .RobotMessage {
-  margin-left: 20px;
+  height: 100%;
+  margin-left: 10vh;
   top: 50%;
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
-  max-width: 70%;
+  /* -ms-transform: translateY(-50%);
+  transform: translateY(-50%); */
 }
 .bubble {
   position: relative;
@@ -11,7 +11,6 @@
   padding: 20px;
   color: #222;
   border-radius: 5px;
-  margin-left: 20px;
 }
 .bubble:after {
   content: "";
@@ -19,7 +18,7 @@
   position: absolute;
 
   left: -15px;
-  top: 50%;
+  top: 60%;
 
   width: 0;
   height: 0;
@@ -29,28 +28,24 @@
 }
 
 .RobotIcon {
-  max-width: 30%;
-}
-
-.RobotMessage,
-.RobotIcon {
+  position: relative;
+  margin-top:auto;
   float: left;
-}
-.RobotWrapper,
-.RobotIcon {
   height: 10vh;
+  width: 10vh;
 }
 .RobotWrapper {
+  padding: 10px 10px;
   padding-top: 10px;
   padding-bottom: 10px;
-}
-.StickyBottomLeft {
+  max-width: 50vw;
   border-radius: 5px;
   box-shadow: 0 15px 25px rgba(129, 124, 124, 0.2);
   background-color: rgba(134, 134, 134, 0.2);
   backdrop-filter: blur(2px);
+}
+.StickyBottomLeft {
   position: fixed;
   left: 2vw;
   bottom: 5vh;
-  max-width: 50vw;
 }
