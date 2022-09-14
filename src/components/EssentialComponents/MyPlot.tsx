@@ -414,10 +414,10 @@ const MyPlot = ({
                 }
                 style={
                   Array.isArray(currentData.selected_attrib) //if 2D
-                    ? currentData.selected_attrib[0] == index
+                    ? currentData.selected_attrib[0] === index
                       ? { backgroundColor: "#8db8cc" }
                       : {}
-                    : currentData.selected_attrib == index
+                    : currentData.selected_attrib === index
                     ? { backgroundColor: "#8db8cc" }
                     : {}
                 }
@@ -448,7 +448,7 @@ const MyPlot = ({
                   }
                   style={
                     Array.isArray(currentData.selected_attrib) //if 2D
-                      ? currentData.selected_attrib[1] == index
+                      ? currentData.selected_attrib[1] === index
                         ? { backgroundColor: "#8db8cc" }
                         : {}
                       : {}

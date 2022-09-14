@@ -1,5 +1,6 @@
 import { Center, Title } from "@mantine/core";
-export default ({
+
+const GameScore = ({
   gameScore,
   maxGameScore,
 }: {
@@ -12,3 +13,5 @@ export default ({
     </Title>
   </Center>
 );
+
+export default GameScore;

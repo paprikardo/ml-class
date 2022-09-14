@@ -1,5 +1,6 @@
 import { Modal } from "@mantine/core";
-export default ({
+
+const EndModal = ({
   opened,
   title,
   children,
@@ -22,3 +23,5 @@ export default ({
     </Modal>
   );
 };
+
+export default EndModal;

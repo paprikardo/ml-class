@@ -1,4 +1,4 @@
-import { IData, IDataPoint } from "../../../Others/Data";
+import { IData } from "../../../Others/Data";
 
 import RobotWrapper from "../../smallerComponents/RobotWrapper";
 import MyPlot from "../../EssentialComponents/MyPlot";

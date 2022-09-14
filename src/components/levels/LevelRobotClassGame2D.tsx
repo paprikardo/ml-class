@@ -6,7 +6,8 @@ import { useState } from "react";
 import EndModal from "../smallerComponents/EndModal";
 import BackToLevelSelectionButton from "../smallerComponents/BackToLevelSelectionButton";
 import { isSeperable } from "../../Others/seperable";
-export default ({
+
+const LevelRobotClassGame2D = ({
   initModalTitle,
   initModalContent,
   dimensions,
@@ -15,7 +16,7 @@ export default ({
   initModalContent: JSX.Element;
   dimensions: number;
 }) => {
-  const dataset = dimensions == 2 ? dummy2C2D : dummy2C3D;
+  const dataset = dimensions === 2 ? dummy2C2D : dummy2C3D;
   const [currentData, setCurrentData] = useState(dataset);
   const [gameAround, setGameAround] = useState(false); //if true the user wants to stay in the level and should not get the prompt all the time
   //EndModal
@@ -65,3 +66,5 @@ export default ({
     </div>
   );
 };
+
+export default LevelRobotClassGame2D;

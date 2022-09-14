@@ -1,9 +1,9 @@
 import Layout2DUserClass from "./layouts/Layout2DUserClass";
-import { dummy2C3D, dummy2C2D} from "../../Others/Data";
+import { dummy2C3D, dummy2C2D } from "../../Others/Data";
 import InitModal from "../smallerComponents/InitModal";
 import { useLevelUserClassGame } from "./useLevelUserClassGame";
 
-export default ({
+const LevelUserClassGame2D = ({
   initModalTitle,
   initModalContent,
   dimensions,
@@ -12,7 +12,7 @@ export default ({
   initModalContent: JSX.Element;
   dimensions: number;
 }): JSX.Element => {
-  const dataset = dimensions == 2 ? dummy2C2D : dummy2C3D;
+  const dataset = dimensions === 2 ? dummy2C2D : dummy2C3D;
   const [currentData, setCurrentData, elements, onNextGameRound] =
     useLevelUserClassGame(dimensions, dataset);
   return (
@@ -27,3 +27,5 @@ export default ({
     </div>
   );
 };
+
+export default LevelUserClassGame2D;

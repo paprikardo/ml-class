@@ -1,6 +1,7 @@
 import { Modal, Text } from "@mantine/core";
 import { useState, useEffect } from "react";
-export default ({
+
+const InitModal = ({
   title,
   children,
 }: {
@@ -17,9 +18,15 @@ export default ({
       centered
       opened={modalOpen}
       onClose={() => setModalOpen(false)}
-      title={<Text weight={700} align="center" underline>{title}</Text>}
+      title={
+        <Text weight={700} align="center" underline>
+          {title}
+        </Text>
+      }
     >
       {children}
     </Modal>
   );
 };
+
+export default InitModal;

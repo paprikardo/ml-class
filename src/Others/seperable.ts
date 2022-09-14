@@ -14,7 +14,7 @@ export const isSeperable = (currentData: IData) => {
   //check for all attributes
   const numAttrib = currentData.attrib.length;
   if (Array.isArray(currentData.selected_attrib)) {
-    //2D case: run svm numberTries times and check if it fails all the time
+    //2D case
     for (var i = 0; i < numAttrib; i++) {
       for (var j = i + 1; j < numAttrib; j++) {
         const mapToAttribs = (c: IDataPoint[]) => c.map((p) => [p[i], p[j]]);
@@ -24,8 +24,8 @@ export const isSeperable = (currentData: IData) => {
       }
     }
   } else {
-    for (var j = 0; j < numAttrib; j++) {
-      const mapToAttrib = (c: IDataPoint[]) => c.map((p) => [p[j]]);
+    for (var k = 0; k < numAttrib; k++) {
+      const mapToAttrib = (c: IDataPoint[]) => c.map((p) => [p[k]]);
       if (isSeperable1D(mapToAttrib(c1), mapToAttrib(c2))) {
         res = true;
       }
@@ -38,8 +38,9 @@ export const isSeperable = (currentData: IData) => {
 //NOTE: This function computes the wrong result with a very small probability due to the unreliable svm performance
 //Increase "numberTries" to be more accurate but less performant
 const isSeperable2D = (c1: IDataPoint[], c2: IDataPoint[]) => {
-  const numberTries = 3;
+  const numberTries = 5;
   var result = false;
+  //compute svm numberTries times and check if perfectly separated ones
   for (var i = 0; i < numberTries; i++) {
     if (svmSeperatedPerfect(c1, c2)) {
       result = true;

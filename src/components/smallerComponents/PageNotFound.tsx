@@ -1,5 +1,7 @@
 import { Title } from "@mantine/core";
 
-export default () => {
+const PageNotFound = () => {
   return <Title order={3}>Oops! This Page does not exist.</Title>;
 };
+
+export default PageNotFound

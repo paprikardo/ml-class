@@ -7,9 +7,7 @@ import { setCurrentDataType } from "../../../Others/currentDataHelperMethods";
 import GridLayout from "../../EssentialComponents/GridLayout";
 import { useGameLogic } from "../UserClassifierLogic/useGameLogic";
 import { getMinMax, getScale } from "../../../Others/myPlotHelpers";
-import {
-  selectDimSelectClassData
-} from "../../../Others/selectData";
+import { selectDimSelectClassData } from "../../../Others/selectData";
 export type IUserLineState = {
   x1: number;
   x2: number;
@@ -57,10 +55,9 @@ function Layout2DUserClass({
   const enableUserDraw = true;
 
   const onMouseUpPlotHandler = () => {
-    const minLengthForUserline = 3;
     if (enableUserDraw) {
       //if line is long enough to not be a mistake change state
-      const [scaleX, scaleXInv, scaleY, scaleYInv] = getScale(
+      const [scaleX, , scaleY] = getScale(
         ...getMinMax(selectDimSelectClassData(currentData))
       );
       if (

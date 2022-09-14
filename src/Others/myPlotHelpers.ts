@@ -36,14 +36,14 @@ export const getMinMax = (
 const afterScalingIntervall = 15;
 //if v=vmin it is mapped to itself. All other values are mapped proportionally to its distance such that vmax is mapped to vmin + afterScalingMaxIntervall
 const scale = (v: number, vmin: number, vmax: number) => {
-  if (vmin == vmax) {
+  if (vmin === vmax) {
     return v;
   }
   return vmin + (afterScalingIntervall * (v - vmin)) / (vmax - vmin);
 };
 //inverse
 const scaleInv = (v: number, vmin: number, vmax: number) => {
-  if (vmin == vmax) {
+  if (vmin === vmax) {
     return v;
   }
   return vmin + ((v - vmin) * (vmax - vmin)) / afterScalingIntervall;

@@ -3,7 +3,7 @@ import { IData } from "../../Others/Data";
 import { setCurrentDataType } from "../../Others/currentDataHelperMethods";
 import TableWrapper from "./TableWrapper";
 
-export default ({
+const GridLayout = ({
   currentData,
   setCurrentData,
   children,
@@ -19,3 +19,5 @@ export default ({
     </SimpleGrid>
   );
 };
+
+export default GridLayout;

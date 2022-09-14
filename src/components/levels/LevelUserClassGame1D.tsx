@@ -3,7 +3,7 @@ import { dummy2C3D1A, dummy2C2D1A } from "../../Others/Data";
 import InitModal from "../smallerComponents/InitModal";
 import { useLevelUserClassGame } from "./useLevelUserClassGame";
 
-export default ({
+const LevelUserClassGame1D = ({
   dimensions,
   initModalTitle,
   initModalContent,
@@ -12,8 +12,9 @@ export default ({
   initModalTitle: string;
   initModalContent: JSX.Element;
 }): JSX.Element => {
-  const dataset = dimensions == 2 ? dummy2C2D1A : dummy2C3D1A;
-  const [currentData, setCurrentData,elements,onNextGameRound] = useLevelUserClassGame(dimensions, dataset);
+  const dataset = dimensions === 2 ? dummy2C2D1A : dummy2C3D1A;
+  const [currentData, setCurrentData, elements, onNextGameRound] =
+    useLevelUserClassGame(dimensions, dataset);
   return (
     <div>
       <InitModal title={initModalTitle}>{initModalContent}</InitModal>
@@ -26,3 +27,5 @@ export default ({
     </div>
   );
 };
+
+export default LevelUserClassGame1D;

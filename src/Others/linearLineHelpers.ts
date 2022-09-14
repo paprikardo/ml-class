@@ -10,14 +10,4 @@ export const isOnLeftSideOfLine = (
   }
   return false;
 };
-//returns true if pclass is on the leftSide of the Line defined by p1 and p2
-export const isOnLeftSideOfLine2Points = (
-  p1: number[] | object,
-  p2: [number, number] | object,
-  pclass: [number, number] | object
-): boolean => {
-  if (Array.isArray(p1)) {
-    const x = p1[0];
-  }
-  return true;
-};
+
