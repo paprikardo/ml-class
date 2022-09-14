@@ -1,4 +1,3 @@
-import hull from "hull.js";
 import { IData, IDataPoint } from "./Data";
 import { svmSeperatedPerfect } from "./classifier";
 import { selectClassData } from "./selectData";
@@ -9,7 +8,7 @@ import { selectClassData } from "./selectData";
 export const isSeperable = (currentData: IData) => {
   var res = false;
   const [c1, c2] = selectClassData(currentData);
-  if (c1.length == 0 || c2.length == 0) {
+  if (c1.length === 0 || c2.length === 0) {
     return true;
   }
   //check for all attributes
@@ -25,8 +24,8 @@ export const isSeperable = (currentData: IData) => {
       }
     }
   } else {
-    for (var i = 0; i < numAttrib; i++) {
-      const mapToAttrib = (c: IDataPoint[]) => c.map((p) => [p[i]]);
+    for (var j = 0; j < numAttrib; j++) {
+      const mapToAttrib = (c: IDataPoint[]) => c.map((p) => [p[j]]);
       if (isSeperable1D(mapToAttrib(c1), mapToAttrib(c2))) {
         res = true;
       }
@@ -58,30 +57,3 @@ const isSeperable1D = (c1: IDataPoint[], c2: IDataPoint[]) => {
   const biggerClass = t1[0] < t2[0] ? t2 : t1;
   return smallerClass[smallerClass.length - 1] < biggerClass[0];
 };
-// const classesSeperable2D = (c1: IDataPoint[], c2: IDataPoint[]): boolean => {
-//   console.log(hull(c1, Infinity));
-//   const hull1 = hull(c1, 100);
-//   const hull2 = hull(c1, 100);
-//   if (hull1.every((el) => el instanceof Array)) {
-//     hull1.map((el) => isInsideHull(el, hull2));
-//   }
-
-//   return true;
-// };
-
-// const isInsideHull = (
-//   point: IDataPoint | object,
-//   hull: IDataPoint[] | object[]
-// ) => {
-//   //if "is on TODO side" for all lines defined by going around the hull
-//   if(hull.length<3){
-//     return true
-//   }
-//   var result = true;
-//   for (var i = 1; i < hull.length; i++) {
-//     if (!isOnLeftSideOfLine2Points(hull[i - 1], hull[i], point)) {
-//       result = false;
-//     }
-//   }
-//   return result;
-// };

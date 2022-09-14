@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { IUserLineState } from "./Layout2DUserClass";
-import { IData, IDataPoint } from "../../Others/Data";
+import { IUserLineState } from "../layouts/Layout2DUserClass";
+import { IData, IDataPoint } from "../../../Others/Data";
 import {
   computePercentAndWrongPoints1D,
   computePercentAndWrongPoints2D,
-} from "../../Others/computeScore";
+} from "../../../Others/computeScore";
 
 const waitTime = 2000;
 export const useGameLogic = (

@@ -1,9 +1,3 @@
-export const NEW_POINT = "NEW_POINT";
-
-interface IData2DPoint {
-  x: number;
-  y: number;
-}
 //red before: #E64848
 //colors for the different classes
 export const colors = ["#f27052", "#89CFFD", "#FFE9AE", "#CFE8A9", "gray"]; //LIMITATION: ALLOW MAXIMUM OF 4 DIFFERENT CLASSES
@@ -11,16 +5,15 @@ export const colors = ["#f27052", "#89CFFD", "#FFE9AE", "#CFE8A9", "gray"]; //LI
 export type IDataPoint = number[];
 
 export interface IDataClass {
-  className: string;
-  points: IDataPoint[];
+  className: string; //name of the class
+  points: IDataPoint[]; //the array of points that belong to this class
 }
 
 export interface IData {
-  data: IDataClass[];
-  attrib: string[];
-  selected_attrib: [number, number] | number; //if both axis are used in the plot (the "2D" case) we have two selected attributes represented by an arrray of two numbers, otherwise we have one number for the one axis
-  selected_class: [number, number]; //same for the selected classes
-  newPoint: IDataPoint;
+  data: IDataClass[]; //the data
+  attrib: string[]; //Names of the attributes
+  selected_attrib: [number, number] | number; //if selected_attrib is an arrray of two numbers the MyPlot component will display two dimensional points with two axes, if it is one number it will display only one axis. The numbers select the attributes accordingly to their indices in the currentData.attribs array
+  selected_class: [number, number]; //The numbers select the classes accordingly to their indices in the currentData.data array
 }
 
 export const ki67positiveZellen: IData = {
@@ -35,7 +28,6 @@ export const ki67positiveZellen: IData = {
     },
   ],
   attrib: ["Anteil Ki-67 positiver Zellen"],
-  newPoint: [10, 10],
   selected_attrib: 0,
   selected_class: [0, 1],
 };
@@ -118,7 +110,6 @@ export const schierlingDataset: IData = {
     },
   ],
   attrib: ["Höhe", "Früchte"],
-  newPoint: [10, 10],
   selected_attrib: [0, 1],
   selected_class: [0, 1],
 };
@@ -157,7 +148,6 @@ export const gegenstaendeDataset: IData = {
     },
   ],
   attrib: ["Volumen (cm^3)", "Masse (g)"],
-  newPoint: [10, 10],
   selected_attrib: [0, 1],
   selected_class: [0, 1],
 };
@@ -225,7 +215,6 @@ export const irisDataset: IData = {
     },
   ],
   attrib: ["Stängel", "Spatha", "Blütenblätter"],
-  newPoint: [10, 10, 10],
   selected_attrib: [0, 1],
   selected_class: [0, 1],
 };
@@ -242,7 +231,6 @@ export const dummy2C3D: IData = {
     },
   ],
   attrib: ["Attribut 1", "Attribut 2", "Attribut 3"],
-  newPoint: [10, 10, 10],
   selected_attrib: [0, 1],
   selected_class: [0, 1],
 };
@@ -259,7 +247,6 @@ export const dummy2C3D1A: IData = {
     },
   ],
   attrib: ["Attribut 1", "Attribut 2", "Attribut 3"],
-  newPoint: [10, 10, 10],
   selected_attrib: 0,
   selected_class: [0, 1],
 };
@@ -276,7 +263,6 @@ export const dummy2C2D: IData = {
     },
   ],
   attrib: ["Attribut 1", "Attribut 2"],
-  newPoint: [10, 10, 10],
   selected_attrib: [0, 1],
   selected_class: [0, 1],
 };
@@ -293,7 +279,6 @@ export const dummy2C2D1A: IData = {
     },
   ],
   attrib: ["Attribut 1", "Attribut 2"],
-  newPoint: [10, 10, 10],
   selected_attrib: 0,
   selected_class: [0, 1],
 };
@@ -416,7 +401,6 @@ export const weinsortenDataset: IData = {
     },
   ],
   attrib: ["Ascheanteil", "Phenolgehalt", "Farbintensität"],
-  newPoint: [10, 10],
   selected_attrib: [0, 1],
   selected_class: [0, 1],
 };
@@ -574,7 +558,6 @@ export const weizen2Dataset: IData = {
     },
   ],
   attrib: ["Länge", "Breite", "Fläche"],
-  newPoint: [10, 10],
   selected_attrib: [0,1],
   selected_class: [0, 1],
 };

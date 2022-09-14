@@ -1,6 +1,5 @@
 import "./App.css";
 import {
-  Button,
   Card,
   Center,
   Grid,
@@ -17,7 +16,7 @@ import {
   Outlet,
 } from "react-router-dom";
 
-import RobotWrapper from "./components/RobotWrapper";
+import RobotWrapper from "./components/smallerComponents/RobotWrapper";
 import {
   generateButtonFromLevel,
   getAllLevelSections,

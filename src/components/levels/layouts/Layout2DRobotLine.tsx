@@ -1,11 +1,9 @@
-import { IData, IDataPoint } from "../Others/Data";
-import Table from "./EssentialComponents/Table";
-import MyPlot from "./EssentialComponents/MyPlot";
-import RobotWrapper from "./RobotWrapper";
+import { IData } from "../../../Others/Data";
+import MyPlot from "../../EssentialComponents/MyPlot";
+import RobotWrapper from "../../smallerComponents/RobotWrapper";
 import { Kbd } from "@mantine/core";
-import { setCurrentDataType } from "../Others/currentDataHelperMethods";
-import GridLayout from "./EssentialComponents/GridLayout";
-import { isSeperable } from "../Others/seperable";
+import { setCurrentDataType } from "../../../Others/currentDataHelperMethods";
+import GridLayout from "../../EssentialComponents/GridLayout";
 
 function Layout2DRobotLine({
   currentData,

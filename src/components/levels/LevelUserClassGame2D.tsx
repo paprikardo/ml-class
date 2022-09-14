@@ -1,4 +1,4 @@
-import Layout2DUserClass from "../UserClassifier/Layout2DUserClass";
+import Layout2DUserClass from "./layouts/Layout2DUserClass";
 import { dummy2C3D, dummy2C2D} from "../../Others/Data";
 import InitModal from "../smallerComponents/InitModal";
 import { useLevelUserClassGame } from "./useLevelUserClassGame";

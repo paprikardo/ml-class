@@ -1,4 +1,4 @@
-import { ReactComponent as RobotIcon } from "../svg/RobotIcon.svg";
+import { ReactComponent as RobotIcon } from "../../svg/RobotIcon.svg";
 import "./RobotWrapper.css";
 const RobotWrapper = ({
   message,

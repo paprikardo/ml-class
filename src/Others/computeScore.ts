@@ -1,4 +1,4 @@
-import { IUserLineState } from "../components/UserClassifier/Layout2DUserClass";
+import { IUserLineState } from "../components/levels/layouts/Layout2DUserClass";
 import { IData } from "./Data";
 import { isOnLeftSideOfLine } from "./linearLineHelpers";
 import { selectDimSelectClassData } from "./selectData";

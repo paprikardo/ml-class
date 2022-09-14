@@ -3,7 +3,7 @@ import LevelUserClassGame1D from "./LevelUserClassGame1D";
 import LevelRobotClassGame2D from "./LevelRobotClassGame2D";
 import { Link, Route } from "react-router-dom";
 import { Button, Grid, Kbd, Text, Title } from "@mantine/core";
-import RealDataLevel1D from "./realDataLevel1D";
+import RealDataLevel1D from "./RealDataLevel1D";
 import {
   gegenstaendeDataset,
   irisDataset,
@@ -12,7 +12,7 @@ import {
   weinsortenDataset,
   weizen2Dataset,
 } from "../../Others/Data";
-import RealDataLevel2D from "./realDataLevel2D";
+import RealDataLevel2D from "./RealDataLevel2D";
 //Interfaces
 interface ILevel {
   initModalTitle: string;
@@ -43,7 +43,7 @@ const robotKlassModalContent = (dim: number) => (
 );
 const levelRoboter: ILevel[] = [
   {
-    initModalTitle: "Roboter-Klassifizieren in 2D",
+    initModalTitle: "Roboter Linien-Klassifizieren in 2D",
     initModalContent: robotKlassModalContent(2),
     getLevelComponent: (title, content) => (
       <LevelRobotClassGame2D
@@ -55,7 +55,7 @@ const levelRoboter: ILevel[] = [
     link: "robot-klassifizieren-2D",
   },
   {
-    initModalTitle: "Roboter-Klassifizieren in 3D",
+    initModalTitle: "Roboter Linien-Klassifizieren in 3D",
     initModalContent: robotKlassModalContent(3),
     getLevelComponent: (title, content) => (
       <LevelRobotClassGame2D

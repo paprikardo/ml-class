@@ -1,6 +1,4 @@
-import hull from "hull.js";
-import { IData, IDataPoint } from "./Data";
-import { selectDimSelectClassData } from "./selectData";
+import { IDataPoint } from "./Data";
 //This class implements the used classifiers
 
 //SVM method "svm"
@@ -39,7 +37,8 @@ export const svmSeperatedPerfect = (c1: IDataPoint[], c2: IDataPoint[]) => {
   return computeSVM(c1, c2).seperatedData;
 };
 
-//Heuristical method point classifier, "heu"
+//Heuristical method "heu" - point classifier
+//args: c1,c2 - Array of 1D data points that are to be classified
 //We define a "smallerClass" that has a smaller minimal point and a "biggerClass" that has a bigger minimal point.
 //We then iterate through the points in the smaller class (descending) and the ones in the bigger class (ascending)
 //If the points do overlap (not linearly seperable), we continue until they do not
@@ -50,9 +49,13 @@ const computePointHeu = (c1: IDataPoint[], c2: IDataPoint[]) => {
   const t2 = c2.map((p) => p[0]).sort((a, b) => a - b); //sorted arrays
   const smallerClass = [...(t1[0] < t2[0] ? t1 : t2)].reverse(); //reverse the elements so that biggest first
   const biggerClass = t1[0] < t2[0] ? t2 : t1;
-  for (var i = 0; i < t1.length; i++) {
+  const l =
+    smallerClass.length < biggerClass.length
+      ? smallerClass.length
+      : biggerClass.length;
+  for (var i = 0; i < l; i++) {
     if (smallerClass[i] > biggerClass[i]) {
-      //console.log("NONSEP");
+      //Data is not separable
     } else {
       return aritMean(biggerClass[i], smallerClass[i]);
     }
@@ -63,10 +66,10 @@ const computePointHeu = (c1: IDataPoint[], c2: IDataPoint[]) => {
 
 //Helper methods
 const aritMean = (m1: number, m2: number) => {
-  return (m1 + m2) / 2;
+  return (m1 + m2) / 2; //return arithmetic mean of the two numbers
 };
 const getDiffLineGeneratorFromWeights = (w: { w: number[]; b: number }) => {
-  if (w.w.length != 2) {
+  if (w.w.length !== 2) {
     console.log(
       "ERROR: tried to compute Line Generator with dimensions: " + w.w.length
     );
@@ -76,7 +79,7 @@ const getDiffLineGeneratorFromWeights = (w: { w: number[]; b: number }) => {
   ) => (x * w["w"][0] + w["b"]) / -w["w"][1]; // "y" = x1 = -(x0*w0+b)/w1
 };
 const getDiffPointFromWeights = (w: { w: number[]; b: number }) => {
-  if (w.w.length != 1) {
+  if (w.w.length !== 1) {
     console.log(
       "ERROR: tried to compute Diff Point with dimensions: " + w.w.length
     );
@@ -93,7 +96,7 @@ export const getDiffPoint = (
   c2: IDataPoint[],
   alg: string = "heu"
 ): number => {
-  if (!(c1[0].length == 1 && c1[0].length == 1)) {
+  if (!(c1[0].length === 1 && c1[0].length === 1)) {
     //input must be array of 1-dimensional points
     console.log(
       "ERROR: Called with wrong input dimensions: " +
@@ -101,7 +104,7 @@ export const getDiffPoint = (
         ". Maybe you have not selected the distincitive feature"
     );
   }
-  if (alg == "svm") {
+  if (alg === "svm") {
     const weights = computeSVM(c1, c2).weights;
     return getDiffPointFromWeights(weights);
   } else {
@@ -121,7 +124,7 @@ export const getDiffLineGenerator = (
   if (c1.length === 0 || c2.length === 0) {
     return () => 0;
   }
-  if (!(c1[0].length == 2 && c1[0].length == 2)) {
+  if (!(c1[0].length === 2 && c1[0].length === 2)) {
     //input must be array of 2-dimensional points
     console.log(
       "ERROR: Called with wrong input dimensions: " +
@@ -129,7 +132,7 @@ export const getDiffLineGenerator = (
         ". Maybe you have not selected the 2 distincitive features"
     );
   }
-  if (alg == "svm") {
+  if (alg === "svm") {
     const weights = computeSVM(c1, c2);
     return getDiffLineGeneratorFromWeights(weights.weights);
   } else {

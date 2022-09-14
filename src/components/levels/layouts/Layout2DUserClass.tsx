@@ -1,15 +1,15 @@
-import { IData } from "../../Others/Data";
+import { IData } from "../../../Others/Data";
 
-import RobotWrapper from "../RobotWrapper";
-import MyPlot from "../EssentialComponents/MyPlot";
+import RobotWrapper from "../../smallerComponents/RobotWrapper";
+import MyPlot from "../../EssentialComponents/MyPlot";
 import { useState } from "react";
-import { setCurrentDataType } from "../../Others/currentDataHelperMethods";
-import GridLayout from "../EssentialComponents/GridLayout";
-import { useGameLogic } from "./useGameLogic";
-import { getMinMax, getScale } from "../../Others/myPlotHelpers";
+import { setCurrentDataType } from "../../../Others/currentDataHelperMethods";
+import GridLayout from "../../EssentialComponents/GridLayout";
+import { useGameLogic } from "../UserClassifierLogic/useGameLogic";
+import { getMinMax, getScale } from "../../../Others/myPlotHelpers";
 import {
   selectDimSelectClassData
-} from "../../Others/selectData";
+} from "../../../Others/selectData";
 export type IUserLineState = {
   x1: number;
   x2: number;

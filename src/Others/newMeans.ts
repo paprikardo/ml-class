@@ -1,5 +1,5 @@
 import { IDataPoint } from "./Data";
-import { rand_0_10 } from "./Random";
+import { rand_0_10 } from "./random";
 
 //computes new means for each class that have a minimum MSE of minMeanDistance
 const minMeanDistance = 5;
@@ -8,7 +8,7 @@ export const newMeans = (numClasses:number,dimensions:number): IDataPoint[] => {
   for (var c = 0; c < numClasses; c++) {
     var classMean: IDataPoint = [];
     while (
-      classMean.length == 0 ||
+      classMean.length === 0 ||
       means
         .map(
           (

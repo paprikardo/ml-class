@@ -1,13 +1,13 @@
-import { IData, IDataPoint } from "../../Others/Data";
+import { IData, IDataPoint } from "../../../Others/Data";
 
-import RobotWrapper from "../RobotWrapper";
-import MyPlot from "../EssentialComponents/MyPlot";
+import RobotWrapper from "../../smallerComponents/RobotWrapper";
+import MyPlot from "../../EssentialComponents/MyPlot";
 import { useState } from "react";
 import {
   setCurrentDataType,
-} from "../../Others/currentDataHelperMethods";
-import GridLayout from "../EssentialComponents/GridLayout";
-import { useGameLogic } from "./useGameLogic";
+} from "../../../Others/currentDataHelperMethods";
+import GridLayout from "../../EssentialComponents/GridLayout";
+import { useGameLogic } from "../UserClassifierLogic/useGameLogic";
 const Layout1DUserClass = ({
   currentData,
   setCurrentData,

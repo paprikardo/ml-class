@@ -1,6 +1,6 @@
 import { Button, Stack, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IData } from "../../Others/Data";
 import {
   addRandomPoint,
@@ -25,7 +25,7 @@ export const useLevelUserClassGame = (
   //managing states
   const [currentData, setCurrentData] = useState(dataset);
   const numClasses = dataset.data.length;
-  const [classMeans, setClassMeans] = useState(
+  const [classMeans,] = useState(
     newMeans(numClasses, dimensions)
   );
   const [gameAround, setGameAround] = useState(false); //if true the user wants to stay in the level and should not get the prompt all the time
@@ -35,7 +35,7 @@ export const useLevelUserClassGame = (
   //initialize dataset to single point
   useEffect(() => {
     setDataSinglePoint(setCurrentData, classMeans);
-  }, []);
+  }, [classMeans]);
   //EndModal
   const navigate = useNavigate();
   const retryButton = (
@@ -44,7 +44,7 @@ export const useLevelUserClassGame = (
         navigate(0); //refresh page
       }}
     >
-      Nochmal versuchen
+      <Link to={""}>Nochmal versuchen</Link>
     </Button>
   );
   const stayButton = (

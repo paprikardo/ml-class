@@ -1,5 +1,5 @@
 import { IData, IDataPoint } from "./Data";
-import { randomPoint, rand_0_10_point } from "./Random";
+import { randomPoint, rand_0_10_point } from "./random";
 
 export type setCurrentDataType = React.Dispatch<React.SetStateAction<IData>>;
 
@@ -77,16 +77,6 @@ export const setSelectedClasses = (
     return newPrev;
   });
 };
-export const changeNewPoint = (
-  setCurrentData: setCurrentDataType,
-  new_point: IDataPoint
-): void => {
-  setCurrentData((prev) => {
-    prev.newPoint = new_point;
-    const newPrev = { ...prev };
-    return newPrev;
-  });
-};
 //set the currentData to a single point per class each. The points are randomly sampled following a mean.
 //The points also have a minimum distance in each dimension
 export const setDataSinglePoint = (
@@ -104,7 +94,6 @@ export const setDataSinglePoint = (
       }),
       selected_attrib: prev.selected_attrib,
       selected_class: prev.selected_class,
-      newPoint: prev.newPoint,
       attrib: prev.attrib,
     };
   });

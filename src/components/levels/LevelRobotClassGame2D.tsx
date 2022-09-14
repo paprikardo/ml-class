@@ -1,6 +1,6 @@
 import { Button, Stack, Text } from "@mantine/core";
 import InitModal from "../smallerComponents/InitModal";
-import Layout2DRobotLine from "../Layout2DRobotLine";
+import Layout2DRobotLine from "./layouts/Layout2DRobotLine";
 import { dummy2C2D, dummy2C3D } from "../../Others/Data";
 import { useState } from "react";
 import EndModal from "../smallerComponents/EndModal";

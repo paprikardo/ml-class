@@ -1,4 +1,3 @@
-import { pointRadial } from "d3-shape";
 import { IDataPoint } from "./Data";
 
 export function rand_0_10() {
