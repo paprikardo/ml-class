@@ -15,7 +15,7 @@ const RealDataLevel1D = ({
   const dataset1D = { ...dataset };
   dataset1D.selected_attrib = 0;
   const [currentData, setCurrentData, elements, onNextGameRound] =
-    useRealDataLevel(dataset);
+    useRealDataLevel(dataset1D);
   return (
     <div>
       <InitModal title={initModalTitle}>{initModalContent}</InitModal>
