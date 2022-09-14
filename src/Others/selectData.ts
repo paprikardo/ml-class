@@ -1,27 +1,5 @@
 import { IData, IDataClass, IDataPoint } from "./Data";
 
-//return selected data of all of the classes (selected attributes of the points from all classes)
-const selectDimData = (currentData: IData): IDataClass[] => {
-  if (Array.isArray(currentData.selected_attrib)) {
-    //2D axis case
-    const [a1, a2] = currentData.selected_attrib; //indices of the selected attributes/dimensions/features
-    return currentData.data.map(({ className, points }) => {
-      return {
-        className: className,
-        points: points.map((p) => [p[a1], p[a2]]),
-      };
-    });
-  } else {
-    const attrib = currentData.selected_attrib;
-    return currentData.data.map(({ className, points }) => {
-      return {
-        className: className,
-        points: points.map((p) => [p[attrib]]),
-      };
-    });
-  }
-};
-
 //return data points of the selected classes where the points only contain the selected dimensions/attributes
 export const selectDimSelectClassData = (
   currentData: IData
