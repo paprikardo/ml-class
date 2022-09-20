@@ -18,6 +18,8 @@ const computeSVM = (c1: IDataPoint[], c2: IDataPoint[]) => {
   ];
   const svm = new svmjs.SVM();
   //const trainstats
+  console.log("data:", data);
+  console.log("labels:", labels);
   svm.train(data, labels, { kernel: "linear", C: Number.MAX_SAFE_INTEGER }); // C is a parameter to SVM, we pick 2^32
   const c1Margins: number[] = svm.margins(c1);
   const c2Margins: number[] = svm.margins(c2);

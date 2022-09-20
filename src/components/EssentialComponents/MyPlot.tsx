@@ -171,14 +171,7 @@ const MyPlot = ({
       }
     }
   }, [
-    isEmpty,
-    oneDimensional,
-    scaleX,
-    selectedDataScaled,
-    xmax,
-    xmin,
     currentData.data,
-    currentData.selected_attrib,
     currentData.selected_attrib,
   ]);
 
