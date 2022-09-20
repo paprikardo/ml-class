@@ -74,13 +74,13 @@ function App() {
                       <Title order={4}>Wie man spielt:</Title>
                       <Text>
                         Benutze die <Kbd>Knöpfe</Kbd> oben rechts um die
-                        Attribute auszuwählen, die auf den Axen angezeigt werden
+                        Attribute auszuwählen, die auf den Axen angezeigt werden.
                       </Text>
                       <Text>
                         Du kannst auch auf die <Kbd>Tabellen</Kbd> der Klassen
                         links klicken, um die Klassen auszuwählen die du
                         klassifizieren möchtest. Die ausgewählten Klassen sind
-                        golden umrandet.
+                        golden umrandet.s
                       </Text>
                       <RobotWrapper
                         message={<>Welches Level möchtest du spielen?</>}

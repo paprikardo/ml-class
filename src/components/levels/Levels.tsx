@@ -69,8 +69,8 @@ const levelRoboter: ILevel[] = [
 ];
 //User and real data helpers
 //returns the basic Task Description ("Use the mouse to classify in 2D/1D"...) for the bottom of the initModal Content for dimension d
-const getTaskRealDataAndUserInitModalContent = (d: number) =>
-  d === 1 ? (
+const getTaskRealDataAndUserInitModalContent = (isLinienClass: boolean) =>
+  !isLinienClass ? (
     <Text weight={700} align="center">
       Klicke mit der Maus um einen Klassifikator zu bestimmen
     </Text>
@@ -81,28 +81,28 @@ const getTaskRealDataAndUserInitModalContent = (d: number) =>
   );
 const getRealDataAndUserInitModalContent = (
   element: JSX.Element,
-  d: number
+  isLinienClass: boolean
 ) => (
   <>
     {element}
-    {getTaskRealDataAndUserInitModalContent(d)}
+    {getTaskRealDataAndUserInitModalContent(isLinienClass)}
   </>
 );
 //User classification levels
-//args: dim = dimension of points, d: dimension of plot
-const userClassModalContent = (dim: number, d: number) =>
+//args: dim = dimension of points, isLinienClass: is a line classifier i.e. plot is in 2D
+const userClassModalContent = (dim: number, isLinienClass: boolean) =>
   getRealDataAndUserInitModalContent(
     <Text>
-      Versuche die {d} dimensionalen Punktewolken der beiden Klassen zu
+      Versuche die {dim} dimensionalen Punktewolken der beiden Klassen zu
       separieren. Dein Score erhöht sich jedes mal, wenn du die Daten perfekt
       separierst!
     </Text>,
-    d
+    isLinienClass
   );
 const levelUser: ILevel[] = [
   {
     initModalTitle: "Punkt-Klassifizieren in 2D",
-    initModalContent: userClassModalContent(2, 1),
+    initModalContent: userClassModalContent(2, false),
     getLevelComponent: (title, content) => (
       <LevelUserClassGame1D
         dimensions={2}
@@ -114,7 +114,7 @@ const levelUser: ILevel[] = [
   },
   {
     initModalTitle: "Punkt-Klassifizieren in 3D",
-    initModalContent: userClassModalContent(3, 1),
+    initModalContent: userClassModalContent(3, false),
     getLevelComponent: (title, content) => (
       <LevelUserClassGame1D
         initModalTitle={title}
@@ -126,7 +126,7 @@ const levelUser: ILevel[] = [
   },
   {
     initModalTitle: "Linien-Klassifizieren in 2D",
-    initModalContent: userClassModalContent(2, 2),
+    initModalContent: userClassModalContent(2, true),
     getLevelComponent: (title, content) => (
       <LevelUserClassGame2D
         initModalTitle={title}
@@ -138,7 +138,7 @@ const levelUser: ILevel[] = [
   },
   {
     initModalTitle: "Linien-Klassifizieren in 3D",
-    initModalContent: userClassModalContent(3, 2),
+    initModalContent: userClassModalContent(3, true),
     getLevelComponent: (title, content) => (
       <LevelUserClassGame2D
         initModalTitle={title}
@@ -150,22 +150,23 @@ const levelUser: ILevel[] = [
   },
 ];
 //    REAL DATA
-const getRealeDatensätzeInitModalTitle = (s: string, d: number) =>
-  s + "-Daten in " + d + "D";
+const getRealeDatensätzeInitModalTitle = (s: string, isLinienClass: boolean) => !isLinienClass?
+  "Punkt-Klassifikator":"Linien-Klassifikator";
+  //"Punkt-Klassifikator für die "+s + "-Daten":"Linien-Klassifikator für die "+s + "-Daten";
 //Weizen levels
-const weizenInitModalContent = (d: number) =>
+const weizenInitModalContent = (isLinienClass: boolean) =>
   getRealDataAndUserInitModalContent(
     <Text>
       Von zwei Weizenarten wurden von je 70 Körnern die Breite, Länge und Fläche
       vermessen. Finde das Attribut mit der sich die beiden Klassen perfekt
       linear separieren lassen.
     </Text>,
-    d
+    isLinienClass
   );
 const weizenLevels: ILevel[] = [
   {
-    initModalTitle: getRealeDatensätzeInitModalTitle("Weizen", 1),
-    initModalContent: weizenInitModalContent(1),
+    initModalTitle: getRealeDatensätzeInitModalTitle("Weizen", false),
+    initModalContent: weizenInitModalContent(false),
     getLevelComponent: (title, content) => (
       <RealDataLevel1D
         initModalTitle={title}
@@ -176,8 +177,8 @@ const weizenLevels: ILevel[] = [
     link: "weizen-1D",
   },
   {
-    initModalTitle: getRealeDatensätzeInitModalTitle("Weizen", 2),
-    initModalContent: weizenInitModalContent(2),
+    initModalTitle: getRealeDatensätzeInitModalTitle("Weizen", true),
+    initModalContent: weizenInitModalContent(true),
     getLevelComponent: (title, content) => (
       <RealDataLevel2D
         initModalTitle={title}
@@ -189,7 +190,7 @@ const weizenLevels: ILevel[] = [
   },
 ];
 //Schierling levels
-const schierlingInitModalContent = (d: number) =>
+const schierlingInitModalContent = (isLinienClass: boolean) =>
   getRealDataAndUserInitModalContent(
     <Text>
       Der griechische Philosoph Sokrates wurde im Athen des Jahres 399 v. Chr.
@@ -203,12 +204,12 @@ const schierlingInitModalContent = (d: number) =>
       Blätter, blühen in weissen Dolden und bilden längliche Früchte. Versuche
       die 3 Pflanzenarten zu klassifizieren.
     </Text>,
-    d
+    isLinienClass
   );
 const schierlingLevels: ILevel[] = [
   {
-    initModalTitle: getRealeDatensätzeInitModalTitle("Schierling", 1),
-    initModalContent: schierlingInitModalContent(1),
+    initModalTitle: getRealeDatensätzeInitModalTitle("Schierling", false),
+    initModalContent: schierlingInitModalContent(false),
     getLevelComponent: (title, content) => (
       <RealDataLevel1D
         initModalTitle={title}
@@ -219,8 +220,8 @@ const schierlingLevels: ILevel[] = [
     link: "schierling-1D",
   },
   {
-    initModalTitle: getRealeDatensätzeInitModalTitle("Schierling", 2),
-    initModalContent: schierlingInitModalContent(2),
+    initModalTitle: getRealeDatensätzeInitModalTitle("Schierling", true),
+    initModalContent: schierlingInitModalContent(true),
     getLevelComponent: (title, content) => (
       <RealDataLevel2D
         initModalTitle={title}
@@ -232,22 +233,19 @@ const schierlingLevels: ILevel[] = [
   },
 ];
 //Weinsorten levels
-const weinsortenInitModalContent = (d: number) =>
+const weinsortenInitModalContent = (isLinienClass: boolean) =>
   getRealDataAndUserInitModalContent(
     <Text>
       Die folgenden Datenpunkte sind von Weinen aus zwei verschiedenen
       Anbaugebieten. Es werden die drei Attribute Ascheanteil, Phenolgehalt und
-      Farbintensität betrachtet. Bezüglich einer Kombination von zwei Attributen
-      lassen sich die Sorten mittels einer Geraden linear separieren, bezüglich
-      der anderen beiden Kombinationen nicht. Finde heraus, welche beiden
-      Attribute eine lineare Trennung ermöglichen.
+      Farbintensität betrachtet. {}
     </Text>,
-    d
+    isLinienClass
   );
 const weinsortenLevels: ILevel[] = [
   {
-    initModalTitle: getRealeDatensätzeInitModalTitle("Weinsorten", 1),
-    initModalContent: weinsortenInitModalContent(1),
+    initModalTitle: getRealeDatensätzeInitModalTitle("Weinsorten", false),
+    initModalContent: weinsortenInitModalContent(false),
     getLevelComponent: (title, content) => (
       <RealDataLevel1D
         initModalTitle={title}
@@ -258,8 +256,8 @@ const weinsortenLevels: ILevel[] = [
     link: "weinsorten-1D",
   },
   {
-    initModalTitle: getRealeDatensätzeInitModalTitle("Weinsorten", 2),
-    initModalContent: weinsortenInitModalContent(2),
+    initModalTitle: getRealeDatensätzeInitModalTitle("Weinsorten", true),
+    initModalContent: weinsortenInitModalContent(true),
     getLevelComponent: (title, content) => (
       <RealDataLevel2D
         initModalTitle={title}
@@ -271,7 +269,7 @@ const weinsortenLevels: ILevel[] = [
   },
 ];
 //Iris levels
-const irisInitModalContent = (d: number) =>
+const irisInitModalContent = (isLinienClass: boolean) =>
   getRealDataAndUserInitModalContent(
     <>
       <Text>
@@ -289,12 +287,12 @@ const irisInitModalContent = (d: number) =>
         Form von Hochblättern. Wir wollen die Daten separieren.
       </Text>
     </>,
-    d
+    isLinienClass
   );
 const irisLevels: ILevel[] = [
   {
-    initModalTitle: getRealeDatensätzeInitModalTitle("Iris", 1),
-    initModalContent: irisInitModalContent(1),
+    initModalTitle: getRealeDatensätzeInitModalTitle("Iris", false),
+    initModalContent: irisInitModalContent(false),
     getLevelComponent: (title, content) => (
       <RealDataLevel1D
         initModalTitle={title}
@@ -305,8 +303,8 @@ const irisLevels: ILevel[] = [
     link: "iris-1D",
   },
   {
-    initModalTitle: getRealeDatensätzeInitModalTitle("Iris", 2),
-    initModalContent: irisInitModalContent(2),
+    initModalTitle: getRealeDatensätzeInitModalTitle("Iris", true),
+    initModalContent: irisInitModalContent(true),
     getLevelComponent: (title, content) => (
       <RealDataLevel2D
         initModalTitle={title}
@@ -318,7 +316,7 @@ const irisLevels: ILevel[] = [
   },
 ];
 //Gegenstaende levels
-const gstInitModalContent = (d: number) =>
+const gstInitModalContent = (isLinienClass: boolean) =>
   getRealDataAndUserInitModalContent(
     <>
       <Text>
@@ -328,12 +326,12 @@ const gstInitModalContent = (d: number) =>
       </Text>
       <Text>Wir wollen die Daten wieder separieren.</Text>
     </>,
-    d
+    isLinienClass
   );
 const gstLevels: ILevel[] = [
   {
-    initModalTitle: getRealeDatensätzeInitModalTitle("Gegenstände", 1),
-    initModalContent: gstInitModalContent(1),
+    initModalTitle: getRealeDatensätzeInitModalTitle("Gegenstände", false),
+    initModalContent: gstInitModalContent(false),
     getLevelComponent: (title, content) => (
       <RealDataLevel1D
         initModalTitle={title}
@@ -344,8 +342,8 @@ const gstLevels: ILevel[] = [
     link: "gst-1D",
   },
   {
-    initModalTitle: getRealeDatensätzeInitModalTitle("Gegenstände", 2),
-    initModalContent: gstInitModalContent(2),
+    initModalTitle: getRealeDatensätzeInitModalTitle("Gegenstände", true),
+    initModalContent: gstInitModalContent(true),
     getLevelComponent: (title, content) => (
       <RealDataLevel2D
         initModalTitle={title}
@@ -357,7 +355,7 @@ const gstLevels: ILevel[] = [
   },
 ];
 //Ki67 levels
-const ki67InitModalContent = (d: number) =>
+const ki67InitModalContent = (isLinienClass:boolean) =>
   getRealDataAndUserInitModalContent(
     <>
       <Text>
@@ -376,12 +374,12 @@ const ki67InitModalContent = (d: number) =>
       </Text>
       <Text>Wir wollen die Daten wieder separieren.</Text>
     </>,
-    d
+    isLinienClass
   );
 const ki67Levels: ILevel[] = [
   {
-    initModalTitle: getRealeDatensätzeInitModalTitle("Ki67", 1),
-    initModalContent: ki67InitModalContent(1),
+    initModalTitle: getRealeDatensätzeInitModalTitle("Ki67", false),
+    initModalContent: ki67InitModalContent(false),
     getLevelComponent: (title, content) => (
       <RealDataLevel1D
         initModalTitle={title}
