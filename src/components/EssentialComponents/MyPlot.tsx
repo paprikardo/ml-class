@@ -211,8 +211,9 @@ const MyPlot = ({
           cy={ys}
           r="0.3"
           stroke="black"
-          strokeWidth="0.09"
+          strokeWidth="0.06"
           fill={colors[currentData.selected_class[cl_index]]}
+          fillOpacity={"80%"}
         />
       );
     })
@@ -231,9 +232,9 @@ const MyPlot = ({
           key={"wrong-p" + points_index}
           cx={xs}
           cy={ys}
-          r="0.4"
+          r="0.35"
           stroke="red"
-          strokeWidth="0.09"
+          strokeWidth="0.065"
           fillOpacity="0.0"
         />
       );
@@ -514,6 +515,7 @@ const MyPlot = ({
               r="0.3"
               stroke="green"
               strokeWidth="0.09"
+              fill="green"
             />
           ) : (
             <></>

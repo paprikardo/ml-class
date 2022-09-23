@@ -43,7 +43,7 @@ const robotKlassModalContent = (dim: number) => (
 );
 const levelRoboter: ILevel[] = [
   {
-    initModalTitle: "Roboter Linien-Klassifizieren in 2D",
+    initModalTitle: "Roboter Linien-Klassifizieren mit 2D-Daten",
     initModalContent: robotKlassModalContent(2),
     getLevelComponent: (title, content) => (
       <LevelRobotClassGame2D
@@ -55,7 +55,7 @@ const levelRoboter: ILevel[] = [
     link: "robot-klassifizieren-2D",
   },
   {
-    initModalTitle: "Roboter Linien-Klassifizieren in 3D",
+    initModalTitle: "Roboter Linien-Klassifizieren mit 3D-Daten",
     initModalContent: robotKlassModalContent(3),
     getLevelComponent: (title, content) => (
       <LevelRobotClassGame2D
@@ -101,7 +101,7 @@ const userClassModalContent = (dim: number, isLinienClass: boolean) =>
   );
 const levelUser: ILevel[] = [
   {
-    initModalTitle: "Punkt-Klassifizieren in 2D",
+    initModalTitle: "Punkt-Klassifizieren mit 2D-Daten",
     initModalContent: userClassModalContent(2, false),
     getLevelComponent: (title, content) => (
       <LevelUserClassGame1D
@@ -113,7 +113,7 @@ const levelUser: ILevel[] = [
     link: "punkt-klassifizieren-2D",
   },
   {
-    initModalTitle: "Punkt-Klassifizieren in 3D",
+    initModalTitle: "Punkt-Klassifizieren mit 3D-Daten",
     initModalContent: userClassModalContent(3, false),
     getLevelComponent: (title, content) => (
       <LevelUserClassGame1D
@@ -125,7 +125,7 @@ const levelUser: ILevel[] = [
     link: "punkt-klassifizieren-3D",
   },
   {
-    initModalTitle: "Linien-Klassifizieren in 2D",
+    initModalTitle: "Linien-Klassifizieren mit 2D-Daten",
     initModalContent: userClassModalContent(2, true),
     getLevelComponent: (title, content) => (
       <LevelUserClassGame2D
@@ -137,7 +137,7 @@ const levelUser: ILevel[] = [
     link: "linien-klassifizieren-2D",
   },
   {
-    initModalTitle: "Linien-Klassifizieren in 3D",
+    initModalTitle: "Linien-Klassifizieren mit 3D-Daten",
     initModalContent: userClassModalContent(3, true),
     getLevelComponent: (title, content) => (
       <LevelUserClassGame2D

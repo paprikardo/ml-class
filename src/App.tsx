@@ -1,13 +1,5 @@
 import "./App.css";
-import {
-  Card,
-  Center,
-  Grid,
-  Stack,
-  Title,
-  Text,
-  Kbd,
-} from "@mantine/core";
+import { Card, Center, Grid, Stack, Title, Text, Kbd } from "@mantine/core";
 import {
   BrowserRouter as Router,
   Routes,
@@ -73,14 +65,15 @@ function App() {
                     <Stack align="center">
                       <Title order={4}>Wie man spielt:</Title>
                       <Text>
-                        Benutze die <Kbd>Knöpfe</Kbd> oben rechts um die
-                        Attribute auszuwählen, die auf den Axen angezeigt werden.
+                        Mit den <Kbd>Knöpfe</Kbd> oben rechts kannst du die
+                        Attribute auswählen, die auf den Achsen angezeigt werden.
                       </Text>
                       <Text>
-                        Du kannst auch auf die <Kbd>Tabellen</Kbd> der Klassen
-                        links klicken, um die Klassen auszuwählen die du
-                        klassifizieren möchtest. Die ausgewählten Klassen sind
-                        golden umrandet.s
+                        Die <Kbd>Tabellen</Kbd> links zeigen den Datensatz. Du
+                        kannst auf eine <Kbd>Tabelle</Kbd>
+                        klicken, um diese Klasse rechts im Koordinatensystem
+                        anzuzeigen. Die Tabellen der ausgewählten Klassen sind
+                        golden umrandet.
                       </Text>
                       <RobotWrapper
                         message={<>Welches Level möchtest du spielen?</>}
