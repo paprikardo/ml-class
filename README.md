@@ -1,6 +1,8 @@
 #  A learning website to teach linear classification to students in Swiss Gymnasium
 This website was written to aid students in learning basic concepts of linear classification. The website is the result of a bachelor's thesis in collaboration with ABZ at ETH, supervised by Juraj Hromcovik and Regula Lacher.
+
 The live version can be found at [https://ricardoheinzmann.com/ml-class](https://ricardoheinzmann.com/ml-class)
+
 This website was created using the React library (with TypeScript). A detailed documentation and description of the project exists and can be requested via mail to rheinzmann@ethz.ch.
 
 
