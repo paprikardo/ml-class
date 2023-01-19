@@ -5,6 +5,7 @@ The live version can be found at [https://ricardoheinzmann.com/ml-class](https:/
 
 This website was created using the React library (with TypeScript). A detailed documentation and description of the project exists and can be requested via mail to rheinzmann@ethz.ch.
 
+The bachelor thesis was awarded with the grade 6 (maximum).
 
 # Getting Started with Create React App
 
